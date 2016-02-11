@@ -75,3 +75,4 @@ Get apps by developer
 GET /gps-api/developers/DxCo%20Games/
 ```
 
+The parameters are taken directly from google-play-scraper. For a full reference check its [documentation](https://github.com/facundoolano/google-play-scraper/#usage).
