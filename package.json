@@ -1,0 +1,17 @@
+{
+  "name": "gps-webtask",
+  "version": "1.0.0",
+  "description": "turn google play scraper into a REST API using webtask.io",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "push": "wt-bundle webtask.js --output build/bundle.js; wt create build/bundle.js --name gps --no-parse --no-merge"
+  },
+  "author": "Facundo Olano",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.12.4",
+    "google-play-scraper": "git://github.com/facundoolano/google-play-scraper.git#webtask-api",
+    "webtask-tools": "^1.3.0"
+  }
+}
