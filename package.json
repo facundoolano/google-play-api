@@ -1,5 +1,5 @@
 {
-  "name": "gps-webtask",
+  "name": "google-play-now",
   "version": "1.0.0",
   "description": "turn google play scraper into a RESTful API",
   "main": "server.js",
