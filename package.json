@@ -1,5 +1,5 @@
 {
-  "name": "google-play-now",
+  "name": "google-play-api",
   "version": "1.0.0",
   "description": "turn google play scraper into a RESTful API",
   "main": "server.js",
