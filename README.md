@@ -13,7 +13,7 @@ npm start
 To run using [now](https://zeit.co/now/):
 
 ```
-npm insall -g now
+npm install -g now
 now
 ```
 
