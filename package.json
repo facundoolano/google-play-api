@@ -10,7 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.12.4",
-    "google-play-scraper": "^1.0.1"
+    "google-play-scraper": "^1.4.0"
   },
   "devDependencies": {
     "eslint": "^2.8.0",

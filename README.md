@@ -1,7 +1,7 @@
 # google-play-api
 
 Turns [google-play-scraper](https://github.com/facundoolano/google-play-scraper/) into a RESTful API.
-See it working [now](https://google-play-api-aubdcilepc.now.sh/api/).
+See it working [now](https://google-play-api-jsqtanwujn.now.sh/api/).
 
 To run locally:
 
