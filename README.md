@@ -1,7 +1,7 @@
 # google-play-api
 
 Turns [google-play-scraper](https://github.com/facundoolano/google-play-scraper/) into a RESTful API.
-See it working [now](https://google-play-api-jsqtanwujn.now.sh/api/).
+See it working [now](https://google-play-api-pqrouahrxz.now.sh/api/).
 
 To run locally:
 
@@ -46,6 +46,18 @@ Get an app detail in spanish
 
 ```http
 GET /api/apps/com.dxco.pandavszombies/?lang=es
+```
+
+Get app required permissions with full descriptions
+
+```http
+GET /api/apps/com.dxco.pandavszombies/permissions/
+```
+
+Get app required permissions (short list)
+
+```http
+GET /api/apps/com.dxco.pandavszombies/permissions/?short=true
 ```
 
 Get similar apps
