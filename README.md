@@ -19,6 +19,8 @@ now
 
 ## Example requests
 
+The parameters for each endpoint are taken directly from google-play-scraper. For a full reference check its [documentation](https://github.com/facundoolano/google-play-scraper/#usage).
+
 Get the top free apps (default list)
 ```http
 GET /api/apps/
@@ -89,5 +91,3 @@ Get apps by developer
 ```http
 GET /api/developers/DxCo%20Games/
 ```
-
-The parameters are taken directly from google-play-scraper. For a full reference check its [documentation](https://github.com/facundoolano/google-play-scraper/#usage).
