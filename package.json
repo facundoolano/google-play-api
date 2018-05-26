@@ -1,6 +1,6 @@
 {
   "name": "google-play-api",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "turn google play scraper into a RESTful API",
   "main": "server.js",
   "scripts": {
