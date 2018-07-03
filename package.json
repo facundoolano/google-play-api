@@ -1,6 +1,6 @@
 {
   "name": "google-play-api",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "turn google play scraper into a RESTful API",
   "main": "server.js",
   "scripts": {
@@ -10,7 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.12.4",
-    "google-play-scraper": "^6.0.4"
+    "google-play-scraper": "^6.1.0"
   },
   "devDependencies": {
     "eslint": "^2.8.0",
