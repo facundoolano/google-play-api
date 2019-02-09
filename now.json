@@ -1,0 +1,11 @@
+{
+    "version": 2,
+    "name": "google-play-api",
+    "builds": [
+        { "src": "index.js", "use": "@now/node-server" }
+    ],
+    "routes": [
+        { "src": "/(.*)", "dest": "index.js" }
+    ]
+}
+

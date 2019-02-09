@@ -2,9 +2,9 @@
   "name": "google-play-api",
   "version": "1.0.5",
   "description": "turn google play scraper into a RESTful API",
-  "main": "server.js",
+  "main": "index.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node index.js"
   },
   "author": "Facundo Olano",
   "license": "ISC",
