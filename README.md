@@ -18,7 +18,7 @@ now
 
 ## Play With Docker
 
-[![Try in PWD](https://raw.githubusercontent.com/play-with-docker/stacks/master/assets/images/button.png)](https://labs.play-with-docker.com/?stack=https://gist.githubusercontent.com/srikanthlogic/49d3dd76cf1117f775fdc5c9746cd091/raw/8593bfa6b15036616147e8f672ecb558fcf87fc6/docker-compose.yml)
+[![Try in PWD](https://raw.githubusercontent.com/play-with-docker/stacks/master/assets/images/button.png)](https://labs.play-with-docker.com/?stack=https://gist.githubusercontent.com/srikanthlogic/49d3dd76cf1117f775fdc5c9746cd091/raw/8593bfa6b15036616147e8f672ecb558fcf87fc6/docker-compose.yml)[![Deploy to Heroku](https://deploy-button.herokuapp.com/deploy.png)](https://deploy-button.herokuapp.com/deploy/facundoolano/google-play-api)
 
 ## Example requests
 
