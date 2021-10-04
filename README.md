@@ -94,3 +94,8 @@ Get apps by developer
 ```http
 GET /api/developers/DxCo%20Games/
 ```
+
+Get categories
+```http
+GET /api/categories/
+```
