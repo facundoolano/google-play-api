@@ -18,7 +18,7 @@ now
 
 ## Play With Docker
 
-[![Try in PWD](https://raw.githubusercontent.com/play-with-docker/stacks/master/assets/images/button.png)](https://labs.play-with-docker.com/?stack=https://gist.githubusercontent.com/srikanthlogic/49d3dd76cf1117f775fdc5c9746cd091/raw/8593bfa6b15036616147e8f672ecb558fcf87fc6/docker-compose.yml)[![Deploy to Heroku](https://deploy-button.herokuapp.com/deploy.png)](https://deploy-button.herokuapp.com/deploy/facundoolano/google-play-api)
+[![Try in PWD](https://raw.githubusercontent.com/play-with-docker/stacks/master/assets/images/button.png)](https://labs.play-with-docker.com/?stack=https://gist.githubusercontent.com/srikanthlogic/49d3dd76cf1117f775fdc5c9746cd091/raw/8593bfa6b15036616147e8f672ecb558fcf87fc6/docker-compose.yml)[![Deploy to Heroku](https://deploy-button.herokuapp.com/deploy.png)](https://deploy-button.herokuapp.com/deploy/facundoolano/google-play-api)[![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/14476425-6c81de84-6e95-48af-8f67-2c9d993a6162?action=collection%2Ffork&collection-url=entityId%3D14476425-6c81de84-6e95-48af-8f67-2c9d993a6162%26entityType%3Dcollection%26workspaceId%3D8dad75f0-8f24-4de1-b8d8-f78d2b788df8#?env%5BHeroku%20-%20Google%20Play%20API%5D=W3sia2V5IjoiSE9TVCIsInZhbHVlIjoiaHR0cHM6Ly9ncGxheWFwaS5oZXJva3VhcHAuY29tIiwiZW5hYmxlZCI6dHJ1ZX1d)
 
 ## Example requests
 
