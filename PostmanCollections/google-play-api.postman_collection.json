@@ -651,7 +651,7 @@
               "variable": [
                 {
                   "key": "devId",
-                  "value": null
+                  "value": "NIC eGov Mobile Apps"
                 }
               ]
             },
@@ -665,19 +665,19 @@
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "{{HOST}}/api/developers/:developerName",
+                  "raw": "{{HOST}}/api/developers/:devId",
                   "host": [
                     "{{HOST}}"
                   ],
                   "path": [
                     "api",
                     "developers",
-                    ":developerName"
+                    ":devId"
                   ],
                   "variable": [
                     {
-                      "key": "developerName",
-                      "value": "NIC eGov Mobile Apps"
+                      "key": "devId",
+                      "value": null
                     }
                   ]
                 }
@@ -695,14 +695,14 @@
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "{{HOST}}/api/developers/:developerName?fullDetail=true",
+                  "raw": "{{HOST}}/api/developers/:devId?fullDetail=true",
                   "host": [
                     "{{HOST}}"
                   ],
                   "path": [
                     "api",
                     "developers",
-                    ":developerName"
+                    ":devId"
                   ],
                   "query": [
                     {
@@ -712,8 +712,8 @@
                   ],
                   "variable": [
                     {
-                      "key": "developerName",
-                      "value": "NIC eGov Mobile Apps"
+                      "key": "devId",
+                      "value": null
                     }
                   ]
                 }
@@ -756,7 +756,7 @@
   ],
   "variable": [
     {
-      "id": "2e77682b-1937-477b-a275-d9e3f84919ff",
+      "id": "801e8344-4915-4a37-8308-b816693eba65",
       "key": "APP_ID",
       "value": "nic.goi.aarogyasetu"
     }
