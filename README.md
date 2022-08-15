@@ -44,37 +44,43 @@ GET /api/apps/?collection=topselling_paid&category=GAME_ACTION&country=ru
 Get an app detail
 
 ```http
-GET /api/apps/com.dxco.pandavszombies/
+GET /api/apps/org.wikipedia/
 ```
 
 Get an app detail in spanish
 
 ```http
-GET /api/apps/com.dxco.pandavszombies/?lang=es
+GET /api/apps/org.wikipedia/?lang=es
 ```
 
 Get app required permissions with full descriptions
 
 ```http
-GET /api/apps/com.dxco.pandavszombies/permissions/
+GET /api/apps/org.wikipedia/permissions/
 ```
 
 Get app required permissions (short list)
 
 ```http
-GET /api/apps/com.dxco.pandavszombies/permissions/?short=true
+GET /api/apps/org.wikipedia/permissions/?short=true
+```
+
+Get app data safety information
+
+```http
+GET /api/apps/org.wikipedia/datasafety/
 ```
 
 Get similar apps
 
 ```http
-GET /api/apps/com.dxco.pandavszombies/similar/
+GET /api/apps/org.wikipedia/similar/
 ```
 
 Get an app's reviews
 
 ```http
-GET /api/apps/com.dxco.pandavszombies/reviews/
+GET /api/apps/org.wikipedia/reviews/
 ```
 
 Search apps
@@ -92,7 +98,7 @@ GET /api/apps/?suggest=face
 Get apps by developer
 
 ```http
-GET /api/developers/DxCo%20Games/
+GET /api/developers/Wikimedia%20Foundation/
 ```
 
 Get categories
