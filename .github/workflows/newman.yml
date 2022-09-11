@@ -1,0 +1,21 @@
+name: Newman Run
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  newman:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code and Install
+        uses: actions/checkout@v3
+      - run: npm install
+      - run: npm start & npx wait-on http://localhost:3000
+      - name: Run Newman
+        uses: matt-ball/newman-action@master
+        with:
+          collection: PostmanCollections/GooglePlayAPI.postman_collection.json
+          environment: PostmanCollections/postman_environment.json
