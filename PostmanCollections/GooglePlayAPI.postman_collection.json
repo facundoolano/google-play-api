@@ -1546,32 +1546,32 @@
 	],
 	"variable": [
 		{
-			"id": "2526ac0e-b99a-489e-ae58-f3c1339aa2cb",
+			"id": "039269ab-9c4c-437f-9ca0-d9fa03c737fd",
 			"key": "APP_ID",
 			"value": "org.wikipedia"
 		},
 		{
-			"id": "2c08cbe4-22a9-4cc9-8033-5230780a165c",
+			"id": "046b6c5b-1f1f-4145-b3d9-80251af1c736",
 			"key": "DEV_ID",
 			"value": "Wikimedia Foundation"
 		},
 		{
-			"id": "95dfd68c-a8ed-4451-af14-8e31aef144a3",
+			"id": "950e638e-a655-4719-983f-3cb64092b69e",
 			"key": "COUNTRY_CODE",
 			"value": "IN"
 		},
 		{
-			"id": "1d0fdebc-f725-4ce7-9cba-2e012c7f4d4b",
+			"id": "e93b0d2c-3f8d-4f46-8e72-1b1469802be3",
 			"key": "LANGUAGE_CODE",
 			"value": "en"
 		},
 		{
-			"id": "dc5603ad-df91-4f2b-9043-9463a2dbd82e",
+			"id": "f466ece7-6404-4f7a-8101-643b6e611bce",
 			"key": "expectedResponseTime",
 			"value": 20
 		},
 		{
-			"id": "8f80dbb1-4693-4fcd-9fd4-99269375d014",
+			"id": "466ba909-f952-4171-b650-d7e41606da32",
 			"key": "expectedResponseStatusCode",
 			"value": 200
 		}
