@@ -1491,7 +1491,7 @@
 		{
 			"listen": "prerequest",
 			"script": {
-				"id": "2a59ee38-72c2-4140-9290-b7aa32f437e8",
+				"id": "5b60c636-acd4-48a0-985f-f463518de8a5",
 				"type": "text/javascript",
 				"exec": [
 					"utils = {",
@@ -1528,10 +1528,17 @@
 		{
 			"listen": "test",
 			"script": {
-				"id": "d91b3337-bf94-4aee-a839-c087e2268929",
+				"id": "81d8e862-1f2e-4239-b7d5-250de82aa643",
 				"type": "text/javascript",
 				"exec": [
-					"utils.checkStatusCode(pm, parseInt(pm.collectionVariables.get(\"expectedResponseStatusCode\")));",
+					"//utils.checkStatusCode(pm, parseInt(pm.collectionVariables.get(\"expectedResponseStatusCode\")));",
+					"pm.test(\"Status Code should be equal to \" + expectedResponseStatusCode, function () {",
+					"            pm.response.to.not.be.error;",
+					"            pm.response.to.have.status(expectedResponseStatusCode);",
+					"        });",
+					"pm.test(\"Response time \" + pm.response.responseTime  + \" ms is less than \" + pm.collectionVariables.get(\"expectedResponseTime\") + \" seconds\", function () {",
+					"            pm.expect(pm.response.responseTime).to.be.below(parseInt(pm.collectionVariables.get(\"expectedResponseTime\")) * 1000);",
+					"        });",
 					"utils.checkResponseTime(pm);"
 				]
 			}
@@ -1539,32 +1546,32 @@
 	],
 	"variable": [
 		{
-			"id": "ebe3efb0-683d-4260-8d92-5805fdc128c6",
+			"id": "bc19b73b-37bc-4390-bf3f-25618bbbafc8",
 			"key": "APP_ID",
 			"value": "org.wikipedia"
 		},
 		{
-			"id": "4ce4f2b3-b24f-432c-bcda-d12e5b40ab7f",
+			"id": "e5747405-f906-4416-bcd9-038d6d37e399",
 			"key": "DEV_ID",
 			"value": "Wikimedia Foundation"
 		},
 		{
-			"id": "59be9cd3-ebd8-413c-a3ac-4f269ed64491",
+			"id": "b8467cf8-7265-4f40-ba60-ade9c5453eb5",
 			"key": "COUNTRY_CODE",
 			"value": "IN"
 		},
 		{
-			"id": "aebea13b-0e5a-4247-b0e1-cc144323dec9",
+			"id": "1365e6c4-2f4a-4dd3-a0ce-640d1fe8def1",
 			"key": "LANGUAGE_CODE",
 			"value": "en"
 		},
 		{
-			"id": "43c068bb-73fe-4cf8-a8a6-7c77f27c738e",
+			"id": "55c1d9a4-9b1c-4900-b883-5364a1fb24fa",
 			"key": "expectedResponseTime",
 			"value": 20
 		},
 		{
-			"id": "bcbf3c7b-e301-45d6-87b9-ac30e3da845f",
+			"id": "7ec04657-1d14-4f85-8f09-833d38a8a81e",
 			"key": "expectedResponseStatusCode",
 			"value": 200
 		}
