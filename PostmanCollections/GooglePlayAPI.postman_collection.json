@@ -1491,44 +1491,44 @@
 		{
 			"listen": "prerequest",
 			"script": {
-				"id": "06503c87-20ad-41fe-9c06-ebfc5a1f8306",
+				"id": "85ddf59d-ac5f-4123-9a6f-53cd31128028",
 				"type": "text/javascript",
 				"exec": [
-					"utils = {",
-					"    /** This is an example function",
-					"     * @param pm pass the current pm so that this has the correct context",
-					"    */",
-					"    reusableFunction: function(pm) {",
-					"        console.log(\"do something amazing here instead of just logging, including manipulating environment or request, access the response, etc. That is why you pass in the pm. Request: \" + JSON.stringify(pm.request));",
-					"    },",
+					"// utils = {",
+					"//     /** This is an example function",
+					"//      * @param pm pass the current pm so that this has the correct context",
+					"//     */",
+					"//     reusableFunction: function(pm) {",
+					"//         console.log(\"do something amazing here instead of just logging, including manipulating environment or request, access the response, etc. That is why you pass in the pm. Request: \" + JSON.stringify(pm.request));",
+					"//     },",
 					"",
-					"    /**",
-					"     * This function checks status code with expectedResponseStatusCode.",
-					"     * @param pm pass the current pm so that this has the correct context",
-					"     * @param expectedResponseStatusCode value of expected response status code",
-					"     */",
+					"//     /**",
+					"//      * This function checks status code with expectedResponseStatusCode.",
+					"//      * @param pm pass the current pm so that this has the correct context",
+					"//      * @param expectedResponseStatusCode value of expected response status code",
+					"//      */",
 					"",
-					"    checkStatusCode: function(pm, expectedResponseStatusCode) {",
-					"        pm.test(\"Status Code should be equal to \" + expectedResponseStatusCode, function () {",
-					"            pm.response.to.not.be.error;",
-					"            pm.response.to.have.status(expectedResponseStatusCode);",
-					"        });",
-					"    },",
+					"//     checkStatusCode: function(pm, expectedResponseStatusCode) {",
+					"//         pm.test(\"Status Code should be equal to \" + expectedResponseStatusCode, function () {",
+					"//             pm.response.to.not.be.error;",
+					"//             pm.response.to.have.status(expectedResponseStatusCode);",
+					"//         });",
+					"//     },",
 					"",
-					"    checkResponseTime: function(pm) {",
-					"        pm.test(\"Response time \" + pm.response.responseTime  + \" ms is less than \" + pm.collectionVariables.get(\"expectedResponseTime\") + \" seconds\", function () {",
-					"            pm.expect(pm.response.responseTime).to.be.below(parseInt(pm.collectionVariables.get(\"expectedResponseTime\")) * 1000);",
-					"        });",
-					"    }",
+					"//     checkResponseTime: function(pm) {",
+					"//         pm.test(\"Response time \" + pm.response.responseTime  + \" ms is less than \" + pm.collectionVariables.get(\"expectedResponseTime\") + \" seconds\", function () {",
+					"//             pm.expect(pm.response.responseTime).to.be.below(parseInt(pm.collectionVariables.get(\"expectedResponseTime\")) * 1000);",
+					"//         });",
+					"//     }",
 					"",
-					"};"
+					"// };"
 				]
 			}
 		},
 		{
 			"listen": "test",
 			"script": {
-				"id": "da248213-7eb0-47e2-a844-8e6d177da5a8",
+				"id": "e8f77cc0-3d38-4ca0-9bea-69d4cc48a131",
 				"type": "text/javascript",
 				"exec": [
 					"//utils.checkStatusCode(pm, parseInt(pm.collectionVariables.get(\"expectedResponseStatusCode\")));",
@@ -1546,32 +1546,32 @@
 	],
 	"variable": [
 		{
-			"id": "2ce7b8b5-820d-4171-8f1a-ba8a7003136b",
+			"id": "b5cf7a45-ad5b-410a-b66f-09e5b596e00a",
 			"key": "APP_ID",
 			"value": "org.wikipedia"
 		},
 		{
-			"id": "aad9ce5c-929e-470d-b1f6-13122bea98e8",
+			"id": "4ede915c-f136-44fd-9cb6-b5c2a57bbf5d",
 			"key": "DEV_ID",
 			"value": "Wikimedia Foundation"
 		},
 		{
-			"id": "0d9670e4-b7d6-4843-a108-586b1eb9dd3e",
+			"id": "5539d54e-cdc1-4055-b064-1fe626de4de3",
 			"key": "COUNTRY_CODE",
 			"value": "IN"
 		},
 		{
-			"id": "9d777ce2-9112-471b-b300-3c2f388c4b8b",
+			"id": "b7edadf0-625f-4989-9d32-a008b9badf4e",
 			"key": "LANGUAGE_CODE",
 			"value": "en"
 		},
 		{
-			"id": "37b8f6ee-8629-4173-8b6f-b40da98ba4be",
+			"id": "76d741d5-eae2-4d4f-8b60-72524c79aec3",
 			"key": "expectedResponseTime",
 			"value": 20
 		},
 		{
-			"id": "14bd66f2-e6d9-43cc-85af-2dec53a9648d",
+			"id": "36f1ef5c-c13b-449e-99ae-ff9818fe1f70",
 			"key": "expectedResponseStatusCode",
 			"value": 200
 		}
