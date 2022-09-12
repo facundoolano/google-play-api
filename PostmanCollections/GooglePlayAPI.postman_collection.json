@@ -1491,7 +1491,7 @@
 		{
 			"listen": "prerequest",
 			"script": {
-				"id": "e9a67998-db55-45a7-8a5e-e1addf2c675f",
+				"id": "444f4560-1c00-4fb0-a367-ec707d841e28",
 				"type": "text/javascript",
 				"exec": [
 					"// utils = {",
@@ -1528,50 +1528,51 @@
 		{
 			"listen": "test",
 			"script": {
-				"id": "71cf6d3d-95ab-464a-8107-1d685feab704",
+				"id": "28676abc-19a0-426d-9f46-9a39d919ec46",
 				"type": "text/javascript",
 				"exec": [
 					"//utils.checkStatusCode(pm, parseInt(pm.collectionVariables.get(\"expectedResponseStatusCode\")));",
+					"var expectedResponseStatusCode = pm.collectionVariables.get(\"expectedResponseStatusCode\");",
 					"pm.test(\"Status Code should be equal to \" + expectedResponseStatusCode, function () {",
 					"            pm.response.to.not.be.error;",
-					"            pm.response.to.have.status(pm.collectionVariables.get(\"expectedResponseStatusCode\"));",
+					"            pm.response.to.have.status(expectedResponseStatusCode);",
 					"        });",
 					"pm.test(\"Response time \" + pm.response.responseTime  + \" ms is less than \" + pm.collectionVariables.get(\"expectedResponseTime\") + \" seconds\", function () {",
 					"            pm.expect(pm.response.responseTime).to.be.below(parseInt(pm.collectionVariables.get(\"expectedResponseTime\")) * 1000);",
 					"        });",
-					"//utils.checkResponseTime(pm);"
+					""
 				]
 			}
 		}
 	],
 	"variable": [
 		{
-			"id": "039269ab-9c4c-437f-9ca0-d9fa03c737fd",
+			"id": "5f08f4af-19d4-44cb-a67f-d141b5080f3b",
 			"key": "APP_ID",
 			"value": "org.wikipedia"
 		},
 		{
-			"id": "046b6c5b-1f1f-4145-b3d9-80251af1c736",
+			"id": "3f5d9679-11d3-4b51-b40c-7de46c671edd",
 			"key": "DEV_ID",
 			"value": "Wikimedia Foundation"
 		},
 		{
-			"id": "950e638e-a655-4719-983f-3cb64092b69e",
+			"id": "08f93466-428e-4547-add6-8adcdca42f26",
 			"key": "COUNTRY_CODE",
 			"value": "IN"
 		},
 		{
-			"id": "e93b0d2c-3f8d-4f46-8e72-1b1469802be3",
+			"id": "b46ea67a-578b-43ba-beb1-4edaf4ed138c",
 			"key": "LANGUAGE_CODE",
 			"value": "en"
 		},
 		{
-			"id": "f466ece7-6404-4f7a-8101-643b6e611bce",
+			"id": "2c71e42f-f2e5-4a7e-9636-d2ddbc04bfe6",
 			"key": "expectedResponseTime",
 			"value": 20
 		},
 		{
-			"id": "466ba909-f952-4171-b650-d7e41606da32",
+			"id": "7b7a3eca-0bca-4349-9368-597efde124f4",
 			"key": "expectedResponseStatusCode",
 			"value": 200
 		}
