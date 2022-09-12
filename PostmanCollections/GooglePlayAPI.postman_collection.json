@@ -1491,7 +1491,7 @@
 		{
 			"listen": "prerequest",
 			"script": {
-				"id": "85ddf59d-ac5f-4123-9a6f-53cd31128028",
+				"id": "e9a67998-db55-45a7-8a5e-e1addf2c675f",
 				"type": "text/javascript",
 				"exec": [
 					"// utils = {",
@@ -1528,13 +1528,13 @@
 		{
 			"listen": "test",
 			"script": {
-				"id": "e8f77cc0-3d38-4ca0-9bea-69d4cc48a131",
+				"id": "71cf6d3d-95ab-464a-8107-1d685feab704",
 				"type": "text/javascript",
 				"exec": [
 					"//utils.checkStatusCode(pm, parseInt(pm.collectionVariables.get(\"expectedResponseStatusCode\")));",
 					"pm.test(\"Status Code should be equal to \" + expectedResponseStatusCode, function () {",
 					"            pm.response.to.not.be.error;",
-					"            pm.response.to.have.status(expectedResponseStatusCode);",
+					"            pm.response.to.have.status(pm.collectionVariables.get(\"expectedResponseStatusCode\"));",
 					"        });",
 					"pm.test(\"Response time \" + pm.response.responseTime  + \" ms is less than \" + pm.collectionVariables.get(\"expectedResponseTime\") + \" seconds\", function () {",
 					"            pm.expect(pm.response.responseTime).to.be.below(parseInt(pm.collectionVariables.get(\"expectedResponseTime\")) * 1000);",
@@ -1546,32 +1546,32 @@
 	],
 	"variable": [
 		{
-			"id": "b5cf7a45-ad5b-410a-b66f-09e5b596e00a",
+			"id": "2526ac0e-b99a-489e-ae58-f3c1339aa2cb",
 			"key": "APP_ID",
 			"value": "org.wikipedia"
 		},
 		{
-			"id": "4ede915c-f136-44fd-9cb6-b5c2a57bbf5d",
+			"id": "2c08cbe4-22a9-4cc9-8033-5230780a165c",
 			"key": "DEV_ID",
 			"value": "Wikimedia Foundation"
 		},
 		{
-			"id": "5539d54e-cdc1-4055-b064-1fe626de4de3",
+			"id": "95dfd68c-a8ed-4451-af14-8e31aef144a3",
 			"key": "COUNTRY_CODE",
 			"value": "IN"
 		},
 		{
-			"id": "b7edadf0-625f-4989-9d32-a008b9badf4e",
+			"id": "1d0fdebc-f725-4ce7-9cba-2e012c7f4d4b",
 			"key": "LANGUAGE_CODE",
 			"value": "en"
 		},
 		{
-			"id": "76d741d5-eae2-4d4f-8b60-72524c79aec3",
+			"id": "dc5603ad-df91-4f2b-9043-9463a2dbd82e",
 			"key": "expectedResponseTime",
 			"value": 20
 		},
 		{
-			"id": "36f1ef5c-c13b-449e-99ae-ff9818fe1f70",
+			"id": "8f80dbb1-4693-4fcd-9fd4-99269375d014",
 			"key": "expectedResponseStatusCode",
 			"value": 200
 		}
