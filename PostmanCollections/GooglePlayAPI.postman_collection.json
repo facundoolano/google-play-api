@@ -1491,7 +1491,7 @@
 		{
 			"listen": "prerequest",
 			"script": {
-				"id": "1bec4d0f-bc62-4d4f-abe3-f97530507f45",
+				"id": "ed9476f8-5a6f-4720-b27c-1521d67d829f",
 				"type": "text/javascript",
 				"exec": [
 					"let expectedResponseStatusCode = pm.collectionVariables.get(\"expectedResponseStatusCode\");"
@@ -1501,10 +1501,9 @@
 		{
 			"listen": "test",
 			"script": {
-				"id": "935ef9cf-d3f2-4160-afe8-5f3210739a0b",
+				"id": "bf02075e-78a6-4807-84db-8c546e3df21d",
 				"type": "text/javascript",
 				"exec": [
-					"//let expectedResponseStatusCode = ;",
 					"pm.test(\"Status Code should be equal to \" + pm.collectionVariables.get(\"expectedResponseStatusCode\"), function () {",
 					"            pm.response.to.not.be.error;",
 					"            pm.response.to.have.status(pm.collectionVariables.get(\"expectedResponseStatusCode\"));",
@@ -1520,32 +1519,32 @@
 	],
 	"variable": [
 		{
-			"id": "ed5b6d57-d850-4911-a403-857dec2aacae",
+			"id": "acef4ca3-ec35-4cbf-bfe9-b9d0b655479e",
 			"key": "APP_ID",
 			"value": "org.wikipedia"
 		},
 		{
-			"id": "65572035-4d09-4e03-a8f8-8e6eba9f0869",
+			"id": "c84c68d1-75b8-453c-af2b-8196c9e357d5",
 			"key": "DEV_ID",
 			"value": "Wikimedia Foundation"
 		},
 		{
-			"id": "3f7c34f1-b2b4-44c2-a1bd-f2d09124ffe7",
+			"id": "f4a3d4e9-87a3-4c54-b364-24b5cc44bc32",
 			"key": "COUNTRY_CODE",
 			"value": "IN"
 		},
 		{
-			"id": "82abce3f-5257-483a-bf7f-ea7ed1df374e",
+			"id": "4cb0f804-590c-4dbb-9f3b-297048b20c09",
 			"key": "LANGUAGE_CODE",
 			"value": "en"
 		},
 		{
-			"id": "b225ca82-c54c-459f-96a9-27b91266005d",
+			"id": "0e6994cf-0063-494e-a0b6-b141291bcaad",
 			"key": "expectedResponseTime",
 			"value": 20
 		},
 		{
-			"id": "498b9a30-378d-4b39-95aa-c1b249409150",
+			"id": "7d2d87e4-19e5-47c8-a196-4731f1bc70f5",
 			"key": "expectedResponseStatusCode",
 			"value": 200
 		}
