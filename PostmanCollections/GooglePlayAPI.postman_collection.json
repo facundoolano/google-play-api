@@ -1491,7 +1491,7 @@
 		{
 			"listen": "prerequest",
 			"script": {
-				"id": "d402cfcf-06c1-47f1-b995-3f5812f62eb1",
+				"id": "1bec4d0f-bc62-4d4f-abe3-f97530507f45",
 				"type": "text/javascript",
 				"exec": [
 					"let expectedResponseStatusCode = pm.collectionVariables.get(\"expectedResponseStatusCode\");"
@@ -1501,12 +1501,13 @@
 		{
 			"listen": "test",
 			"script": {
-				"id": "3195fb7b-f20b-4a30-94b8-ac8524776629",
+				"id": "935ef9cf-d3f2-4160-afe8-5f3210739a0b",
 				"type": "text/javascript",
 				"exec": [
-					"pm.test(\"Status Code should be equal to \" + expectedResponseStatusCode, function () {",
+					"//let expectedResponseStatusCode = ;",
+					"pm.test(\"Status Code should be equal to \" + pm.collectionVariables.get(\"expectedResponseStatusCode\"), function () {",
 					"            pm.response.to.not.be.error;",
-					"            pm.response.to.have.status(expectedResponseStatusCode);",
+					"            pm.response.to.have.status(pm.collectionVariables.get(\"expectedResponseStatusCode\"));",
 					"        });",
 					"",
 					"pm.test(\"Response time \" + pm.response.responseTime  + \" ms is less than \" + pm.collectionVariables.get(\"expectedResponseTime\") + \" seconds\", function () {",
@@ -1519,32 +1520,32 @@
 	],
 	"variable": [
 		{
-			"id": "51980401-ea60-4e9d-8b58-9078f23e3b3d",
+			"id": "6cc0a5e9-ab23-4582-9b61-8203430f05ff",
 			"key": "APP_ID",
 			"value": "org.wikipedia"
 		},
 		{
-			"id": "5c9c39b9-8911-4bbf-aa24-7889689c2e0b",
+			"id": "5a2e00db-d320-4805-951f-1a680a5fd94d",
 			"key": "DEV_ID",
 			"value": "Wikimedia Foundation"
 		},
 		{
-			"id": "249e1799-f7af-41bb-b662-a2dbe9898a13",
+			"id": "00749664-99a6-49d6-8699-d27a04f1e713",
 			"key": "COUNTRY_CODE",
 			"value": "IN"
 		},
 		{
-			"id": "b997119d-9b35-4f56-933e-1b5119f7ab80",
+			"id": "feaea701-8230-4447-91fd-ae3ae0a42d91",
 			"key": "LANGUAGE_CODE",
 			"value": "en"
 		},
 		{
-			"id": "f32f9060-41fe-413c-91cf-772dbb1f0435",
+			"id": "f9c79126-728a-462e-9323-cb7ff3c45948",
 			"key": "expectedResponseTime",
 			"value": 20
 		},
 		{
-			"id": "765a82ce-9b06-4d8e-8338-e677dea8c6b7",
+			"id": "7f2a214a-2291-4e52-a833-91a88c8f6445",
 			"key": "expectedResponseStatusCode",
 			"value": 200
 		}
