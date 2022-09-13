@@ -1491,7 +1491,7 @@
 		{
 			"listen": "prerequest",
 			"script": {
-				"id": "adb6abe4-8281-4c7a-a9e8-687d63314b40",
+				"id": "a9116324-d292-42a2-aa8e-7a09cb5cc367",
 				"type": "text/javascript",
 				"exec": [
 					""
@@ -1501,14 +1501,15 @@
 		{
 			"listen": "test",
 			"script": {
-				"id": "591bcf5a-df23-4dd2-8d17-58a3bdcbe4f3",
+				"id": "48d8373e-f7a6-472d-a34d-659edcd81f35",
 				"type": "text/javascript",
 				"exec": [
-					"var expectedResponseStatusCode = pm.collectionVariables.get(\"expectedResponseStatusCode\");",
+					"let expectedResponseStatusCode = pm.collectionVariables.get(\"expectedResponseStatusCode\");",
 					"pm.test(\"Status Code should be equal to \" + expectedResponseStatusCode, function () {",
 					"            pm.response.to.not.be.error;",
 					"            pm.response.to.have.status(expectedResponseStatusCode);",
 					"        });",
+					"",
 					"pm.test(\"Response time \" + pm.response.responseTime  + \" ms is less than \" + pm.collectionVariables.get(\"expectedResponseTime\") + \" seconds\", function () {",
 					"            pm.expect(pm.response.responseTime).to.be.below(parseInt(pm.collectionVariables.get(\"expectedResponseTime\")) * 1000);",
 					"        });",
@@ -1519,32 +1520,32 @@
 	],
 	"variable": [
 		{
-			"id": "386f3082-dd7e-4d2e-94e4-433ededf142e",
+			"id": "5c1eab36-35de-4474-b87a-ef1d4943635f",
 			"key": "APP_ID",
 			"value": "org.wikipedia"
 		},
 		{
-			"id": "6336b6db-76c7-4d60-bcff-2f8909b00a2e",
+			"id": "5b5b8405-7bb5-412c-85ff-165e6a9143c2",
 			"key": "DEV_ID",
 			"value": "Wikimedia Foundation"
 		},
 		{
-			"id": "3e9e2094-b49f-454d-825f-64fdcb178454",
+			"id": "8934d2f1-8b0f-469a-baa1-e79e11beb116",
 			"key": "COUNTRY_CODE",
 			"value": "IN"
 		},
 		{
-			"id": "ce09862e-bd15-4f4d-9af9-b867e64fbf97",
+			"id": "e56456f0-7275-4756-bb51-482640360f32",
 			"key": "LANGUAGE_CODE",
 			"value": "en"
 		},
 		{
-			"id": "5aeceebe-d9da-42b4-a60e-b5d57ea60980",
+			"id": "f2139e5f-7e45-4640-8fae-bf6a7e811ed1",
 			"key": "expectedResponseTime",
 			"value": 20
 		},
 		{
-			"id": "f8f5db30-1aca-4331-960f-204f053f75de",
+			"id": "518efc14-2adb-4de5-9481-c7fe1415786d",
 			"key": "expectedResponseStatusCode",
 			"value": 200
 		}
