@@ -69,7 +69,7 @@
 								{
 									"key": "country",
 									"value": "{{COUNTRY_CODE}}",
-									"description": "Optional - defaults to US; 2 letter country code",
+									"description": "Optional - defaults to US; 2 letter country code;\nMandatory for geo-restricted apps;",
 									"disabled": true
 								},
 								{
@@ -1519,32 +1519,32 @@
 	],
 	"variable": [
 		{
-			"id": "acef4ca3-ec35-4cbf-bfe9-b9d0b655479e",
+			"id": "3b6d098f-f01e-4304-bafa-12c3440657dc",
 			"key": "APP_ID",
 			"value": "org.wikipedia"
 		},
 		{
-			"id": "c84c68d1-75b8-453c-af2b-8196c9e357d5",
+			"id": "73acc137-c585-47bd-8344-1ce334a7d981",
 			"key": "DEV_ID",
 			"value": "Wikimedia Foundation"
 		},
 		{
-			"id": "f4a3d4e9-87a3-4c54-b364-24b5cc44bc32",
+			"id": "12abb38d-3a52-490d-9a26-72aae0571b5b",
 			"key": "COUNTRY_CODE",
 			"value": "IN"
 		},
 		{
-			"id": "4cb0f804-590c-4dbb-9f3b-297048b20c09",
+			"id": "4fb606c5-b28d-4aa3-a958-5fa429c41491",
 			"key": "LANGUAGE_CODE",
 			"value": "en"
 		},
 		{
-			"id": "0e6994cf-0063-494e-a0b6-b141291bcaad",
+			"id": "fb25ec2b-bd58-4594-9b2d-03df642824d4",
 			"key": "expectedResponseTime",
 			"value": 20
 		},
 		{
-			"id": "7d2d87e4-19e5-47c8-a196-4731f1bc70f5",
+			"id": "e8dbe497-e76c-4646-a758-aca2bd7f9971",
 			"key": "expectedResponseStatusCode",
 			"value": 200
 		}
