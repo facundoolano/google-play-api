@@ -1,5 +1,3 @@
-'use strict';
-
 const Express = require('express');
 const router = require('./lib');
 
@@ -8,7 +6,7 @@ const port = process.env.PORT || 3000;
 
 app.use('/api/', router);
 
-app.get('/', function(req, res){
+app.get('/', function (req, res) {
   res.redirect('/api');
 });
 
