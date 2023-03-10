@@ -5,9 +5,10 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 app.use('/api/', router);
+app.use(express.static('public'));
 
 app.get('/', function (req, res) {
-  res.redirect('/api');
+  res.sendFile('/public/index.html');
 });
 
 app.listen(port, function () {
