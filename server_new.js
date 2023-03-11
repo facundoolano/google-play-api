@@ -1,14 +1,15 @@
 const express = require('express');
 const router = require('./lib');
+const path = require('path');
 
 const app = express();
 const port = process.env.PORT || 3000;
 
 app.use('/api/', router);
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, '.')));
 
 app.get('/', function (req, res) {
-  res.sendFile('/public/index.html');
+  res.sendFile(path.join(__dirname, './public/index.html'));
 });
 
 app.listen(port, function () {
