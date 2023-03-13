@@ -19,6 +19,7 @@
     "google-play-scraper": "^9.1.0",
     "handlebars": "^4.7.7",
     "path": "^0.12.7",
+    "ramda": "^0.28.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "vue-router": "^4.1.6"

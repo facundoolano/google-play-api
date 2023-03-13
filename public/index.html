@@ -84,46 +84,44 @@
           })
         }
       };
-      fetch(`../test.json`) // use relative path to output.json file
-        .then(response => response.json()).then(data => {
-          const jsonData = data; // Define jsonData here
-          resultsList.innerHTML = '';
-          if (Array.isArray(data) && data) { // check if data is an array
-            data.forEach(result => {
-              const {
-                icon,
-                title,
-                summary,
-                scoreText
-              } = jsonData.find(app => app.appId === result.appId);
-              const div_item = document.createElement('div');
-              div_item.innerHTML = `
-          
-									<div class="flex bg-white mb-6 rounded-lg shadow">
-										<div class="w-full md:w-1/4 p-4">
-											<img class="border rounded-lg" src="${icon}" alt="App icon">
-											</div>
-											<div class="w-full md:w-3/4 p-4 border-l">
-												<div class="card-body">
-													<h5 class="card-title font-bold text-lg mb-2">${title}</h5>
-													<p class="card-text text-gray-700">${summary}</p>
-													<div class="flex items-center justify-between mt-4">
-                  ${scoreText ? `
-														<span class="font-bold mr-1">${scoreText}</span>` : ''}
-                  
-														<button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded" onclick="displayReviews('${result.appId}');">Show Reviews</button>
-													</div>
-												</div>
-											</div>
-										</div>
-        `;
-              resultsList.appendChild(div_item);
-            });
-          } else {
-            // handle error case where data is not an array
-            console.error('Response data is not an array:', data);
-          }
-        });
+
+      form.addEventListener('submit', function(event) {
+			  event.preventDefault();
+			  const query = input.value;
+		  
+			  fetch(`/api/apps/?q=${query}`)
+				.then(response => response.json())
+				.then(data => {
+				  resultsList.innerHTML = '';
+				  if (Array.isArray(data.results) && data.results) { // Add a check for data.results
+					data.results.forEach(result => {
+					  const div_item = document.createElement('div');
+					  div_item.innerHTML = `
+					  <div class="flex bg-white mb-6 rounded-lg shadow">
+							<div class="w-full md:w-1/4 p-4">
+								<img class="border rounded-lg" src="${result.icon}" alt="App icon">
+							</div>
+							<div class="w-full md:w-3/4 p-4 border-l">
+								<div class="card-body">
+									<h5 class="card-title font-bold text-lg mb-2">${result.title}</h5>
+									<p class="card-text text-gray-700">${result.summary}</p>
+									<div class="flex items-center justify-between mt-4">
+										${result.scoreText ? `<span class="font-bold mr-1">${result.scoreText}</span>` : ''}
+										<button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded" onclick="displayReviews('${result.appId}');">Show Reviews</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					`; 
+
+					  resultsList.appendChild(div_item);
+					});
+				  } else {
+					// handle error case where data.results is not an array
+					console.error('Response data is not an array:', data);
+				  }
+        })
+				});
     </script>
     <style>
       input[type="text"] {
