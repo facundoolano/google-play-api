@@ -8,12 +8,14 @@
   </head>
   <body class="bg-gray-200">
     <div class="container mx-auto py-10">
-      <h1 class="text-4xl font-bold mb-10">Search for Apps on the Google Play Store</h1>
+      <h1 class="text-4xl font-bold mb-10 text-center">Search for Apps on the Google Play Store</h1>
       <form class="mb-3">
         <div class="relative">
           <label for="query" class="sr-only">Search for an app:</label>
-          <input type="text" class="w-full h-12 px-4 pr-12 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-400" id="query" name="query" placeholder="Enter a search term">
-          <button type="submit" class="absolute top-0 right-0 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400">Search</button>
+          <div class="flex items-center border border-gray-300 rounded-lg overflow-hidden">
+            <input type="text" class="w-full h-12 px-4 bg-white focus:outline-none focus:ring-2 focus:ring-blue-400" id="query" name="query" placeholder="Enter a search term">
+            <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400">Search</button>
+          </div>
         </div>
       </form>
       <div id="results"></div>
@@ -21,107 +23,148 @@
     <!-- Add Tailwind CSS dependencies -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fetch/2.0.4/fetch.min.js"></script>
     <script>
-      const form = document.querySelector('form');
-      const input = document.querySelector('#query');
-      const resultsList = document.querySelector('#results');
+      const form = document.querySelector("form");
+      const input = document.querySelector("#query");
+      const resultsList = document.querySelector("#results");
       if (resultsList) {
         function displayReviews(appId) {
           fetch(`/api/apps/${appId}/reviews`).then(response => response.json()).then(data => {
-            resultsList.innerHTML = '';
+            resultsList.innerHTML = "";
             if (Array.isArray(data.results.data)) {
               data.results.data.forEach(result => {
-                const div_item = document.createElement('div');
-                div_item.innerHTML = `
-							
+                const div_item = document.createElement("div");
+                div_item.innerHTML = ` 
+                
 						<div class="flex bg-white mb-6 rounded-lg shadow">
-							<div class="w-full md:w-1/4 p-4">
-									${result.userImage ? `
-								<img class="border rounded-lg" src="${result.userImage}" alt="Card image cap">` : ''}
-								
-								</div>
-								<div class="w-full md:w-3/4 p-4 border-l">
-									<div class="card-body">
-										<div class="mt-2 flex items-center justify-between">
-											<div class="flex items-center">
-												${result.userImage && result.userName && new Date(result.date).toLocaleString() ? `
-												<img class="h-8 w-8 rounded-full object-cover" src="${result.userImage}" alt="${result.userName}">
-													<div class="ml-2 text-sm">
-														<p class="text-gray-900 leading-none">${result.userName}</p>
-														<p class="text-gray-600">${new Date(result.date).toLocaleString()}</p>
-													</div>` : ''}
-											
-												</div>
-												<div class="flex items-center">
-												${result.scoreText ? `
-													<div class="flex items-center">
-														<svg class="h-5 w-5 fill-current ${result.scoreText}" viewBox="0 0 24 24">
-															<path d="M12 .69l3.117 7.655h8.048l-6.522 4.747 2.847 7.694L12 17.322l-7.49 4.144 2.847-7.694L.835 8.345h8.048L12 .69zm0 2.322L9.107 8.345H1.427l5.804 4.227-2.847 7.694L12 14.678l7.49 4.144-2.847-7.694 5.804-4.227h-7.68L12 2.012z"/>
-														</svg>
-														<span class="ml-1">${result.scoreText}</span>
-													</div>` : ''}
-
-											
-												</div>
-											</div>
-										${result.text ? `
-											<p class="card-text text-gray-700">${result.text}</p>` : ''} 
-										${new Date(result.replyDate).toLocaleString() && result.replyText ? `
-											<div class="flex flex-col mt-4">
-												<hr>
-													<p class="text-sm font-bold mt-2">${result.userName}</p>
-													<p class="text-gray-700">${result.replyText}</p>
-												</div>` : ''}
-									
-											</div>
+							<div class="w-full md:w-1/4 p-4"></div>
+							<div class="w-full md:w-3/4 p-4 border-l">
+								<div class="card-body">
+									<div class="mt-2 flex items-center justify-between">
+										<div class="flex items-center">
+                        ${result.userName && new Date(result.date).toLocaleString() ? ` 
+                          
+											<div class="ml-2 text-sm">
+												<p class="text-gray-900 leading-none">${result.userName}</p>
+												<p class="text-gray-600">${new Date(result.date).toLocaleString()}</p>
+											</div>` : ""} 
+                        
 										</div>
-									</div> `
+										<div class="flex items-center">
+                        ${result.scoreText ? ` 
+                          
+											<div class="flex items-center">
+												<svg class="h-5 w-5 fill-current ${result.scoreText}" viewBox="0 0 24 24">
+													<path d="M12 .69l3.117 7.655h8.048l-6.522 4.747 2.847 7.694L12 17.322l-7.49 4.144 2.847-7.694L.835 8.345h8.048L12 .69zm0 2.322L9.107 8.345H1.427l5.804 4.227-2.847 7.694L12 14.678l7.49 4.144-2.847-7.694 5.804-4.227h-7.68L12 2.012z"/>
+												</svg>
+												<span class="ml-1">${result.scoreText}</span>
+											</div>` : ""} 
+                        
+										</div>
+									</div>
+                      ${result.text ? ` 
+                        
+									<p class="card-text text-gray-700">${result.text}</p>` : ""} 
+                      ${new Date(result.replyDate).toLocaleString() && result.replyText ? ` 
+                        
+									<div class="flex flex-col mt-4">
+										<hr>
+											<p class="text-sm font-bold mt-2">${result.userName}</p>
+											<p class="text-gray-700">${result.replyText}</p>
+										</div>` : ""} 
+                        
+									</div>
+								</div>
+							</div>
+						</div>`;
                 resultsList.appendChild(div_item);
               });
             } else {
               // handle error case where data.results.data is not an array
-              console.error('Response data is not an array:', data);
+              console.error("Response data is not an array:", data);
             }
           })
         }
       };
-
-      form.addEventListener('submit', function(event) {
-			  event.preventDefault();
-			  const query = input.value;
-		  
-			  fetch(`/api/apps/?q=${query}`)
-				.then(response => response.json())
-				.then(data => {
-				  resultsList.innerHTML = '';
-				  if (Array.isArray(data.results) && data.results) { // Add a check for data.results
-					data.results.forEach(result => {
-					  const div_item = document.createElement('div');
-					  div_item.innerHTML = `
-					  <div class="flex bg-white mb-6 rounded-lg shadow">
+      form.addEventListener("submit", function(event) {
+        event.preventDefault();
+        const query = input.value;
+        fetch(`/api/apps/?q=${query}`)
+          .then(response => response.json())
+          .then(data => {
+          resultsList.innerHTML = "";
+          if (Array.isArray(data.results) && data.results) {
+            data.results.forEach(result => {
+              const div_item = document.createElement("div");
+              div_item.innerHTML = `  
+									
+						<div class="flex bg-white mb-6 rounded-lg shadow">
 							<div class="w-full md:w-1/4 p-4">
 								<img class="border rounded-lg" src="${result.icon}" alt="App icon">
-							</div>
-							<div class="w-full md:w-3/4 p-4 border-l">
-								<div class="card-body">
-									<h5 class="card-title font-bold text-lg mb-2">${result.title}</h5>
-									<p class="card-text text-gray-700">${result.summary}</p>
-									<div class="flex items-center justify-between mt-4">
-										${result.scoreText ? `<span class="font-bold mr-1">${result.scoreText}</span>` : ''}
+									<div class="text-center">
 										<button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded" onclick="displayReviews('${result.appId}');">Show Reviews</button>
 									</div>
 								</div>
+								<div class="w-full md:w-3/4 p-4 border-l">
+									<div class="card-body">
+										<h5 class="card-title font-bold text-lg mb-2">${result.title}</h5>
+										<p class="card-text text-gray-700">${result.summary}</p>
+										<div class="flex items-center justify-between mt-4">
+                           ${result.scoreText ? `
+                            
+											<div class="flex items-center">
+												<svg class="h-5 w-5 fill-current ${result.scoreText}" viewBox="0 0 24 24">
+													<path d="M12 .69l3.117 7.655h8.048l-6.522 4.747 2.847 7.694L12 17.322l-7.49 4.144 2.847-7.694L.835 8.345h8.048L12 .69zm0 2.322L9.107 8.345H1.427l5.804 4.227-2.847 7.694L12 14.678l7.49 4.144-2.847-7.694 5.804-4.227h-7.68L12 2.012z"/>
+												</svg>
+												<span class="font-bold ml-1 mr-2">${result.scoreText}</span>
+											</div>` : ""}
+                          
+											<div class="flex justify-center">
+												<button class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded" onclick="toggleAnnotation('${result.appId}');">Add Annotation</button>
+											</div>
+										</div>
+										<div id="annotation-${result.appId}" class="annotation mt-4 hidden">
+											<textarea id="annotation-input-${result.appId}" class="annotation-input-container resize-none border rounded-lg p-2 w-full text-gray-700" placeholder="${localStorage.getItem('annotation-' + result.appId) || "Write something here"}"></textarea>
+											<button class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 mt-2 rounded" onclick="saveAnnotation('${result.appId}');">Save Annotation</button>
+										</div>
+									</div>
+								</div>
 							</div>
-						</div>
-					`; 
+        `;
+              resultsList.appendChild(div_item);
+            });
+          } else {
+            // handle error case where data.results.data is not an array
+            console.error("Response data is not an array:", data);
+          }
+          // Clear the input field
+          input.value = "";
+        }).catch(error => {
+            console.error("Error fetching data:", error);
+          // Add some error handling here 
+        });
+      });
 
-					  resultsList.appendChild(div_item);
-					});
-				  } else {
-					// handle error case where data.results is not an array
-					console.error('Response data is not an array:', data);
-				  }
-        })
-				});
+      function toggleAnnotation(appId) {
+        const annotationDiv = document.getElementById(`annotation-${appId}`);
+        annotationDiv.classList.toggle("hidden");
+        const annotationInput = document.getElementById(`annotation-input-${appId}`);
+        annotationInput.addEventListener("blur", function() {
+          localStorage.setItem(`annotation-${appId}`, annotationInput.value);
+        });
+      }
+
+      function saveAnnotation(appId) {
+        const annotationInput = document.getElementById(`annotation-input-${appId}`);
+        const annotationValue = annotationInput ? annotationInput.value : "";
+        const csvData = `App ID, Annotation\n${appId}, ${annotationValue}`;
+        const encodedUri = encodeURI(`data:text/csv;charset=utf-8,${csvData}`);
+        const link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", "annotations.csv");
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
     </script>
     <style>
       input[type="text"] {
@@ -159,6 +202,11 @@
         .container {
           max-width: 1024px;
         }
+      }
+
+      .annotation-input-container {
+        width: 100%;
+        padding: 0;
       }
     </style>
   </body>
