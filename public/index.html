@@ -28,7 +28,6 @@
       const resultsList = document.querySelector("#results");
       let page = 1; 
       let query = "";
-      
       // Display reviews for an app
       if (resultsList) {
         function displayReviews(appId) {
@@ -185,7 +184,8 @@
                 prevLoadMoreBtn.remove();
               }
 
-              const loadMoreBtn = document.createElement("div").id = "load-more-btn"; 
+              const loadMoreBtn = document.createElement("div");
+              loadMoreBtn.id = "load-more-btn"; 
               loadMoreBtn.innerHTML = `
                 <div class="flex justify-center mt-4">
                   <button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded" onclick="loadMoreResults();">Load More</button>
