@@ -26,6 +26,8 @@
       const form = document.querySelector("form");
       const input = document.querySelector("#query");
       const resultsList = document.querySelector("#results");
+      let page = 1; 
+      let query = "";/*
       if (resultsList) {
         function displayReviews(appId) {
           fetch(`/api/apps/${appId}/reviews`).then(response => response.json()).then(data => {
@@ -35,6 +37,7 @@
                 const div_item = document.createElement("div");
                 div_item.innerHTML = ` 
                 
+						
 						<div class="flex bg-white mb-6 rounded-lg shadow">
 							<div class="w-full md:w-1/4 p-4"></div>
 							<div class="w-full md:w-3/4 p-4 border-l">
@@ -43,15 +46,18 @@
 										<div class="flex items-center">
                         ${result.userName && new Date(result.date).toLocaleString() ? ` 
                           
+											
 											<div class="ml-2 text-sm">
 												<p class="text-gray-900 leading-none">${result.userName}</p>
 												<p class="text-gray-600">${new Date(result.date).toLocaleString()}</p>
 											</div>` : ""} 
                         
+										
 										</div>
 										<div class="flex items-center">
                         ${result.scoreText ? ` 
                           
+											
 											<div class="flex items-center">
 												<svg class="h-5 w-5 fill-current ${result.scoreText}" viewBox="0 0 24 24">
 													<path d="M12 .69l3.117 7.655h8.048l-6.522 4.747 2.847 7.694L12 17.322l-7.49 4.144 2.847-7.694L.835 8.345h8.048L12 .69zm0 2.322L9.107 8.345H1.427l5.804 4.227-2.847 7.694L12 14.678l7.49 4.144-2.847-7.694 5.804-4.227h-7.68L12 2.012z"/>
@@ -59,19 +65,23 @@
 												<span class="ml-1">${result.scoreText}</span>
 											</div>` : ""} 
                         
+										
 										</div>
 									</div>
                       ${result.text ? ` 
                         
+									
 									<p class="card-text text-gray-700">${result.text}</p>` : ""} 
                       ${new Date(result.replyDate).toLocaleString() && result.replyText ? ` 
                         
+									
 									<div class="flex flex-col mt-4">
 										<hr>
 											<p class="text-sm font-bold mt-2">${result.userName}</p>
 											<p class="text-gray-700">${result.replyText}</p>
 										</div>` : ""} 
                         
+									
 									</div>
 								</div>
 							</div>
@@ -84,65 +94,119 @@
             }
           })
         }
-      };
+      };*/
       form.addEventListener("submit", function(event) {
         event.preventDefault();
-        const query = input.value;
-        fetch(`/api/apps/?q=${query}`)
-          .then(response => response.json())
-          .then(data => {
-          resultsList.innerHTML = "";
-          if (Array.isArray(data.results) && data.results) {
-            data.results.forEach(result => {
-              const div_item = document.createElement("div");
-              div_item.innerHTML = `  
-									
-						<div class="flex bg-white mb-6 rounded-lg shadow">
-							<div class="w-full md:w-1/4 p-4">
-								<img class="border rounded-lg" src="${result.icon}" alt="App icon">
-									<div class="text-center">
-										<button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded" onclick="displayReviews('${result.appId}');">Show Reviews</button>
-									</div>
-								</div>
-								<div class="w-full md:w-3/4 p-4 border-l">
-									<div class="card-body">
-										<h5 class="card-title font-bold text-lg mb-2">${result.title}</h5>
-										<p class="card-text text-gray-700">${result.summary}</p>
-										<div class="flex items-center justify-between mt-4">
-                           ${result.scoreText ? `
-                            
-											<div class="flex items-center">
-												<svg class="h-5 w-5 fill-current ${result.scoreText}" viewBox="0 0 24 24">
-													<path d="M12 .69l3.117 7.655h8.048l-6.522 4.747 2.847 7.694L12 17.322l-7.49 4.144 2.847-7.694L.835 8.345h8.048L12 .69zm0 2.322L9.107 8.345H1.427l5.804 4.227-2.847 7.694L12 14.678l7.49 4.144-2.847-7.694 5.804-4.227h-7.68L12 2.012z"/>
-												</svg>
-												<span class="font-bold ml-1 mr-2">${result.scoreText}</span>
-											</div>` : ""}
-                          
-											<div class="flex justify-center">
-												<button class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded" onclick="toggleAnnotation('${result.appId}');">Add Annotation</button>
-											</div>
-										</div>
-										<div id="annotation-${result.appId}" class="annotation mt-4 hidden">
-											<textarea id="annotation-input-${result.appId}" class="annotation-input-container resize-none border rounded-lg p-2 w-full text-gray-700" placeholder="${localStorage.getItem('annotation-' + result.appId) || "Write something here"}"></textarea>
-											<button class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 mt-2 rounded" onclick="saveAnnotation('${result.appId}');">Save Annotation</button>
-										</div>
-									</div>
-								</div>
-							</div>
-        `;
-              resultsList.appendChild(div_item);
-            });
-          } else {
-            // handle error case where data.results.data is not an array
-            console.error("Response data is not an array:", data);
-          }
-          // Clear the input field
-          input.value = "";
-        }).catch(error => {
-            console.error("Error fetching data:", error);
-          // Add some error handling here 
-        });
+        query = input.value.trim();
+        if (query === "") {
+          return;
+        }
+        page = 1;
+        displayResults(query, page);
       });
+      
+      const uniqueApps = new Set();
+
+      async function displayResults(query, page) {
+        await fetch(`/api/apps/?q=${query}&page=${page}`).then(async response => {
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          return response.json();
+        }).then(async data => {  
+          resultsList.innerHTML += ""; 
+          if (Array.isArray(data.results) && data.results) {
+ 
+            data.results.forEach(result => {
+              if (!uniqueApps.has(result.appId)) {
+                uniqueApps.add(result.appId); 
+
+                const div_item = document.createElement("div");
+                div_item.innerHTML = `  
+                    
+              
+              <div class="flex bg-white mb-6 rounded-lg shadow">
+                <div class="w-full md:w-1/4 p-4">
+                  <img class="border rounded-lg" src="${result.icon}" alt="App icon">
+                    <div class="text-center">
+                      <button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded" onclick="displayReviews('${result.appId}');">Show Reviews</button>
+                    </div>
+                  </div>
+                  <div class="w-full md:w-3/4 p-4 border-l">
+                    <div class="card-body">
+                      <h5 class="card-title font-bold text-lg mb-2">${result.title}</h5>
+                      <p class="card-text text-gray-700">${result.summary}</p>
+                      <div class="flex items-center justify-between mt-4">
+                            ${result.scoreText ? `
+                              
+                        
+                        <div class="flex items-center">
+                          <svg class="h-5 w-5 fill-current ${result.scoreText}" viewBox="0 0 24 24">
+                            <path d="M12 .69l3.117 7.655h8.048l-6.522 4.747 2.847 7.694L12 17.322l-7.49 4.144 2.847-7.694L.835 8.345h8.048L12 .69zm0 2.322L9.107 8.345H1.427l5.804 4.227-2.847 7.694L12 14.678l7.49 4.144-2.847-7.694 5.804-4.227h-7.68L12 2.012z"/>
+                          </svg>
+                          <span class="font-bold ml-1 mr-2">${result.scoreText}</span>
+                        </div>` : ""}
+                            
+                        
+                        <div class="flex justify-center">
+                          <button class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded" onclick="toggleAnnotation('${result.appId}');">Add Annotation</button>
+                        </div>
+                      </div>
+                      <div id="annotation-${result.appId}" class="annotation mt-4 hidden">
+                        <textarea id="annotation-input-${result.appId}" class="annotation-input-container resize-none border rounded-lg p-2 w-full text-gray-700" placeholder="${localStorage.getItem('annotation-' + result.appId) || "Write something here"}"></textarea>
+                        <button class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 mt-2 rounded" onclick="saveAnnotation('${result.appId}');">Save Annotation</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+          `;
+              resultsList.appendChild(div_item);
+              } else {
+                return;
+              }
+
+            }); 
+          }
+          const TOKEN_BUCKET_CAPACITY = 100; // Max number of requests allowed within the window
+          const TOKEN_BUCKET_REFILL_RATE = 1; // Number of tokens (requests) to add per second
+          let tokenBucket = TOKEN_BUCKET_CAPACITY; // Initialize the token bucket with the capacity
+
+          if (data.next !== null) {
+            // Check if there are enough tokens in the bucket to make the request
+            if (tokenBucket > 0) {
+              // Decrement the token bucket by 1
+              tokenBucket--;
+
+              // Remove any previous load more button element
+              const prevLoadMoreBtn = document.querySelector("#load-more-btn");
+              if (prevLoadMoreBtn) {
+                prevLoadMoreBtn.remove();
+              }
+
+              const loadMoreBtn = document.createElement("div");
+              loadMoreBtn.id = "load-more-btn";
+              loadMoreBtn.innerHTML = `
+                <div class="flex justify-center mt-4">
+                  <button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded" onclick="loadMoreResults();">Load More</button>
+                </div>
+              `;
+              resultsList.appendChild(loadMoreBtn);
+
+              page += 1;
+            } else {
+                // If there are no tokens left, wait for the next refill before making the request
+                await new Promise((resolve) => setTimeout(resolve, 1000 / TOKEN_BUCKET_REFILL_RATE));
+                tokenBucket = TOKEN_BUCKET_CAPACITY; // Refill the token bucket
+            }
+          }
+        }).catch(error => {
+          console.error("There has been a problem with your fetch operation:", error);
+        });
+      }
+ 
+      async function loadMoreResults() {
+        await displayResults(query, page + 1);  
+      }
 
       function toggleAnnotation(appId) {
         const annotationDiv = document.getElementById(`annotation-${appId}`);
