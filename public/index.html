@@ -27,7 +27,9 @@
       const input = document.querySelector("#query");
       const resultsList = document.querySelector("#results");
       let page = 1; 
-      let query = "";/*
+      let query = "";
+      
+      // Display reviews for an app
       if (resultsList) {
         function displayReviews(appId) {
           fetch(`/api/apps/${appId}/reviews`).then(response => response.json()).then(data => {
@@ -94,7 +96,7 @@
             }
           })
         }
-      };*/
+      };
       form.addEventListener("submit", function(event) {
         event.preventDefault();
         query = input.value.trim();
@@ -106,6 +108,10 @@
       });
       
       const uniqueApps = new Set();
+ 
+      const TOKEN_BUCKET_CAPACITY = 100; // Max number of requests allowed within the window
+      const TOKEN_BUCKET_REFILL_RATE = 1; // Number of tokens (requests) to add per second
+      let tokenBucket = TOKEN_BUCKET_CAPACITY; // Initialize the token bucket with the capacity 
 
       async function displayResults(query, page) {
         await fetch(`/api/apps/?q=${query}&page=${page}`).then(async response => {
@@ -163,13 +169,9 @@
               resultsList.appendChild(div_item);
               } else {
                 return;
-              }
-
+              } 
             }); 
           }
-          const TOKEN_BUCKET_CAPACITY = 100; // Max number of requests allowed within the window
-          const TOKEN_BUCKET_REFILL_RATE = 1; // Number of tokens (requests) to add per second
-          let tokenBucket = TOKEN_BUCKET_CAPACITY; // Initialize the token bucket with the capacity
 
           if (data.next !== null) {
             // Check if there are enough tokens in the bucket to make the request
@@ -183,8 +185,7 @@
                 prevLoadMoreBtn.remove();
               }
 
-              const loadMoreBtn = document.createElement("div");
-              loadMoreBtn.id = "load-more-btn";
+              const loadMoreBtn = document.createElement("div").id = "load-more-btn"; 
               loadMoreBtn.innerHTML = `
                 <div class="flex justify-center mt-4">
                   <button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded" onclick="loadMoreResults();">Load More</button>
