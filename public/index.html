@@ -174,35 +174,10 @@
                     return;
                   } 
                 }); 
-              } 
+              }  
 
               if (data.next !== null) {
-                // Check if there are enough tokens in the bucket to make the request
-                if (tokenBucket > 0) {
-                  // Decrement the token bucket by 1
-                  tokenBucket--;
-
-                  // Remove any previous load more button element
-                  const prevLoadMoreBtn = document.querySelector("#load-more-btn");
-                  if (prevLoadMoreBtn) {
-                    prevLoadMoreBtn.remove();
-                  }
-
-                  const loadMoreBtn = document.createElement("div");
-                  loadMoreBtn.id = "load-more-btn"; 
-                  loadMoreBtn.innerHTML = `
-                    <div class="flex justify-center mt-4">
-                      <button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded" onclick="loadMoreResults();">Load More</button>
-                    </div>
-                  `;
-                  resultsList.appendChild(loadMoreBtn);
-
                   page += 1;
-                } else {
-                    // If there are no tokens left, wait for the next refill before making the request
-                    await new Promise((resolve) => setTimeout(resolve, 1000 / TOKEN_BUCKET_REFILL_RATE));
-                    tokenBucket = TOKEN_BUCKET_CAPACITY; // Refill the token bucket
-                }
               }
             }).catch(error => {
               console.error("There has been a problem with your fetch operation:", error);
@@ -219,11 +194,7 @@
             console.error("There has been a problem with your fetch operation:", error);
           }
         }
-      }
- 
-      async function loadMoreResults() {
-        await displayResults(query, page + 1, num);  
-      }
+      } 
 
       function toggleAnnotation(appId) {
         const annotationDiv = document.getElementById(`annotation-${appId}`);
