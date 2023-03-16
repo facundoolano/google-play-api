@@ -96,117 +96,133 @@
           })
         }
       };
-      form.addEventListener("submit", function(event) {
+      form.addEventListener("submit", async function(event) {
         event.preventDefault();
         query = input.value.trim();
         if (query === "") {
           return;
         }
-        page = 1;
-        displayResults(query, page);
+        page = 0;
+        num = 40;
+        try {   
+          await displayResults(query, page, num);
+        } catch (error) {
+          console.error("There has been a problem with your fetch operation:", error);
+        }
       });
-      
-      const uniqueApps = new Set();
- 
-      const TOKEN_BUCKET_CAPACITY = 100; // Max number of requests allowed within the window
-      const TOKEN_BUCKET_REFILL_RATE = 1; // Number of tokens (requests) to add per second
-      let tokenBucket = TOKEN_BUCKET_CAPACITY; // Initialize the token bucket with the capacity 
 
-      async function displayResults(query, page) {
-        await fetch(`/api/apps/?q=${query}&page=${page}`).then(async response => {
-          if (!response.ok) {
-            throw new Error("Network response was not ok");
-          }
-          return response.json();
-        }).then(async data => {  
-          resultsList.innerHTML += ""; 
-          if (Array.isArray(data.results) && data.results) {
- 
-            data.results.forEach(result => {
-              if (!uniqueApps.has(result.appId)) {
-                uniqueApps.add(result.appId); 
+      async function displayResults(query, page, num) { 
+        const uniqueApps = new Set(); // Set to store unique app IDs  
 
-                const div_item = document.createElement("div");
-                div_item.innerHTML = `  
-                    
-              
-              <div class="flex bg-white mb-6 rounded-lg shadow">
-                <div class="w-full md:w-1/4 p-4">
-                  <img class="border rounded-lg" src="${result.icon}" alt="App icon">
-                    <div class="text-center">
-                      <button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded" onclick="displayReviews('${result.appId}');">Show Reviews</button>
-                    </div>
-                  </div>
-                  <div class="w-full md:w-3/4 p-4 border-l">
-                    <div class="card-body">
-                      <h5 class="card-title font-bold text-lg mb-2">${result.title}</h5>
-                      <p class="card-text text-gray-700">${result.summary}</p>
-                      <div class="flex items-center justify-between mt-4">
-                            ${result.scoreText ? `
-                              
+        try {
+          while (true) {
+            await fetch(`/api/apps/?q=${query}&page=${page}&num=${num}`).then(async response => {
+              if (!response.ok) {
+                throw new Error("Network response was not ok");
+              }
+              return response.json();
+            }).then(async data => {   
+
+              // Check if the response data is an array
+              if (Array.isArray(data.results) && data.results) {
+                resultsList.innerHTML += "";
+                data.results.forEach(result => {
+                  if (!uniqueApps.has(result.appId)) {
+                    uniqueApps.add(result.appId); 
+
+                    const div_item = document.createElement("div");
+                    div_item.innerHTML = `  
                         
-                        <div class="flex items-center">
-                          <svg class="h-5 w-5 fill-current ${result.scoreText}" viewBox="0 0 24 24">
-                            <path d="M12 .69l3.117 7.655h8.048l-6.522 4.747 2.847 7.694L12 17.322l-7.49 4.144 2.847-7.694L.835 8.345h8.048L12 .69zm0 2.322L9.107 8.345H1.427l5.804 4.227-2.847 7.694L12 14.678l7.49 4.144-2.847-7.694 5.804-4.227h-7.68L12 2.012z"/>
-                          </svg>
-                          <span class="font-bold ml-1 mr-2">${result.scoreText}</span>
-                        </div>` : ""}
-                            
-                        
-                        <div class="flex justify-center">
-                          <button class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded" onclick="toggleAnnotation('${result.appId}');">Add Annotation</button>
+                  
+                  <div class="flex bg-white mb-6 rounded-lg shadow">
+                    <div class="w-full md:w-1/4 p-4">
+                      <img class="border rounded-lg" src="${result.icon}" alt="App icon">
+                        <div class="text-center">
+                          <button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded" onclick="displayReviews('${result.appId}');">Show Reviews</button>
                         </div>
                       </div>
-                      <div id="annotation-${result.appId}" class="annotation mt-4 hidden">
-                        <textarea id="annotation-input-${result.appId}" class="annotation-input-container resize-none border rounded-lg p-2 w-full text-gray-700" placeholder="${localStorage.getItem('annotation-' + result.appId) || "Write something here"}"></textarea>
-                        <button class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 mt-2 rounded" onclick="saveAnnotation('${result.appId}');">Save Annotation</button>
+                      <div class="w-full md:w-3/4 p-4 border-l">
+                        <div class="card-body">
+                          <h5 class="card-title font-bold text-lg mb-2">${result.title}</h5>
+                          <p class="card-text text-gray-700">${result.summary}</p>
+                          <div class="flex items-center justify-between mt-4">
+                                ${result.scoreText ? `
+                                  
+                            
+                            <div class="flex items-center">
+                              <svg class="h-5 w-5 fill-current ${result.scoreText}" viewBox="0 0 24 24">
+                                <path d="M12 .69l3.117 7.655h8.048l-6.522 4.747 2.847 7.694L12 17.322l-7.49 4.144 2.847-7.694L.835 8.345h8.048L12 .69zm0 2.322L9.107 8.345H1.427l5.804 4.227-2.847 7.694L12 14.678l7.49 4.144-2.847-7.694 5.804-4.227h-7.68L12 2.012z"/>
+                              </svg>
+                              <span class="font-bold ml-1 mr-2">${result.scoreText}</span>
+                            </div>` : ""}
+                                
+                            
+                            <div class="flex justify-center">
+                              <button class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded" onclick="toggleAnnotation('${result.appId}');">Add Annotation</button>
+                            </div>
+                          </div>
+                          <div id="annotation-${result.appId}" class="annotation mt-4 hidden">
+                            <textarea id="annotation-input-${result.appId}" class="annotation-input-container resize-none border rounded-lg p-2 w-full text-gray-700" placeholder="${localStorage.getItem('annotation-' + result.appId) || "Write something here"}"></textarea>
+                            <button class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 mt-2 rounded" onclick="saveAnnotation('${result.appId}');">Save Annotation</button>
+                          </div>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </div>
-          `;
-              resultsList.appendChild(div_item);
-              } else {
-                return;
-              } 
-            }); 
-          }
-
-          if (data.next !== null) {
-            // Check if there are enough tokens in the bucket to make the request
-            if (tokenBucket > 0) {
-              // Decrement the token bucket by 1
-              tokenBucket--;
-
-              // Remove any previous load more button element
-              const prevLoadMoreBtn = document.querySelector("#load-more-btn");
-              if (prevLoadMoreBtn) {
-                prevLoadMoreBtn.remove();
-              }
-
-              const loadMoreBtn = document.createElement("div");
-              loadMoreBtn.id = "load-more-btn"; 
-              loadMoreBtn.innerHTML = `
-                <div class="flex justify-center mt-4">
-                  <button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded" onclick="loadMoreResults();">Load More</button>
-                </div>
               `;
-              resultsList.appendChild(loadMoreBtn);
+                  resultsList.appendChild(div_item);
+                  } else {
+                    return;
+                  } 
+                }); 
+              } 
 
-              page += 1;
-            } else {
-                // If there are no tokens left, wait for the next refill before making the request
-                await new Promise((resolve) => setTimeout(resolve, 1000 / TOKEN_BUCKET_REFILL_RATE));
-                tokenBucket = TOKEN_BUCKET_CAPACITY; // Refill the token bucket
-            }
+              if (data.next !== null) {
+                // Check if there are enough tokens in the bucket to make the request
+                if (tokenBucket > 0) {
+                  // Decrement the token bucket by 1
+                  tokenBucket--;
+
+                  // Remove any previous load more button element
+                  const prevLoadMoreBtn = document.querySelector("#load-more-btn");
+                  if (prevLoadMoreBtn) {
+                    prevLoadMoreBtn.remove();
+                  }
+
+                  const loadMoreBtn = document.createElement("div");
+                  loadMoreBtn.id = "load-more-btn"; 
+                  loadMoreBtn.innerHTML = `
+                    <div class="flex justify-center mt-4">
+                      <button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded" onclick="loadMoreResults();">Load More</button>
+                    </div>
+                  `;
+                  resultsList.appendChild(loadMoreBtn);
+
+                  page += 1;
+                } else {
+                    // If there are no tokens left, wait for the next refill before making the request
+                    await new Promise((resolve) => setTimeout(resolve, 1000 / TOKEN_BUCKET_REFILL_RATE));
+                    tokenBucket = TOKEN_BUCKET_CAPACITY; // Refill the token bucket
+                }
+              }
+            }).catch(error => {
+              console.error("There has been a problem with your fetch operation:", error);
+            });
           }
-        }).catch(error => {
-          console.error("There has been a problem with your fetch operation:", error);
-        });
+        } catch (error) {
+          if (error.message && error.message.includes("The number of results can't exceed 250")) {
+            // Display an error message to the user
+            const errorMessage = document.createElement("div");
+            errorMessage.className = "text-center mt-8 text-gray-500";
+            errorMessage.innerText = "Sorry, too many results. Please refine your search query.";
+            resultsList.appendChild(errorMessage);
+          } else {
+            console.error("There has been a problem with your fetch operation:", error);
+          }
+        }
       }
  
       async function loadMoreResults() {
-        await displayResults(query, page + 1);  
+        await displayResults(query, page + 1, num);  
       }
 
       function toggleAnnotation(appId) {
