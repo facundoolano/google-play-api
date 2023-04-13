@@ -23,9 +23,7 @@ ipcRenderer.on('search-results', async (event, resultsData, term) => {
       return;
     }
 
-    console.log("Parsed search results:", results);
-
-    const fields = ["title", "id", "url", "icon", "developer", "developerId", "priceText", "price", "isFree", "summary", "scoreText", "score"];
+    const fields = ["title", "appId", "url", "icon", "developer", "currency", "free", "summary", "scoreText", "score"];
     let csvData = "";
 
     // Loop through each search result and add it to the CSV data string
@@ -34,10 +32,17 @@ ipcRenderer.on('search-results', async (event, resultsData, term) => {
       const result = results[resultId];
       const row = [];
       fields.forEach((field) => {
-        if (field === "isFree") {
-          row.push(result["price"] === 0 ? "Yes" : "No");
+        if (field === "developer") {
+          row.push(`"${result["developer"].replace(/"/g, '""')}"`);
+        } else if (field === "title") {
+          row.push(`"${result["title"].replace(/"/g, '""')}"`);
+        } 
+        else if (field === "free") {
+          row.push(result[field] ? "true" : "false");
+        } else if (field === "summary") {
+          row.push(`"${result[field].replace(/"/g, '""')}"`);
         } else {
-          row.push(result[field] || "");
+          row.push(result[field] || "N/A");
         }
       });
       csvData += row.join(",") + "\n";
@@ -46,7 +51,9 @@ ipcRenderer.on('search-results', async (event, resultsData, term) => {
     // Create a temporary link to download the CSV file
     const link = document.createElement("a");
     link.setAttribute("href", "data:text/csv;charset=utf-8," + encodeURIComponent(csvData));
+    // save to csvs folder
     link.setAttribute("download", `${term}.csv`);
+
 
     // Append the link to the document body and click it to download the CSV file
     document.body.appendChild(link);
