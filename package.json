@@ -1,1 +1,73 @@
-{"name":"google-play-api","version":"1.3.0","description":"turn google play scraper into a RESTful API","main":"server.js","scripts":{"start":"node server.js"},"author":"Facundo Olano","license":"ISC","repository":{"type":"git","url":"git+https://github.com/facundoolano/google-play-api.git"},"dependencies":{"axios":"^1.3.4","ejs":"^3.1.8","express":"^4.18.2","google-play-scraper":"^9.1.0","handlebars":"^4.7.7","path":"^0.12.7","ramda":"^0.28.0","react":"^18.2.0","react-dom":"^18.2.0","vue-router":"^4.1.6"},"devDependencies":{"eslint":"^7.32.0","eslint-config-semistandard":"^16.0.0","eslint-config-standard":"^16.0.3","eslint-plugin-import":"^2.24.2","eslint-plugin-node":"^11.1.0","eslint-plugin-promise":"^5.1.0","eslint-plugin-standard":"^4.1.0"},"bugs":{"url":"https://github.com/facundoolano/google-play-api/issues"},"homepage":"https://github.com/facundoolano/google-play-api#readme","directories":{"lib":"lib"}}
+{
+  "name": "google-play-api",
+  "version": "1.0.0",
+  "description": "My Electron application description",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "electron-forge start --enable-logging",
+    "package": "electron-forge package",
+    "make": "electron-forge make",
+    "publish": "electron-forge publish",
+    "lint": "eslint src --color"
+  },
+  "keywords": [],
+  "author": "javu4",
+  "license": "MIT",
+  "config": {
+    "forge": {
+      "make_targets": {
+        "win32": [
+          "squirrel"
+        ],
+        "darwin": [
+          "zip"
+        ],
+        "linux": [
+          "deb",
+          "rpm"
+        ]
+      },
+      "electronPackagerConfig": {
+        "packageManager": "npm"
+      },
+      "electronWinstallerConfig": {
+        "name": "csv_prototype"
+      },
+      "electronInstallerDebian": {},
+      "electronInstallerRedhat": {},
+      "github_repository": {
+        "owner": "",
+        "name": ""
+      },
+      "windowsStoreConfig": {
+        "packageName": "",
+        "name": "csvprototype"
+      }
+    }
+  },
+  "dependencies": {
+    "electron-compile": "^6.4.4",
+    "electron-squirrel-startup": "^1.0.0",
+    "electron-store": "^8.1.0"
+  },
+  "devDependencies": {
+    "babel-plugin-transform-async-to-generator": "^6.24.1",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-react": "^6.24.1",
+    "electron-forge": "^5.2.4",
+    "electron-prebuilt-compile": "8.2.0",
+    "eslint": "^3.19.0",
+    "eslint-config-airbnb": "^15.1.0",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-jsx-a11y": "^5.1.1",
+    "eslint-plugin-react": "^7.32.2",
+    "google-play-scraper": "^9.1.0"
+  },
+  "bugs": {
+    "url": "https://github.com/facundoolano/google-play-api/issues"
+  },
+  "homepage": "https://github.com/facundoolano/google-play-api#readme",
+  "directories": {
+    "lib": "lib"
+  }
+}
