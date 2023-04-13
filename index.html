@@ -1,33 +1,29 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="UTF-8"> 
+    <meta charset="UTF-8">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
     <title>Google Play Scraper</title>
     <link rel="stylesheet" href="./styles.css">
   </head>
-  <body> 
-    <!-- Header --> 
-    <h1>Google Play Scraper</h1> 
-
+  <body>
+    <!-- Header -->
+    <h1>Google Play Scraper</h1>
     <!-- Instructions -->
     <form>
       <fieldset>
         <p>To use this tool, simply search and click the corresponding button.</p>
-
       </fieldset>
-    </form>  
-
+    </form>
     <!-- Search Form -->
     <form id="search-form">
       <fieldset>
         <legend>Search by App Name or Keywords</legend>
         <label for="search-input">App Name or Keywords:</label>
-        <input type="text" id="search-input" name="search-input"> 
+        <input type="text" id="search-input" name="search-input">
         <input type="submit" value="Search"></input>
       </fieldset>
-    </form> 
-
+    </form>
     <!-- Developer Form -->
     <form id="developer-form">
       <fieldset>
@@ -36,7 +32,7 @@
         <input type="text" id="developer-input" name="developer-input">
         <input type="submit" value="Search"></input>
       </fieldset>
-    </form>   
+    </form>
     <!-- Scripts -->
     <script nonce="randomnonce" src="./src/renderer.js"></script>
   </body>

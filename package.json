@@ -11,7 +11,7 @@
     "lint": "eslint src --color"
   },
   "keywords": [],
-  "author": "javu4",
+  "author": "javab3ans",
   "license": "MIT",
   "config": {
     "forge": {
