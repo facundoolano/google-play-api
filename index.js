@@ -56,6 +56,97 @@ ipcMain.on('search', async (event, searchTerm) => {
 	}
 });
 
+/* Search suggest */
+ipcMain.on('search-suggest', async (event, query) => {
+	if (!query.suggest) {
+	  return;
+	}
+  
+	const toJSON = (term) => ({
+	  term,
+	  url: '/apps/?q=' + encodeURIComponent(term)
+	});
+  
+	try {
+	  const terms = await gplay.suggest({ term: query.suggest });
+	  const result = terms.map(toJSON);
+	  event.reply('search-suggest-result', result);
+	} catch (err) {
+	  	event.reply('error', err.message);
+	}
+});
+
+/* Similar apps */
+ipcMain.on('get-similar-apps', async (event, options) => {
+	try {
+	  const apps = await gplay.similar(options);
+	  const cleanApps = apps.map(cleanUrls(options));
+	  event.reply('similar-apps', cleanApps);
+	} catch (err) {
+	  	event.reply('error', err.message);
+	}
+  });
+  
+  /* Data Safety */
+  ipcMain.on('get-data-safety', async (event, options) => {
+	try {
+	  const dataSafety = await gplay.datasafety(options);
+	  event.reply('data-safety', dataSafety);
+	} catch (err) {
+	  	event.reply('error', err.message);
+	}
+  });
+  
+  /* App permissions */
+  ipcMain.on('get-app-permissions', async (event, options) => {
+	try {
+	  const permissions = await gplay.permissions(options);
+	  event.reply('app-permissions', permissions);
+	} catch (err) {
+	  	event.reply('error', err.message);
+	}
+  });
+
+  /* App reviews */
+ipcMain.on('get-reviews', async (event, options) => {
+	try {
+	  const reviews = await gplay.reviews(options);
+	  const page = parseInt(options.page || '0');
+	  const subpath = `/apps/${options.appId}/reviews/`;
+  
+	  if (page > 0) {
+		const prevUrl = new URLSearchParams();
+		prevUrl.set('page', page - 1);
+		reviews.prev = `${subpath}?${prevUrl.toString()}`;
+	  }
+  
+	  if (reviews.results.length) {
+		const nextUrl = new URLSearchParams();
+		nextUrl.set('page', page + 1);
+		reviews.next = `${subpath}?${nextUrl.toString()}`;
+	  }
+  
+	  event.reply('reviews', reviews);
+	} catch (err) {
+	  	event.reply('error', err.message);
+	}
+  });
+  
+/* Apps by developer */
+ipcMain.on('get-apps-by-dev', async (event, options) => {
+	try {
+		const apps = await gplay.developer(options);
+		const appsWithCleanUrls = apps.map(cleanUrls(options));
+		const data = {
+			devId: options.devId,
+			apps: appsWithCleanUrls
+		};
+		event.reply('apps-by-dev', data);
+	} catch (err) {
+		event.reply('error', err.message);
+	}
+});
+   
 async function searchTermMore(term, arr = {}) {
 	if (!term) {
 		console.error("Error: search term is undefined");
