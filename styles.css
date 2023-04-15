@@ -78,7 +78,7 @@ input[type="submit"]:hover {
 }
 
 #search-form input[type="submit"],
-#developer-form input[type="submit"] {
+#review-form input[type="submit"] {
   display: block;
   margin: 0 auto;
 }

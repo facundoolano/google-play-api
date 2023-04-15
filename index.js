@@ -56,27 +56,7 @@ ipcMain.on('search', async (event, searchTerm) => {
 	}
 });
 
-/* Search suggest */
-ipcMain.on('search-suggest', async (event, query) => {
-	if (!query.suggest) {
-	  return;
-	}
-  
-	const toJSON = (term) => ({
-	  term,
-	  url: '/apps/?q=' + encodeURIComponent(term)
-	});
-  
-	try {
-	  const terms = await gplay.suggest({ term: query.suggest });
-	  const result = terms.map(toJSON);
-	  event.reply('search-suggest-result', result);
-	} catch (err) {
-	  	event.reply('error', err.message);
-	}
-});
-
-/* Similar apps */
+/* Similar Apps */
 ipcMain.on('get-similar-apps', async (event, options) => {
 	try {
 	  const apps = await gplay.similar(options);
@@ -88,64 +68,62 @@ ipcMain.on('get-similar-apps', async (event, options) => {
   });
   
   /* Data Safety */
-  ipcMain.on('get-data-safety', async (event, options) => {
-	try {
-	  const dataSafety = await gplay.datasafety(options);
-	  event.reply('data-safety', dataSafety);
+  ipcMain.on('get-data-safety', async (event, appId) => {
+	try { 
+	  const dataSafety = await gplay.datasafety(appId);
+	  event.sender.send('data-safety', dataSafety);
 	} catch (err) {
-	  	event.reply('error', err.message);
-	}
+	event.sender.send('data-safety-error', err.message)
+	};
   });
   
-  /* App permissions */
-  ipcMain.on('get-app-permissions', async (event, options) => {
+  /* App Permissions */
+  ipcMain.on('get-app-permissions', async (event, appId) => {
 	try {
-	  const permissions = await gplay.permissions(options);
-	  event.reply('app-permissions', permissions);
+	  const appPermissions = await gplay.permissions(appId);
+	  event.sender.send('app-permissions', appPermissions);
 	} catch (err) {
-	  	event.reply('error', err.message);
+	  event.sender.send('permissions-error', err.message);
 	}
   });
 
-  /* App reviews */
-ipcMain.on('get-reviews', async (event, options) => {
-	try {
-	  const reviews = await gplay.reviews(options);
+/* App reviews */
+ipcMain.on('get-reviews', async (event, appId) => {
+	const options = {
+	  appId: appId,
+	  page: 0,
+	  lang: 'en',
+	  country: 'us'
+	};
+  
+	function paginate(reviews) {
 	  const page = parseInt(options.page || '0');
-	  const subpath = `/apps/${options.appId}/reviews/`;
+	  const subpath = `/apps/${appId}/reviews/`;
   
 	  if (page > 0) {
-		const prevUrl = new URLSearchParams();
-		prevUrl.set('page', page - 1);
+		const prevUrl = new URLSearchParams({ page: page - 1 });
 		reviews.prev = `${subpath}?${prevUrl.toString()}`;
 	  }
   
-	  if (reviews.results.length) {
-		const nextUrl = new URLSearchParams();
-		nextUrl.set('page', page + 1);
+	  if (reviews.results && reviews.results.length) {
+		const nextUrl = new URLSearchParams({ page: page + 1 });
 		reviews.next = `${subpath}?${nextUrl.toString()}`;
 	  }
   
-	  event.reply('reviews', reviews);
+	  return reviews;
+	}
+  
+	try {
+	  const reviews = await gplay.reviews(options);
+	  console.log('reviews:', reviews);
+	  const paginatedReviews = paginate(reviews);
+	  console.log('paginatedReviews:', paginatedReviews);
+	  event.sender.send('review-results', paginatedReviews, appId);
 	} catch (err) {
-	  	event.reply('error', err.message);
+	  console.error("Error occurred while getting reviews:", err);
+	  event.sender.send('review-error', err.message);
 	}
   });
-  
-/* Apps by developer */
-ipcMain.on('get-apps-by-dev', async (event, options) => {
-	try {
-		const apps = await gplay.developer(options);
-		const appsWithCleanUrls = apps.map(cleanUrls(options));
-		const data = {
-			devId: options.devId,
-			apps: appsWithCleanUrls
-		};
-		event.reply('apps-by-dev', data);
-	} catch (err) {
-		event.reply('error', err.message);
-	}
-});
    
 async function searchTermMore(term, arr = {}) {
 	if (!term) {
