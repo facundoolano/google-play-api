@@ -45,7 +45,7 @@ function downloadCSVFile(csvData, filename) {
 }
 
 // Search form event listener
-searchForm.addEventListener('submit', async (event) => {
+searchForm.addEventListener('submit', (event) => {
   event.preventDefault();
 
   const term = searchInput.value.trim();
@@ -70,8 +70,7 @@ reviewForm.addEventListener('submit', (event) => {
 // Search results event listener
 ipcRenderer.on('search-results', async (event, resultsData, term) => {
   console.log("Received search results for term:", term);
-
-  try {
+ 
     let results;
     try {
       results = JSON.parse(resultsData);
@@ -84,27 +83,18 @@ ipcRenderer.on('search-results', async (event, resultsData, term) => {
     const csvData = generateCSVData(results, fields);
 
     // Download the CSV file with the search results
-    downloadCSVFile(csvData, `${term}.csv`);
-  } catch (err) {
-    console.error("Error occurred while processing search results:", err);
-    // Show error message to user
-  }
+    downloadCSVFile(csvData, `${term}.csv`); 
 });
 
 // Review results event listener
 ipcRenderer.on('review-results', async (event, paginatedReviews, appId) => {
   console.log("Received reviews for app:", appId);
-
-  try {
+ 
     const fields = ["userName", "userImage", "score", "date", "text"];
     const csvData = generateCSVData(paginatedReviews.data, fields);
 
     // Download the CSV file with the reviews
-    downloadCSVFile(csvData, `${appId}.csv`);
-  } catch (err) {
-    console.error("Error occurred while processing reviews:", err);
-    // Show error message to user
-  }
+    downloadCSVFile(csvData, `${appId}.csv`); 
 });
 
 // Search error event listener

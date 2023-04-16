@@ -114,10 +114,8 @@ ipcMain.on('get-reviews', async (event, appId) => {
 	}
   
 	try {
-	  const reviews = await gplay.reviews(options);
-	  console.log('reviews:', reviews);
-	  const paginatedReviews = paginate(reviews);
-	  console.log('paginatedReviews:', paginatedReviews);
+	  const reviews = await gplay.reviews(options); 
+	  const paginatedReviews = paginate(reviews); 
 	  event.sender.send('review-results', paginatedReviews, appId);
 	} catch (err) {
 	  console.error("Error occurred while getting reviews:", err);
@@ -143,9 +141,7 @@ async function searchTermMore(term, arr = {}) {
 			num: 20,
 		});
 
-		total = apps.length;
-
-		console.log(`Found ${total} apps for term: ${term}`);
+		total = apps.length; 
 
 		if (apps.length === 0) {
 			console.log(`No apps found for term: ${term}`);
@@ -158,9 +154,7 @@ async function searchTermMore(term, arr = {}) {
 					const apps2 = await gplay.search({
 						term: app.title,
 						num: 100,
-					});
-
-					console.log(`Found ${apps2.length} apps for subterm: ${app.title}`);
+					}); 
 
 					for (let app of apps2) {
 						if (!(app.appId in arr)) {
@@ -178,8 +172,7 @@ async function searchTermMore(term, arr = {}) {
 		if (count < total) {
 			console.log(`Not all apps for term: ${term} have been processed, calling searchTermMore again`);
 			return await searchTermMore(term, arr);
-		} else {
-			console.log("searchTermMore returning arr:", Object.values(arr));
+		} else { 
 			return Object.values(arr);
 		}
 	} catch (err) {
