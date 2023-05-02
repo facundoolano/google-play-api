@@ -2,38 +2,76 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'">
     <title>Google Play Scraper</title>
     <link rel="stylesheet" href="./styles.css">
   </head>
   <body>
     <!-- Header -->
     <h1>Google Play Scraper</h1> 
+    <h2>Home</h2> 
     <!-- Instructions -->
     <form>
       <fieldset>
-        <p>To use the tool, select the feature you'd want to use!</p>
+        <p><a href="https://github.com/facundoolano/google-play-scraper"> This Google Play Scraper from Github</a> is an open source scraper you can use to retrieve app information from the Google Play Store.</p>
+        <p>To use the tool, select the feature you'd like to use!</p>
       </fieldset>
     </form>
-    <!-- Search Form -->
-    <form id="search-form">
+    <form id="feature-form">
       <fieldset>
-        <legend>Search by App Name or Keyword</legend>
-        <label for="search-input">App Name or Keywords</label>
-        <input type="text" id="search-input" name="search-input" placeholder="Type here!">
-        <input type="submit" value="Search"></input>
+        <legend>Select which feature you want to use</legend>
+        <ul>
+          <li>
+            <label>
+              <input type="radio" id="search-radio" name="feature" value="search">
+              Search
+            </label>
+          </li>
+          <li>
+            <label>
+              <input type="radio" id="app-data-radio" name="feature" value="app-data">
+              App Data
+            </label>
+          </li>
+          <li>
+            <label>
+              <input type="radio" id="reviews-radio" name="feature" value="reviews">
+              Reviews
+            </label>
+          </li>
+          <li>
+            <label>
+              <input type="radio" id="similar-apps-radio" name="feature" value="similar-apps">
+              Similar Apps
+            </label>
+          </li>
+          <li>
+            <label>
+              <input type="radio" id="permissions-radio" name="feature" value="permissions">
+              Permissions
+            </label>
+          </li>
+          <li>
+            <label>
+              <input type="radio" id="data-safety-radio" name="feature" value="data-safety">
+              Data Safety
+            </label>
+          </li>
+        </ul>
+        <input type="submit" value="Next"></input>
       </fieldset>
     </form>
-    <!-- Review Form -->
-    <form id="review-form">
-      <fieldset>
-        <legend>Get Specific App Review</legend>
-        <label for="review-input">App ID:</label>
-        <input type="text" id="review-input" name="review-input" placeholder="Type here!">
-        <input type="submit" value="Search"></input>
-      </fieldset>
-    </form> 
-    <!-- Scripts -->
-    <script nonce="randomnonce" src="./src/renderer.js"></script>
+    <script>
+    const form = document.getElementById("feature-form");
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const selectedFeature = form.querySelector('input[name="feature"]:checked');
+      if (selectedFeature) {
+        window.location.href = `./pages/${selectedFeature.value}.html`;
+      } else {
+        alert("Please select a feature to proceed.");
+      }
+    });
+  </script> 
   </body>
 </html>

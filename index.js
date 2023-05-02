@@ -66,7 +66,17 @@ ipcMain.on('get-similar-apps', async (event, options) => {
 	  	event.reply('error', err.message);
 	}
   });
-  
+
+  /* App Details */
+  ipcMain.on('get-app-details', async (event, appId) => {
+	try {
+		const appDetails = await gplay.app({ appId: appId, lang: 'en', country: 'us' });
+		event.sender.send('app-details', appDetails);
+	} catch (err) {
+		event.sender.send('app-details-error', err.message);
+	}
+});
+ 
   /* Data Safety */
   ipcMain.on('get-data-safety', async (event, appId) => {
 	try { 

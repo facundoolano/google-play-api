@@ -1,9 +1,12 @@
 const { ipcRenderer } = require("electron");
 
-const searchForm = document.getElementById("search-form");
+// Get the search input and form
 const searchInput = document.getElementById("search-input");
-const reviewForm = document.getElementById("review-form");
+const searchForm = document.getElementById("search-form");
+
+// Get the review input and form
 const reviewInput = document.getElementById("review-input");
+const reviewForm = document.getElementById("review-form");
 
 // Function to generate CSV data from an array of objects
 function generateCSVData(objects, fields) {
@@ -44,67 +47,88 @@ function downloadCSVFile(csvData, filename) {
   document.body.removeChild(link);
 }
 
-// Search form event listener
-searchForm.addEventListener('submit', (event) => {
-  event.preventDefault();
+if (searchInput && searchForm) {
+  // Search form event listener
+  searchForm.addEventListener("submit", (event) => {
+    event.preventDefault();
 
-  const term = searchInput.value.trim();
+    const term = searchInput.value.trim();
 
-  ipcRenderer.send('search', term);
-});
+    ipcRenderer.send("search", term);
+  });
+} 
 
-// Review form event listener
-reviewForm.addEventListener('submit', (event) => {
-  event.preventDefault(); // prevent form submission
+if (reviewInput && reviewForm) {
+  // Review form event listener
+  reviewForm.addEventListener("submit", (event) => {
+    event.preventDefault(); // prevent form submission
 
-  const appId = reviewInput.value.trim();
+    const appId = reviewInput.value.trim();
 
-  if (!appId) {
-    // do nothing if input is empty
-    return;
-  }
-
-  ipcRenderer.send('get-reviews', appId);
-});
-
-// Search results event listener
-ipcRenderer.on('search-results', async (event, resultsData, term) => {
-  console.log("Received search results for term:", term);
- 
-    let results;
-    try {
-      results = JSON.parse(resultsData);
-    } catch (err) {
-      console.error("Error parsing search results data:", err);
+    if (!appId) {
+      // do nothing if input is empty
       return;
     }
 
-    const fields = ["title", "appId", "url", "icon", "developer", "currency", "free", "summary", "scoreText", "score"];
-    const csvData = generateCSVData(results, fields);
+    ipcRenderer.send("get-reviews", appId);
+  });
+}
 
-    // Download the CSV file with the search results
-    downloadCSVFile(csvData, `${term}.csv`); 
+// Search results event listener
+ipcRenderer.on("search-results", async (event, resultsData, term) => {
+  console.log("Received search results for term:", term);
+
+  let results;
+  try {
+    results = JSON.parse(resultsData);
+  } catch (err) {
+    console.error("Error parsing search results data:", err);
+    return;
+  }
+
+  const fields = [
+    "title",
+    "appId",
+    "url",
+    "icon",
+    "developer",
+    "currency",
+    "free",
+    "summary",
+    "scoreText",
+    "score",
+  ];
+  const csvData = generateCSVData(results, fields);
+
+  // Download the CSV file with the search results
+  downloadCSVFile(csvData, `${term}.csv`);
 });
 
 // Review results event listener
-ipcRenderer.on('review-results', async (event, paginatedReviews, appId) => {
+ipcRenderer.on("review-results", async (event, paginatedReviews, appId) => {
   console.log("Received reviews for app:", appId);
- 
-    const fields = ["userName", "userImage", "score", "date", "text"];
-    const csvData = generateCSVData(paginatedReviews.data, fields);
 
-    // Download the CSV file with the reviews
-    downloadCSVFile(csvData, `${appId}.csv`); 
+  const fields = [
+    "userName",
+    "userImage",
+    "score",
+    "date",
+    "text"
+  ];
+  const csvData = generateCSVData(paginatedReviews.data, fields);
+
+  // Download the CSV file with the reviews
+  downloadCSVFile(csvData, `${appId}.csv`);
 });
 
 // Search error event listener
-ipcRenderer.on('search-error', (event, err) => {
+ipcRenderer.on("search-error", (event, err) => {
   console.error("Error occurred during search:", err);
   // Show error message to user
 });
 
 // Review error
-ipcRenderer.on('review-error', (event, err) => {
+ipcRenderer.on("review-error", (event, err) => {
   console.error("Error occurred while getting reviews:", err);
   // Show error message to user
 });

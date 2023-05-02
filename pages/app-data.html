@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'">
+    <title>Google Play Scraper</title>
+    <link rel="stylesheet" href="../styles.css">
+    <script nonce="randomnonce" src="../src/renderer.js" defer></script> 
+  </head>
+  <body>
+    <!-- Header -->
+    <h1>Google Play Scraper</h1> 
+    <h2>App Details</h2> 
+    <button type="button" id="backButton" class="button">Back</button>
+    <!-- Instructions -->
+    <form id="instructions">
+      <fieldset>
+        <p>This retrieves all the app details of a given app.</p>
+        <p>To use this function, enter the App ID.</p>
+        <p>To get the App ID, reference the image below!</p>
+      </fieldset>
+    </form>
+    <!-- Search Form -->
+    <form id="app-data-form">
+      <fieldset>
+        <legend>Enter App ID</legend> 
+        <input type="text" id="app-data-input" name="app-data-input" placeholder="Type here!">
+        <input type="submit" value="Search" onclick="validateSearch(event)"></input>
+      </fieldset>
+    </form> 
+    <!-- Scripts -->
+    <script>
+      function validateSearch(event) {
+        const appDataInput = document.getElementById("app-data-input").value;
+        if (appDataInput === "") {
+          event.preventDefault();
+          alert("Please enter a search term or keyword to proceed.");
+        }
+      }
+
+      document.getElementById("backButton").onclick = function () {
+        		location.href = "../index.html";
+      };
+    </script> 
+</body>
+</html>

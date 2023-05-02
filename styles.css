@@ -6,11 +6,20 @@ body {
   padding: 0;
 }
 
+ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  margin-top: 20px; 
+} 
+ 
 h1 {
   text-align: center;
-  font-size: 2.5em;
-  margin-top: 30px;
-  margin-bottom: 50px;
+  font-size: 2.5em; 
+}
+
+h2 {
+  text-align: center;
 }
 
 form {
@@ -42,19 +51,12 @@ input[type="number"] {
 }
 
 input[type="submit"] {
-  background-color: #9d2235;
-  color: #fff;
-  font-size: 1.2em;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
+  display: block;
+  margin: 0 auto;
+  background-color: #B30738; 
+  padding: .5em 2em;
 }
-
-input[type="submit"]:hover {
-  background-color: #9d2235;
-}
+ 
 
 #output {
   margin: 0 auto;
@@ -78,7 +80,11 @@ input[type="submit"]:hover {
 }
 
 #search-form input[type="submit"],
-#review-form input[type="submit"] {
+#review-form input[type="submit"],
+#permission-form input[type="submit"],
+#app-data-form input[type="submit"],
+#data-safety-form input[type="submit"],
+#similar-apps-form input[type="submit"] {
   display: block;
   margin: 0 auto;
 }
@@ -111,10 +117,32 @@ select {
   width: 100%;
 }
 
+#backButton {
+  padding: .5em 2em;
+  font-size: 20px;
+  margin: 0 auto;
+  display: block;
+  margin-bottom: 20px;
+}
+
+.button {
+  background-color: #B30738;
+  color: white;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+}
+
+.button:hover {
+  background-color: #eaaa00;
+}
+
 input[type="submit"] {
   display: block;
   margin-left: auto;
-  background-color: #9d2235;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  background-color: #B30738;
   color: #fff;
   font-size: 1.2em;
   font-weight: bold;
@@ -126,7 +154,7 @@ input[type="submit"] {
 }
 
 input[type="submit"]:hover {
-  background-color: #9d2235;
+  background-color: #cd235c;
 }
 
 .form-message {
@@ -161,4 +189,23 @@ input[type="text"] {
   box-sizing: border-box; /* added */
   text-align: center; /* added */
   margin-top: 10px; /* added */
+}
+
+input[type="radio"] {
+  appearance: none;
+  -webkit-appearance: none;
+  border: 1px solid black;
+  border-radius: 50%;
+  width: 10px;
+  height: 10px;
+  margin: 0 10px;
+  outline: none;
+}
+
+input[type="radio"]:checked {
+  background-color: #B30738;
+} 
+
+#instructions {
+  text-align: center;;
 }

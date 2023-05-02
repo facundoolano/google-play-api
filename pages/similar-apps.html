@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'">
+    <title>Google Play Scraper</title>
+    <link rel="stylesheet" href="../styles.css"> 
+    <script nonce="randomnonce" src="../src/renderer.js" defer></script> 
+  </head>
+  <body>
+    <!-- Header -->
+    <h1>Google Play Scraper</h1> 
+    <h2>Similar Apps</h2> 
+    <button type="button" id="backButton" class="button">Back</button>
+    <!-- Instructions -->
+    <form id="instructions">
+      <fieldset>
+        <p>This returns a list of similar apps based on the specified app.</p>
+        <p>To use this function, enter the App ID.</p>
+        <p>To get the App ID, reference the image below!</p>
+      </fieldset>
+    </form>
+    <!-- Search Form -->
+    <form id="similar-apps-form">
+      <fieldset>
+        <legend>Type App ID here</legend> 
+        <input type="text" id="similar-apps-input" name="similar-apps-input" placeholder="Type here!">
+        <input type="submit" value="Search" onclick="validateSearch(event)"></input>
+      </fieldset>
+    </form> 
+    <!-- Scripts -->
+    <script>
+      function validateSearch(event) {
+        const similarAppsInput = document.getElementById("similar-apps-input").value;
+        if (similarAppsInput === "") {
+          event.preventDefault();
+          alert("Please enter a search term or keyword to proceed.");
+        }
+      }
+
+      document.getElementById("backButton").onclick = function () {
+        		location.href = "../index.html";
+      };
+    </script>
+</body>
+</html>
