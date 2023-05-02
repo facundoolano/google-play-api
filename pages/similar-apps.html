@@ -18,6 +18,7 @@
         <p>This returns a list of similar apps based on the specified app.</p>
         <p>To use this function, enter the App ID.</p>
         <p>To get the App ID, reference the image below!</p>
+        <img src="../images/appID.png" alt="App ID" width="100%">
       </fieldset>
     </form>
     <!-- Search Form -->
@@ -34,7 +35,7 @@
         const similarAppsInput = document.getElementById("similar-apps-input").value;
         if (similarAppsInput === "") {
           event.preventDefault();
-          alert("Please enter a search term or keyword to proceed.");
+          alert("Please enter an app ID to proceed.");
         }
       }
 

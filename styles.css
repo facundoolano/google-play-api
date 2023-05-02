@@ -82,7 +82,7 @@ input[type="submit"] {
 #search-form input[type="submit"],
 #review-form input[type="submit"],
 #permission-form input[type="submit"],
-#app-data-form input[type="submit"],
+#app-details-form input[type="submit"],
 #data-safety-form input[type="submit"],
 #similar-apps-form input[type="submit"] {
   display: block;

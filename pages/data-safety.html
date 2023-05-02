@@ -18,6 +18,7 @@
         <p>This returns the data safety information of a specific app.</p>
 				<p>To use this function, enter the App ID. </p>
 				<p>To get the App ID, reference the image below!</p>
+        <img src="../images/appID.png" alt="App ID" width="100%">
       </fieldset>
     </form>
     <!-- Search Form -->
@@ -34,7 +35,7 @@
         const dataSafetyInput = document.getElementById("data-safety-input").value;
         if (dataSafetyInput === "") {
           event.preventDefault();
-          alert("Please enter a search term or keyword to proceed.");
+          alert("Please enter an app ID to proceed.");
         }
       }
 
