@@ -8,6 +8,14 @@ const searchForm = document.getElementById("search-form");
 const reviewInput = document.getElementById("review-input");
 const reviewForm = document.getElementById("review-form");
 
+// Get permission input and form
+const permissionInput = document.getElementById("permission-input");
+const permissionForm = document.getElementById("permission-form");
+
+// Get data safety input and form
+const dataSafetyInput = document.getElementById("data-safety-input");
+const dataSafetyForm = document.getElementById("data-safety-form");
+
 // Function to generate CSV data from an array of objects
 function generateCSVData(objects, fields) {
   let csvData = "";
@@ -74,6 +82,38 @@ if (reviewInput && reviewForm) {
   });
 }
 
+if (permissionInput && permissionForm) {
+  // Permission form event listener
+  permissionForm.addEventListener("submit", (event) => {
+    event.preventDefault(); // prevent form submission
+
+    const appId = permissionInput.value.trim();
+
+    if (!appId) {
+      // do nothing if input is empty
+      return;
+    }
+
+    ipcRenderer.send("get-app-permissions", appId);
+  });
+}
+
+if (dataSafetyInput && dataSafetyForm) {
+  // Data safety form event listener
+  dataSafetyForm.addEventListener("submit", (event) => {
+    event.preventDefault(); // prevent form submission
+
+    const appId = dataSafetyInput.value.trim();
+
+    if (!appId) {
+      // do nothing if input is empty
+      return;
+    }
+
+    ipcRenderer.send("get-data-safety", appId);
+  });
+}
+
 // Search results event listener
 ipcRenderer.on("search-results", async (event, resultsData, term) => {
   console.log("Received search results for term:", term);
@@ -87,21 +127,12 @@ ipcRenderer.on("search-results", async (event, resultsData, term) => {
   }
 
   const fields = [
-    "title",
-    "appId",
-    "url",
-    "icon",
-    "developer",
-    "currency",
-    "free",
-    "summary",
-    "scoreText",
-    "score",
+    "url", "appId", "summary", "title", "developer", "developerId", "icon", "score", "scoreText", "priceText", "free"
   ];
   const csvData = generateCSVData(results, fields);
 
   // Download the CSV file with the search results
-  downloadCSVFile(csvData, `${term}.csv`);
+  downloadCSVFile(csvData, `${term}-search.csv`);
 });
 
 // Review results event listener
@@ -109,16 +140,80 @@ ipcRenderer.on("review-results", async (event, paginatedReviews, appId) => {
   console.log("Received reviews for app:", appId);
 
   const fields = [
+    "id",
     "userName",
     "userImage",
     "score",
     "date",
-    "text"
+    "score",
+    "scoreText",
+    "url",
+    "title",
+    "text",
+    "replyDate",
+    "replyText",
+    "version",
+    "thumbsUp",
+
   ];
   const csvData = generateCSVData(paginatedReviews.data, fields);
 
   // Download the CSV file with the reviews
-  downloadCSVFile(csvData, `${appId}.csv`);
+  downloadCSVFile(csvData, `${appId}-reviews.csv`);
+}); 
+
+// Permission results event listener
+ipcRenderer.on("permission-results", async (event, permissions, appId) => {
+  console.log("Received permissions for app:", appId);
+
+  const fields = [
+    "permission",
+    "type"
+  ];
+  const csvData = generateCSVData(permissions, fields);
+
+  // Download the CSV file with the permissions
+  downloadCSVFile(csvData, `${appId}-permissions.csv`);
+});
+
+// Data safety results event listener
+ipcRenderer.on("data-safety-results", async (event, dataSafety, appId) => {
+  console.log("Received data safety:");
+
+  const fields = [
+    "category","data","optional","purpose","type","securityPractices","privacyPolicyUrl"
+  ];
+
+  const sharedDataFormatted = dataSafety.sharedData.map((item) => {
+    return {
+      category: "shared data",
+      data: item.data,
+      optional: item.optional,
+      purpose: item.purpose,
+      type: item.type,
+      securityPractices: dataSafety.securityPractices.map((practice) => `${practice.practice} (${practice.description})`).join("; "),
+      privacyPolicyUrl: dataSafety.privacyPolicyUrl
+    }
+  });
+
+  const collectedDataFormatted = dataSafety.collectedData.map((item) => {
+    return {
+      category: "collected data",
+      data: item.data,
+      optional: item.optional,
+      purpose: item.purpose,
+      type: item.type,
+      securityPractices: dataSafety.securityPractices.map((practice) => `${practice.practice} (${practice.description})`).join("; "),
+      privacyPolicyUrl: dataSafety.privacyPolicyUrl
+    }
+  });
+
+  const dataSafetyFormatted = sharedDataFormatted.concat(collectedDataFormatted);
+
+  const csvData = generateCSVData(dataSafetyFormatted, fields);
+
+  // Download the CSV file with the data safety
+  downloadCSVFile(csvData, `${appId}-dataSafety.csv`);
 });
 
 // Search error event listener
@@ -130,5 +225,17 @@ ipcRenderer.on("search-error", (event, err) => {
 // Review error
 ipcRenderer.on("review-error", (event, err) => {
   console.error("Error occurred while getting reviews:", err);
+  // Show error message to user
+});
+
+// Permission error
+ipcRenderer.on("permission-error", (event, err) => {
+  console.error("Error occurred while getting permissions:", err);
+  // Show error message to user
+});
+
+// Data safety error
+ipcRenderer.on("data-safety-error", (event, err) => {
+  console.error("Error occurred while getting data safety:", err);
   // Show error message to user
 });

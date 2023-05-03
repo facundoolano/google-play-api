@@ -46,7 +46,7 @@ app.on("window-all-closed", function() {
 	if (process.platform !== "darwin") app.quit();
 });
 
-/* App Search */
+/* App Search */ 
 ipcMain.on('search', async (event, searchTerm) => {
 	try {
 		const results = await searchTermMore(searchTerm);
@@ -77,56 +77,43 @@ ipcMain.on('get-similar-apps', async (event, options) => {
 	}
 });
  
-  /* Data Safety */
-  ipcMain.on('get-data-safety', async (event, appId) => {
+/* Data Safety */
+ipcMain.on('get-data-safety', async (event, appId) => {
 	try { 
-	  const dataSafety = await gplay.datasafety(appId);
-	  event.sender.send('data-safety', dataSafety);
+	  const dataSafety = await gplay.datasafety({ appId: appId, lang: 'en', country: 'us' });
+	  console.log("Generated data safety for app:", appId, dataSafety);
+	  event.sender.send('data-safety-results', dataSafety, appId);
 	} catch (err) {
-	event.sender.send('data-safety-error', err.message)
-	};
+	  event.sender.send('data-safety-error', err.message)
+	}
   });
+  
   
   /* App Permissions */
   ipcMain.on('get-app-permissions', async (event, appId) => {
 	try {
-	  const appPermissions = await gplay.permissions(appId);
-	  event.sender.send('app-permissions', appPermissions);
+	  const permissions = await gplay.permissions({ appId: appId, lang: 'en', country: 'us' });
+	  console.log("Generated permissions for app:", appId, permissions);
+	  event.sender.send('permission-results', permissions, appId); 
 	} catch (err) {
-	  event.sender.send('permissions-error', err.message);
+		console.error("Error generating permissions for app:", appId, err);
+		event.sender.send('permission-results-error', err.message);
 	}
   });
-
+  
 /* App reviews */
 ipcMain.on('get-reviews', async (event, appId) => {
 	const options = {
-	  appId: appId,
-	  page: 0,
+	  appId: appId, 
+	  sort: gplay.sort.RATIING,
 	  lang: 'en',
 	  country: 'us'
 	};
   
-	function paginate(reviews) {
-	  const page = parseInt(options.page || '0');
-	  const subpath = `/apps/${appId}/reviews/`;
-  
-	  if (page > 0) {
-		const prevUrl = new URLSearchParams({ page: page - 1 });
-		reviews.prev = `${subpath}?${prevUrl.toString()}`;
-	  }
-  
-	  if (reviews.results && reviews.results.length) {
-		const nextUrl = new URLSearchParams({ page: page + 1 });
-		reviews.next = `${subpath}?${nextUrl.toString()}`;
-	  }
-  
-	  return reviews;
-	}
-  
 	try {
-	  const reviews = await gplay.reviews(options); 
-	  const paginatedReviews = paginate(reviews); 
-	  event.sender.send('review-results', paginatedReviews, appId);
+	  const reviews = await gplay.reviews(options);  
+	  console.log(reviews);
+	  event.sender.send('review-results', reviews, appId);
 	} catch (err) {
 	  console.error("Error occurred while getting reviews:", err);
 	  event.sender.send('review-error', err.message);
