@@ -16,6 +16,18 @@ const permissionForm = document.getElementById("permission-form");
 const dataSafetyInput = document.getElementById("data-safety-input");
 const dataSafetyForm = document.getElementById("data-safety-form");
 
+// Get similar apps input and form
+const similarAppsInput = document.getElementById("similar-apps-input");
+const similarAppsForm = document.getElementById("similar-apps-form");
+
+// Get app details input and form
+const appDetailsInput = document.getElementById("app-details-input");
+const appDetailsForm = document.getElementById("app-details-form");
+
+document.getElementById("backButton").onclick = function () {
+  location.href = "../index.html";
+};
+
 // Function to generate CSV data from an array of objects
 function generateCSVData(objects, fields) {
   let csvData = "";
@@ -114,6 +126,38 @@ if (dataSafetyInput && dataSafetyForm) {
   });
 }
 
+if (similarAppsInput && similarAppsForm) {
+  // Similar apps form event listener
+  similarAppsForm.addEventListener("submit", (event) => {
+    event.preventDefault(); // prevent form submission
+
+    const appId = similarAppsInput.value.trim();
+
+    if (!appId) {
+      // do nothing if input is empty 
+      return;
+    }
+
+    ipcRenderer.send("get-similar-apps", appId);
+  });
+}
+
+if (appDetailsInput && appDetailsForm) {
+  // App details form event listener
+  appDetailsForm.addEventListener("submit", (event) => {
+    event.preventDefault(); // prevent form submission
+
+    const appId = appDetailsInput.value.trim();
+
+    if (!appId) {
+      // do nothing if input is empty
+      return;
+    }
+
+    ipcRenderer.send("get-app-details", appId);
+  });
+}
+
 // Search results event listener
 ipcRenderer.on("search-results", async (event, resultsData, term) => {
   console.log("Received search results for term:", term);
@@ -126,9 +170,8 @@ ipcRenderer.on("search-results", async (event, resultsData, term) => {
     return;
   }
 
-  const fields = [
-    "url", "appId", "summary", "title", "developer", "developerId", "icon", "score", "scoreText", "priceText", "free"
-  ];
+  const fields = [ "url", "appId", "summary", "title", "developer", "developerId", "icon", "score", "scoreText", "priceText", "free" ];
+
   const csvData = generateCSVData(results, fields);
 
   // Download the CSV file with the search results
@@ -136,26 +179,22 @@ ipcRenderer.on("search-results", async (event, resultsData, term) => {
 });
 
 // Review results event listener
-ipcRenderer.on("review-results", async (event, paginatedReviews, appId) => {
+ipcRenderer.on("reviews-results", async (event, paginatedReviews, appId) => {
   console.log("Received reviews for app:", appId);
 
-  const fields = [
-    "id",
-    "userName",
-    "userImage",
-    "score",
-    "date",
-    "score",
-    "scoreText",
-    "url",
-    "title",
-    "text",
-    "replyDate",
-    "replyText",
-    "version",
-    "thumbsUp",
+  const fields = [ "id", "userName", "userImage", "score", "date", "score", "scoreText", "url", "text", "replyDate", "replyText", "version", "thumbsUp"];
+  
+  // if replyDate is null, N/A
+    paginatedReviews.data.forEach((review) => {
+      if (review.replyDate === null) {
+        review.replyDate = "N/A";
+      }
 
-  ];
+      if (review.replyText === null) {
+        review.replyText = "N/A";
+      }
+    });
+
   const csvData = generateCSVData(paginatedReviews.data, fields);
 
   // Download the CSV file with the reviews
@@ -166,10 +205,8 @@ ipcRenderer.on("review-results", async (event, paginatedReviews, appId) => {
 ipcRenderer.on("permission-results", async (event, permissions, appId) => {
   console.log("Received permissions for app:", appId);
 
-  const fields = [
-    "permission",
-    "type"
-  ];
+  const fields = [ "permission", "type"];
+
   const csvData = generateCSVData(permissions, fields);
 
   // Download the CSV file with the permissions
@@ -180,9 +217,7 @@ ipcRenderer.on("permission-results", async (event, permissions, appId) => {
 ipcRenderer.on("data-safety-results", async (event, dataSafety, appId) => {
   console.log("Received data safety:");
 
-  const fields = [
-    "category","data","optional","purpose","type","securityPractices","privacyPolicyUrl"
-  ];
+  const fields = [ "category","data","optional","purpose","type","securityPractices","privacyPolicyUrl" ];
 
   const sharedDataFormatted = dataSafety.sharedData.map((item) => {
     return {
@@ -216,6 +251,39 @@ ipcRenderer.on("data-safety-results", async (event, dataSafety, appId) => {
   downloadCSVFile(csvData, `${appId}-dataSafety.csv`);
 });
 
+// Similar apps results event listener
+ipcRenderer.on("similar-apps-results", async (event, similarApps, appId) => {
+  console.log("Received similar apps for app:", appId);
+
+  const fields = [ "url", "appId", "summary", "developer", "developerId", "icon", "score", "scoreText", "priceText", "free" ];
+
+  const csvData = generateCSVData(similarApps, fields);
+
+  // Download the CSV file with the similar apps
+  downloadCSVFile(csvData, `${appId}-similarApps.csv`);
+});
+
+// App details results event listener
+ipcRenderer.on("app-details-results", async (event, appDetails, appId) => {
+  console.log("Received app details for app:", appId);
+
+  // get all fields
+  const fields = ["title","description","descriptionHTML","summary","installs","minInstalls","maxInstalls","score","scoreText","ratings","reviews","price","free","currency","priceText","available","offersIAP","IAPRange","androidVersion","androidVersionText","developer","developerId","developerEmail","developerWebsite","developerAddress","privacyPolicy","developerInternalID","genre","genreId","icon","headerImage","screenshots","contentRating","contentRatingDescription","adSupported","released","updated","version","recentChanges","appId","url"];
+
+  // concatenate screenshot URLs with ;
+  // check if screenshots property exists
+  // concatenate screenshot urls with ;
+  if (Array.isArray(appDetails.screenshots)) {
+    const screenshots = appDetails.screenshots.join(",");
+    appDetails.screenshots = screenshots;
+  }  
+  
+  const csvData = generateCSVData([appDetails], fields);
+
+  // Download the CSV file with the app details
+  downloadCSVFile(csvData, `${appId}-appDetails.csv`);
+});
+
 // Search error event listener
 ipcRenderer.on("search-error", (event, err) => {
   console.error("Error occurred during search:", err);
@@ -237,5 +305,17 @@ ipcRenderer.on("permission-error", (event, err) => {
 // Data safety error
 ipcRenderer.on("data-safety-error", (event, err) => {
   console.error("Error occurred while getting data safety:", err);
+  // Show error message to user
+});
+
+// Similar apps error
+ipcRenderer.on("similar-apps-error", (event, err) => {
+  console.error("Error occurred while getting similar apps:", err);
+  // Show error message to user
+});
+
+// App details error
+ipcRenderer.on("app-details-error", (event, err) => {
+  console.error("Error occurred while getting app details:", err);
   // Show error message to user
 });

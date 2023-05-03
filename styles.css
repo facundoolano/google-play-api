@@ -52,12 +52,11 @@ input[type="number"] {
 
 input[type="submit"] {
   display: block;
-  margin: 0 auto;
+  margin: 0 auto; 
   background-color: #B30738; 
   padding: .5em 2em;
 }
- 
-
+  
 #output {
   margin: 0 auto;
   max-width: 600px;
@@ -87,6 +86,7 @@ input[type="submit"] {
 #similar-apps-form input[type="submit"] {
   display: block;
   margin: 0 auto;
+  margin-bottom: 10px;
 }
 
 .form-title {
@@ -101,7 +101,7 @@ input[type="submit"] {
 
 label {
   display: block;
-  font-size: 1.2em;
+  font-size: 1.05em;
   font-weight: bold;
   margin-bottom: 10px;
 }
@@ -118,43 +118,58 @@ select {
 }
 
 #backButton {
-  padding: .5em 2em;
-  font-size: 20px;
-  margin: 0 auto;
   display: block;
-  margin-bottom: 20px;
+  margin: 20px auto;
+  background-color: #B30738;
+  color: #fff;
+  font-size: 1.2em;
+  font-weight: bold;
+  padding: 10px 20px; 
+  border-radius: 30px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16);
+} 
+
+#backButton:hover {
+  background-color: #FF2D55;
 }
 
+#backButton:active,
+#backButton:focus {
+outline: none;
+}
+  
 .button {
   background-color: #B30738;
   color: white;
   border: none;
   border-radius: 25px;
   cursor: pointer;
-}
-
-.button:hover {
-  background-color: #eaaa00;
-}
+} 
 
 input[type="submit"] {
-  display: block;
-  margin-left: auto;
-  margin-top: 20px;
-  margin-bottom: 20px;
+  display:  block;
+  margin: 20px auto; 
   background-color: #B30738;
   color: #fff;
   font-size: 1.2em;
   font-weight: bold;
   padding: 10px 20px;
   border: none;
-  border-radius: 5px;
+  border-radius: 30px;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16);
 }
 
 input[type="submit"]:hover {
-  background-color: #cd235c;
+  background-color: #FF2D55;
+}
+
+input[type="submit"]:active,
+input[type="submit"]:focus {
+  outline: none;
 }
 
 .form-message {
@@ -182,13 +197,28 @@ input[type="submit"]:hover {
 input[type="text"] {
   padding: 8px;
   font-size: 1.2em;
-  border: 2px solid #ccc;
-  border-radius: 5px;
+  border: none;
+  border-radius: 25px;
   margin-bottom: 20px;
   width: 100%;
-  box-sizing: border-box; /* added */
-  text-align: center; /* added */
-  margin-top: 10px; /* added */
+  box-sizing: border-box;
+  text-align: center;
+  margin-top: 10px;
+  background-color: #f2f2f2;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  outline: none;
+  transition: all 0.3s ease;
+  border: 2px solid #ccc;
+}
+
+input[type="text"]:hover {
+  background-color: #e6e6e6;
+}
+
+input[type="text"]:focus {
+  background-color: #f2f2f2;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  border: 2px solid dimgray;
 }
 
 input[type="radio"] {

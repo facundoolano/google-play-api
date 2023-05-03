@@ -57,21 +57,20 @@ ipcMain.on('search', async (event, searchTerm) => {
 });
 
 /* Similar Apps */
-ipcMain.on('get-similar-apps', async (event, options) => {
+ipcMain.on('get-similar-apps', async (event, appId) => {
 	try {
-	  const apps = await gplay.similar(options);
-	  const cleanApps = apps.map(cleanUrls(options));
-	  event.reply('similar-apps', cleanApps);
+		const similarApps = await gplay.similar({ appId: appId, lang: 'en', country: 'us' });
+		event.sender.send('similar-apps-results', similarApps, appId);
 	} catch (err) {
-	  	event.reply('error', err.message);
+		event.sender.send('similar-apps-error', err.message);
 	}
-  });
+});
 
   /* App Details */
   ipcMain.on('get-app-details', async (event, appId) => {
 	try {
 		const appDetails = await gplay.app({ appId: appId, lang: 'en', country: 'us' });
-		event.sender.send('app-details', appDetails);
+		event.sender.send('app-details-results', appDetails, appId);
 	} catch (err) {
 		event.sender.send('app-details-error', err.message);
 	}
@@ -80,8 +79,7 @@ ipcMain.on('get-similar-apps', async (event, options) => {
 /* Data Safety */
 ipcMain.on('get-data-safety', async (event, appId) => {
 	try { 
-	  const dataSafety = await gplay.datasafety({ appId: appId, lang: 'en', country: 'us' });
-	  console.log("Generated data safety for app:", appId, dataSafety);
+	  const dataSafety = await gplay.datasafety({ appId: appId, lang: 'en', country: 'us' }); 
 	  event.sender.send('data-safety-results', dataSafety, appId);
 	} catch (err) {
 	  event.sender.send('data-safety-error', err.message)
@@ -92,8 +90,7 @@ ipcMain.on('get-data-safety', async (event, appId) => {
   /* App Permissions */
   ipcMain.on('get-app-permissions', async (event, appId) => {
 	try {
-	  const permissions = await gplay.permissions({ appId: appId, lang: 'en', country: 'us' });
-	  console.log("Generated permissions for app:", appId, permissions);
+	  const permissions = await gplay.permissions({ appId: appId, lang: 'en', country: 'us' }); 
 	  event.sender.send('permission-results', permissions, appId); 
 	} catch (err) {
 		console.error("Error generating permissions for app:", appId, err);
@@ -104,22 +101,36 @@ ipcMain.on('get-data-safety', async (event, appId) => {
 /* App reviews */
 ipcMain.on('get-reviews', async (event, appId) => {
 	const options = {
-	  appId: appId, 
-	  sort: gplay.sort.RATIING,
+	  appId: appId,
+	  sort: gplay.sort.RATING,
 	  lang: 'en',
-	  country: 'us'
+	  country: 'us',
+	  num: 10000, // Number of reviews per request 
 	};
-  
+	
+	// get the total number of reviews for the app using the gplay.reviewsCount method. 
+	// Calculate the number of requests required to fetch all the reviews
+	// create an array of requests using the Array.from method. 
+	// Use the Promise.all method to execute all the requests concurrently
+	// merge the results using the concat method.
+	// use the push.apply() method to append the reviews data from each pagination request to the allReviews array
+	
 	try {
-	  const reviews = await gplay.reviews(options);  
-	  console.log(reviews);
-	  event.sender.send('review-results', reviews, appId);
+	  let reviews = await gplay.reviews(options);
+	  const allReviews = reviews.data;
+  
+	  while (reviews.nextPaginationToken) {
+		options.nextPaginationToken = reviews.nextPaginationToken;
+		reviews = await gplay.reviews(options);
+		allReviews.push.apply(allReviews, reviews.data);
+	  }
+  
+	  event.sender.send('reviews-results', {data: allReviews}, appId);
 	} catch (err) {
-	  console.error("Error occurred while getting reviews:", err);
-	  event.sender.send('review-error', err.message);
+	  event.sender.send('reviews-error', err.message);
 	}
-  });
-   
+  });  
+  
 async function searchTermMore(term, arr = {}) {
 	if (!term) {
 		console.error("Error: search term is undefined");

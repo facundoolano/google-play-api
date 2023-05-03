@@ -17,61 +17,79 @@
         <p>To use the tool, select the feature you'd like to use!</p>
       </fieldset>
     </form>
-    <form id="feature-form">
+    <form id="feature-form" required>
       <fieldset>
         <legend>Select which feature you want to use</legend>
         <ul>
           <li>
             <label>
-              <input type="radio" id="search-radio" name="feature" value="search">
+              <input type="radio" id="search-radio" name="feature" value="search" required>
               Search
             </label>
           </li>
           <li>
             <label>
-              <input type="radio" id="app-details-radio" name="feature" value="app-details">
+              <input type="radio" id="app-details-radio" name="feature" value="app-details" required>
               App Details
             </label>
           </li>
           <li>
             <label>
-              <input type="radio" id="reviews-radio" name="feature" value="reviews">
+              <input type="radio" id="reviews-radio" name="feature" value="reviews" required>
               Reviews
             </label>
           </li>
           <li>
             <label>
-              <input type="radio" id="similar-apps-radio" name="feature" value="similar-apps">
+              <input type="radio" id="similar-apps-radio" name="feature" value="similar-apps" required>
               Similar Apps
             </label>
           </li>
           <li>
             <label>
-              <input type="radio" id="permissions-radio" name="feature" value="permissions">
+              <input type="radio" id="permissions-radio" name="feature" value="permissions" required>
               Permissions
             </label>
           </li>
           <li>
             <label>
-              <input type="radio" id="data-safety-radio" name="feature" value="data-safety">
+              <input type="radio" id="data-safety-radio" name="feature" value="data-safety" required>
               Data Safety
             </label>
           </li>
         </ul>
         <input type="submit" value="Next"></input>
       </fieldset>
-    </form>
+    </form>    
     <script>
-    const form = document.getElementById("feature-form");
-    form.addEventListener("submit", (event) => {
-      event.preventDefault();
-      const selectedFeature = form.querySelector('input[name="feature"]:checked');
-      if (selectedFeature) {
-        window.location.href = `./pages/${selectedFeature.value}.html`;
-      } else {
-        alert("Please select a feature to proceed.");
-      }
-    });
-  </script> 
+     const form = document.getElementById("feature-form"); 
+      form.addEventListener("submit", (event) => {
+        event.preventDefault(); 
+        const feature = document.querySelector('input[name="feature"]:checked').value;
+
+        switch (feature) {
+          case "search":
+            window.location.href = "./pages/search.html";
+            break;
+          case "app-details":
+            window.location.href = "./pages/app-details.html";
+            break;
+          case "reviews":
+            window.location.href = "./pages/reviews.html";
+            break;
+          case "similar-apps":
+            window.location.href = "./pages/similar-apps.html";
+            break;
+          case "permissions":
+            window.location.href = "./pages/permissions.html";
+            break;
+          case "data-safety":
+            window.location.href = "./pages/data-safety.html";
+            break;
+          default:
+            break;
+        }
+      }); 
+    </script> 
   </body>
 </html>

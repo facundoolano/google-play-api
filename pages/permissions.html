@@ -25,23 +25,9 @@
     <form id="permission-form">
       <fieldset>
         <legend>Enter App ID</legend> 
-        <input type="text" id="permission-input" name="permission-input" placeholder="Type here!">
-        <input type="submit" value="Search" onclick="validateSearch(event)"></input>
+        <input type="text" id="permission-input" name="permission-input" placeholder="Type here!" required>
+        <input type="submit" value="Search">
       </fieldset>
-    </form> 
-    <!-- Scripts -->
-    <script>
-      function validateSearch(event) {
-        const permissionInput = document.getElementById("permission-input").value;
-        if (permissionInput === "") {
-          event.preventDefault();
-          alert("Please enter an app ID to proceed.");
-        }
-      }
-
-      document.getElementById("backButton").onclick = function () {
-        		location.href = "../index.html";
-      };
-    </script> 
+    </form>  
 </body>
 </html>

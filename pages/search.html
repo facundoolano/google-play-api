@@ -24,23 +24,9 @@
     <form id="search-form">
       <fieldset>
         <legend>Search by App Name or Keyword</legend> 
-        <input type="text" id="search-input" name="search-input" placeholder="Type here!">
-        <input type="submit" value="Search" onclick="validateSearch(event)"></input>
+        <input type="text" id="search-input" name="search-input" placeholder="Type here!" required>
+        <input type="submit" value="Search">
       </fieldset>
-    </form>   
-    <!-- Script to validate search input -->
-    <script>
-      function validateSearch(event) {
-        const searchInput = document.getElementById("search-input").value;
-        if (searchInput === "") {
-          event.preventDefault();
-          alert("Please enter a search term or keyword to proceed.");
-        }
-      }
-
-      document.getElementById("backButton").onclick = function () {
-        		location.href = "../index.html";
-      };
-    </script>
+    </form>    
 </body>
 </html>

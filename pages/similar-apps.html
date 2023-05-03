@@ -25,23 +25,9 @@
     <form id="similar-apps-form">
       <fieldset>
         <legend>Type App ID here</legend> 
-        <input type="text" id="similar-apps-input" name="similar-apps-input" placeholder="Type here!">
-        <input type="submit" value="Search" onclick="validateSearch(event)"></input>
+        <input type="text" id="similar-apps-input" name="similar-apps-input" placeholder="Type here!" required>
+        <input type="submit" value="Search"></input>
       </fieldset>
-    </form> 
-    <!-- Scripts -->
-    <script>
-      function validateSearch(event) {
-        const similarAppsInput = document.getElementById("similar-apps-input").value;
-        if (similarAppsInput === "") {
-          event.preventDefault();
-          alert("Please enter an app ID to proceed.");
-        }
-      }
-
-      document.getElementById("backButton").onclick = function () {
-        		location.href = "../index.html";
-      };
-    </script>
+    </form>  
 </body>
 </html>

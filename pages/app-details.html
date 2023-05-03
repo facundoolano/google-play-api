@@ -25,23 +25,9 @@
     <form id="app-details-form">
       <fieldset>
         <legend>Enter App ID</legend> 
-        <input type="text" id="app-details-input" name="app-details-input" placeholder="Type here!">
-        <input type="submit" value="Search" onclick="validateSearch(event)"></input>
+        <input type="text" id="app-details-input" name="app-details-input" placeholder="Type here!" required>
+        <input type="submit" value="Search">
       </fieldset>
-    </form> 
-    <!-- Scripts -->
-    <script>
-      function validateSearch(event) {
-        const appDetailsInput = document.getElementById("app-details-input").value;
-        if (appDetailsInput === "") {
-          event.preventDefault();
-          alert("Please enter an app ID to proceed.");
-        }
-      }
-
-      document.getElementById("backButton").onclick = function () {
-        		location.href = "../index.html";
-      };
-    </script> 
+    </form>  
 </body>
 </html>
