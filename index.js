@@ -50,9 +50,19 @@ app.on("window-all-closed", function() {
 ipcMain.on('search', async (event, searchTerm) => {
 	try {
 		const results = await searchTermMore(searchTerm);
-		event.sender.send('search-results', JSON.stringify(results), searchTerm);
+		event.sender.send('search-results', JSON.stringify(results), searchTerm); 
 	} catch (err) {
 		event.sender.send('search-error', err);
+	}
+});
+
+/* App Suggest */
+ipcMain.on('suggest', async (event, searchTerm) => {
+	try {
+		const results = await gplay.suggest({term: searchTerm});
+		event.sender.send('suggest-results', JSON.stringify(results), searchTerm);
+	} catch (err) {
+		event.sender.send('suggest-error', err);
 	}
 });
 
@@ -98,38 +108,24 @@ ipcMain.on('get-data-safety', async (event, appId) => {
 	}
   });
   
-/* App reviews */
+/* App reviews */ 
 ipcMain.on('get-reviews', async (event, appId) => {
 	const options = {
-	  appId: appId,
-	  sort: gplay.sort.RATING,
+	  appId: appId, 
+	  sort: gplay.sort.RATIING,
 	  lang: 'en',
 	  country: 'us',
-	  num: 10000, // Number of reviews per request 
+	  num: 2500
 	};
-	
-	// get the total number of reviews for the app using the gplay.reviewsCount method. 
-	// Calculate the number of requests required to fetch all the reviews
-	// create an array of requests using the Array.from method. 
-	// Use the Promise.all method to execute all the requests concurrently
-	// merge the results using the concat method.
-	// use the push.apply() method to append the reviews data from each pagination request to the allReviews array
-	
+  
 	try {
-	  let reviews = await gplay.reviews(options);
-	  const allReviews = reviews.data;
-  
-	  while (reviews.nextPaginationToken) {
-		options.nextPaginationToken = reviews.nextPaginationToken;
-		reviews = await gplay.reviews(options);
-		allReviews.push.apply(allReviews, reviews.data);
-	  }
-  
-	  event.sender.send('reviews-results', {data: allReviews}, appId);
+	  const reviews = await gplay.reviews(options);  
+	  event.sender.send('reviews-results', reviews, appId);
 	} catch (err) {
+	  console.error("Error occurred while getting reviews:", err);
 	  event.sender.send('reviews-error', err.message);
 	}
-  });  
+  });
   
 async function searchTermMore(term, arr = {}) {
 	if (!term) {

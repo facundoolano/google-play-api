@@ -1,8 +1,14 @@
-const { ipcRenderer } = require("electron");
+const {
+  ipcRenderer
+} = require("electron");
 
 // Get the search input and form
 const searchInput = document.getElementById("search-input");
 const searchForm = document.getElementById("search-form");
+
+// Get the tooltip element and suggestions list
+const tooltip = document.querySelector('#search-tooltip');
+const suggestionsList = document.querySelector('#suggestions-list');
 
 // Get the review input and form
 const reviewInput = document.getElementById("review-input");
@@ -24,7 +30,7 @@ const similarAppsForm = document.getElementById("similar-apps-form");
 const appDetailsInput = document.getElementById("app-details-input");
 const appDetailsForm = document.getElementById("app-details-form");
 
-document.getElementById("backButton").onclick = function () {
+document.getElementById("backButton").onclick = function() {
   location.href = "../index.html";
 };
 
@@ -35,19 +41,19 @@ function generateCSVData(objects, fields) {
   // Loop through each object and add it to the CSV data string
   csvData += fields.join(",") + "\n";
   for (const obj of objects) {
-    const row = [];
-    fields.forEach((field) => {
-      if (field in obj) {
-        if (typeof obj[field] === "string") {
-          row.push(`"${obj[field].replace(/"/g, '""')}"`);
-        } else {
-          row.push(obj[field]);
-        }
-      } else {
-        row.push("N/A");
-      }
-    });
-    csvData += row.join(",") + "\n";
+      const row = [];
+      fields.forEach((field) => {
+          if (field in obj) {
+              if (typeof obj[field] === "string") {
+                  row.push(`"${obj[field].replace(/"/g, '""')}"`);
+              } else {
+                  row.push(obj[field]);
+              }
+          } else {
+              row.push("N/A");
+          }
+      });
+      csvData += row.join(",") + "\n";
   }
 
   return csvData;
@@ -68,93 +74,198 @@ function downloadCSVFile(csvData, filename) {
 }
 
 if (searchInput && searchForm) {
+  let suggestTimeout;
+
   // Search form event listener
   searchForm.addEventListener("submit", (event) => {
     event.preventDefault();
 
-    const term = searchInput.value.trim();
+    const searchTerm = searchInput.value.trim();
 
-    ipcRenderer.send("search", term);
+    // Clear the previous suggestions
+    suggestionsList.innerHTML = '';
+
+    ipcRenderer.send("search", searchTerm);
   });
-} 
+
+  // Search input event listeners
+  searchInput.addEventListener("input", async () => {
+    const searchTerm = searchInput.value.trim();
+
+    // Only show the tooltip if the search term is not empty
+    if (searchTerm !== '') {
+      // Check if there is a pending suggest request
+      if (suggestTimeout) {
+        clearTimeout(suggestTimeout);
+      }
+
+      // Set a timer to aggregate similar search requests
+      suggestTimeout = setTimeout(async () => {
+        try {
+          // Get the suggestions from the main process
+          const suggestions = await ipcRenderer.send('suggest', searchTerm);
+
+          // Clear the previous suggestions
+          suggestionsList.innerHTML = '';
+
+          // Check if suggestions is iterable and has at least one suggestion
+          if (Symbol.iterator in Object(suggestions) && suggestions.length > 0) {
+            // Add each suggestion to the list
+            for (const suggestion of suggestions) {
+              const suggestionElement = document.createElement('li');
+              suggestionElement.classList.add('suggestion');
+              suggestionElement.textContent = suggestion;
+              suggestionsList.appendChild(suggestionElement);
+            }
+          } else {
+            // If no suggestions, display "No suggestions"
+            const noSuggestionsElement = document.createElement('li');
+            noSuggestionsElement.textContent = "No suggestions";
+            suggestionsList.appendChild(noSuggestionsElement);
+          }
+
+          // Show the tooltip
+          tooltip.classList.remove('hidden');
+        } catch (err) {
+          console.error("Error occurred while getting suggestions:", err);
+        }
+      }, 500);
+    } else {
+      // Hide the tooltip when the search input is empty
+      tooltip.classList.add('hidden');
+      // Clear the suggestions list when hiding the tooltip
+      suggestionsList.innerHTML = '';
+    }
+  });
+
+  // Hide the tooltip when the user clicks outside of it or the search input
+  document.addEventListener('click', (event) => {
+    if (!tooltip.contains(event.target) && !searchInput.contains(event.target)) {
+      tooltip.classList.add('hidden');
+      // Clear the suggestions list when hiding the tooltip
+      suggestionsList.innerHTML = '';
+    }
+  });
+
+  // Listen for suggestion results from the main process
+  ipcRenderer.on('suggest-results', (event, resultsJSON) => {
+    const results = JSON.parse(resultsJSON);
+
+    // Clear the previous suggestions
+    suggestionsList.innerHTML = '';
+
+    // Check if results has at least one suggestion
+    if (results.length > 0) {
+      // Add each suggestion to the list
+      for (const suggestion of results) {
+        const suggestionElement = document.createElement('li');
+        suggestionElement.classList.add('suggestion');
+        suggestionElement.textContent = suggestion;
+        suggestionsList.appendChild(suggestionElement);
+
+        // Add click event listener to suggestion element
+        suggestionElement.addEventListener('click', () => {
+          // Set the value of the search input to the suggestion text
+          searchInput.value = suggestion;
+          tooltip.classList.add('hidden');
+          // Clear the suggestions list when hiding the tooltip
+          suggestionsList.innerHTML = '';
+        });
+      }
+    } else {
+      // If no suggestions, display "No suggestions"
+      const noSuggestionsElement = document.createElement('li');
+      noSuggestionsElement.textContent = "No suggestions";
+      suggestionsList.appendChild(noSuggestionsElement);
+    }
+
+    // Show the tooltip
+    tooltip.classList.remove('hidden');
+  });
+
+  // Suggestions error
+  ipcRenderer.on('suggest-error', (event, error) => {
+    console.error("Error occurred while getting suggestions:", error);
+  });
+}
 
 if (reviewInput && reviewForm) {
   // Review form event listener
   reviewForm.addEventListener("submit", (event) => {
-    event.preventDefault(); // prevent form submission
+      event.preventDefault(); // prevent form submission
 
-    const appId = reviewInput.value.trim();
+      const appId = reviewInput.value.trim();
 
-    if (!appId) {
-      // do nothing if input is empty
-      return;
-    }
+      if (!appId) {
+          // do nothing if input is empty
+          return;
+      }
 
-    ipcRenderer.send("get-reviews", appId);
+      ipcRenderer.send("get-reviews", appId);
   });
 }
 
 if (permissionInput && permissionForm) {
   // Permission form event listener
   permissionForm.addEventListener("submit", (event) => {
-    event.preventDefault(); // prevent form submission
+      event.preventDefault(); // prevent form submission
 
-    const appId = permissionInput.value.trim();
+      const appId = permissionInput.value.trim();
 
-    if (!appId) {
-      // do nothing if input is empty
-      return;
-    }
+      if (!appId) {
+          // do nothing if input is empty
+          return;
+      }
 
-    ipcRenderer.send("get-app-permissions", appId);
+      ipcRenderer.send("get-app-permissions", appId);
   });
 }
 
 if (dataSafetyInput && dataSafetyForm) {
   // Data safety form event listener
   dataSafetyForm.addEventListener("submit", (event) => {
-    event.preventDefault(); // prevent form submission
+      event.preventDefault(); // prevent form submission
 
-    const appId = dataSafetyInput.value.trim();
+      const appId = dataSafetyInput.value.trim();
 
-    if (!appId) {
-      // do nothing if input is empty
-      return;
-    }
+      if (!appId) {
+          // do nothing if input is empty
+          return;
+      }
 
-    ipcRenderer.send("get-data-safety", appId);
+      ipcRenderer.send("get-data-safety", appId);
   });
 }
 
 if (similarAppsInput && similarAppsForm) {
   // Similar apps form event listener
   similarAppsForm.addEventListener("submit", (event) => {
-    event.preventDefault(); // prevent form submission
+      event.preventDefault(); // prevent form submission
 
-    const appId = similarAppsInput.value.trim();
+      const appId = similarAppsInput.value.trim();
 
-    if (!appId) {
-      // do nothing if input is empty 
-      return;
-    }
+      if (!appId) {
+          // do nothing if input is empty 
+          return;
+      }
 
-    ipcRenderer.send("get-similar-apps", appId);
+      ipcRenderer.send("get-similar-apps", appId);
   });
 }
 
 if (appDetailsInput && appDetailsForm) {
   // App details form event listener
   appDetailsForm.addEventListener("submit", (event) => {
-    event.preventDefault(); // prevent form submission
+      event.preventDefault(); // prevent form submission
 
-    const appId = appDetailsInput.value.trim();
+      const appId = appDetailsInput.value.trim();
 
-    if (!appId) {
-      // do nothing if input is empty
-      return;
-    }
+      if (!appId) {
+          // do nothing if input is empty
+          return;
+      }
 
-    ipcRenderer.send("get-app-details", appId);
+      ipcRenderer.send("get-app-details", appId);
   });
 }
 
@@ -164,13 +275,13 @@ ipcRenderer.on("search-results", async (event, resultsData, term) => {
 
   let results;
   try {
-    results = JSON.parse(resultsData);
+      results = JSON.parse(resultsData);
   } catch (err) {
-    console.error("Error parsing search results data:", err);
-    return;
+      console.error("Error parsing search results data:", err);
+      return;
   }
 
-  const fields = [ "url", "appId", "summary", "title", "developer", "developerId", "icon", "score", "scoreText", "priceText", "free" ];
+  const fields = ["url", "appId", "summary", "title", "developer", "developerId", "icon", "score", "scoreText", "priceText", "free"];
 
   const csvData = generateCSVData(results, fields);
 
@@ -205,7 +316,7 @@ ipcRenderer.on("reviews-results", async (event, paginatedReviews, appId) => {
 ipcRenderer.on("permission-results", async (event, permissions, appId) => {
   console.log("Received permissions for app:", appId);
 
-  const fields = [ "permission", "type"];
+  const fields = ["permission", "type"];
 
   const csvData = generateCSVData(permissions, fields);
 
@@ -217,30 +328,30 @@ ipcRenderer.on("permission-results", async (event, permissions, appId) => {
 ipcRenderer.on("data-safety-results", async (event, dataSafety, appId) => {
   console.log("Received data safety:");
 
-  const fields = [ "category","data","optional","purpose","type","securityPractices","privacyPolicyUrl" ];
+  const fields = ["category", "data", "optional", "purpose", "type", "securityPractices", "privacyPolicyUrl"];
 
   const sharedDataFormatted = dataSafety.sharedData.map((item) => {
-    return {
-      category: "shared data",
-      data: item.data,
-      optional: item.optional,
-      purpose: item.purpose,
-      type: item.type,
-      securityPractices: dataSafety.securityPractices.map((practice) => `${practice.practice} (${practice.description})`).join("; "),
-      privacyPolicyUrl: dataSafety.privacyPolicyUrl
-    }
+      return {
+          category: "shared data",
+          data: item.data,
+          optional: item.optional,
+          purpose: item.purpose,
+          type: item.type,
+          securityPractices: dataSafety.securityPractices.map((practice) => `${practice.practice} (${practice.description})`).join("; "),
+          privacyPolicyUrl: dataSafety.privacyPolicyUrl
+      }
   });
 
   const collectedDataFormatted = dataSafety.collectedData.map((item) => {
-    return {
-      category: "collected data",
-      data: item.data,
-      optional: item.optional,
-      purpose: item.purpose,
-      type: item.type,
-      securityPractices: dataSafety.securityPractices.map((practice) => `${practice.practice} (${practice.description})`).join("; "),
-      privacyPolicyUrl: dataSafety.privacyPolicyUrl
-    }
+      return {
+          category: "collected data",
+          data: item.data,
+          optional: item.optional,
+          purpose: item.purpose,
+          type: item.type,
+          securityPractices: dataSafety.securityPractices.map((practice) => `${practice.practice} (${practice.description})`).join("; "),
+          privacyPolicyUrl: dataSafety.privacyPolicyUrl
+      }
   });
 
   const dataSafetyFormatted = sharedDataFormatted.concat(collectedDataFormatted);
@@ -255,7 +366,7 @@ ipcRenderer.on("data-safety-results", async (event, dataSafety, appId) => {
 ipcRenderer.on("similar-apps-results", async (event, similarApps, appId) => {
   console.log("Received similar apps for app:", appId);
 
-  const fields = [ "url", "appId", "summary", "developer", "developerId", "icon", "score", "scoreText", "priceText", "free" ];
+  const fields = ["url", "appId", "summary", "developer", "developerId", "icon", "score", "scoreText", "priceText", "free"];
 
   const csvData = generateCSVData(similarApps, fields);
 
@@ -268,16 +379,16 @@ ipcRenderer.on("app-details-results", async (event, appDetails, appId) => {
   console.log("Received app details for app:", appId);
 
   // get all fields
-  const fields = ["title","description","descriptionHTML","summary","installs","minInstalls","maxInstalls","score","scoreText","ratings","reviews","price","free","currency","priceText","available","offersIAP","IAPRange","androidVersion","androidVersionText","developer","developerId","developerEmail","developerWebsite","developerAddress","privacyPolicy","developerInternalID","genre","genreId","icon","headerImage","screenshots","contentRating","contentRatingDescription","adSupported","released","updated","version","recentChanges","appId","url"];
+  const fields = ["title", "description", "descriptionHTML", "summary", "installs", "minInstalls", "maxInstalls", "score", "scoreText", "ratings", "reviews", "price", "free", "currency", "priceText", "available", "offersIAP", "IAPRange", "androidVersion", "androidVersionText", "developer", "developerId", "developerEmail", "developerWebsite", "developerAddress", "privacyPolicy", "developerInternalID", "genre", "genreId", "icon", "headerImage", "screenshots", "contentRating", "contentRatingDescription", "adSupported", "released", "updated", "version", "recentChanges", "appId", "url"];
 
   // concatenate screenshot URLs with ;
   // check if screenshots property exists
   // concatenate screenshot urls with ;
   if (Array.isArray(appDetails.screenshots)) {
-    const screenshots = appDetails.screenshots.join(",");
-    appDetails.screenshots = screenshots;
-  }  
-  
+      const screenshots = appDetails.screenshots.join(",");
+      appDetails.screenshots = screenshots;
+  }
+
   const csvData = generateCSVData([appDetails], fields);
 
   // Download the CSV file with the app details
@@ -291,7 +402,7 @@ ipcRenderer.on("search-error", (event, err) => {
 });
 
 // Review error
-ipcRenderer.on("review-error", (event, err) => {
+ipcRenderer.on("reviews-error", (event, err) => {
   console.error("Error occurred while getting reviews:", err);
   // Show error message to user
 });

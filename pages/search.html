@@ -10,6 +10,7 @@
   </head>
   <body>
     <!-- Header -->
+    
     <h1>Google Play Scraper</h1> 
     <h2>Search</h2> 
     <button type="button" id="backButton" class="button">Back</button>
@@ -20,13 +21,16 @@
         <p>To use this function, type your search query and click the button!</p>
       </fieldset>
     </form>
-    <!-- Search Form -->
     <form id="search-form">
       <fieldset>
         <legend>Search by App Name or Keyword</legend> 
         <input type="text" id="search-input" name="search-input" placeholder="Type here!" required>
+        <div id="search-tooltip" class="tooltip hidden">  
+          <ul id="suggestions-list"></ul>
+        </div> 
         <input type="submit" value="Search">
       </fieldset>
-    </form>    
+    </form> 
+    
 </body>
 </html>
