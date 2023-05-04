@@ -109,24 +109,51 @@ ipcMain.on('get-data-safety', async (event, appId) => {
   });
   
 /* App reviews */ 
-ipcMain.on('get-reviews', async (event, appId) => {
+const NodeCache = require("node-cache");
+const reviewCache = new NodeCache({ stdTTL: 60 * 60 * 24 }); // Cache for 24 hours
+
+ipcMain.on('get-reviews', async (event, appId, numReviews, sortBy) => {
+	const cacheKey = `reviews-${appId}-${numReviews}-${sortBy}`;
+	const cachedReviews = reviewCache.get(cacheKey);
+  
+	if (cachedReviews) {
+	  console.log(`Returning cached reviews for app: ${appId}`);
+	  event.sender.send('reviews-results', cachedReviews, appId);
+	  return;
+	}
+  
+	const sortOption = (() => {
+	  switch(sortBy) {
+		case "RATING": return gplay.sort.RATING;
+		case "HELPFULNESS": return gplay.sort.HELPFULNESS;
+		default: return gplay.sort.NEWEST;
+	  }
+	})();
+	
 	const options = {
 	  appId: appId, 
-	  sort: gplay.sort.RATIING,
+	  sort: sortOption,
 	  lang: 'en',
 	  country: 'us',
-	  num: 2500
+	  num: parseInt(numReviews)
 	};
+	
+	let reviews; // Initialize the variable reviews before it is used
   
 	try {
-	  const reviews = await gplay.reviews(options);  
+	  reviews = await gplay.reviews(options); // Assign the value returned by the API to reviews
+	  if (reviews.length > options.num) {
+		reviews = reviews.slice(0, options.num); // Truncate the reviews array to the desired length
+	  }
+	  reviewCache.set(cacheKey, reviews);
+	  console.log(`Caching ${reviews.length} reviews for app: ${appId}`);
 	  event.sender.send('reviews-results', reviews, appId);
 	} catch (err) {
 	  console.error("Error occurred while getting reviews:", err);
 	  event.sender.send('reviews-error', err.message);
 	}
-  });
-  
+  });  
+
 async function searchTermMore(term, arr = {}) {
 	if (!term) {
 		console.error("Error: search term is undefined");

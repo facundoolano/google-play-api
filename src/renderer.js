@@ -13,6 +13,8 @@ const suggestionsList = document.querySelector('#suggestions-list');
 // Get the review input and form
 const reviewInput = document.getElementById("review-input");
 const reviewForm = document.getElementById("review-form");
+const reviewAmountSelect = document.querySelector("#review-amount");
+const reviewSortSelect = document.querySelector("#review-sort");
 
 // Get permission input and form
 const permissionInput = document.getElementById("permission-input");
@@ -195,13 +197,15 @@ if (reviewInput && reviewForm) {
       event.preventDefault(); // prevent form submission
 
       const appId = reviewInput.value.trim();
+      const reviewAmount = reviewAmountSelect.value;
+      const reviewSort = reviewSortSelect.value;
 
       if (!appId) {
           // do nothing if input is empty
           return;
       }
 
-      ipcRenderer.send("get-reviews", appId);
+      ipcRenderer.send("get-reviews", appId, reviewAmount, reviewSort);
   });
 }
 

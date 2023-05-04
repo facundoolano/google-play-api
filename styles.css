@@ -91,7 +91,7 @@ input[type="submit"] {
 #similar-apps-form input[type="submit"] {
   display: block;
   margin: 0 auto;
-  margin-bottom: 10px;
+  margin-bottom: 10px; 
 }
 
 .form-title {
@@ -301,3 +301,30 @@ input[type="radio"]:checked {
   border-width: 10px 10px 0 10px;
   border-color: #ffffff transparent transparent transparent;
 } 
+
+.form-group {
+  display: flex;
+  margin-bottom: 10px;
+  align-items: center;
+}
+
+label {
+  flex-basis: 150px;
+}
+
+input[type="text"],
+input[type="number"],
+select {
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  text-align: center;
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus,
+select:focus {
+  border-color: #5b9dd9;
+  outline: none;
+}
