@@ -9,7 +9,7 @@ const searchForm = document.getElementById("search-form");
 // Get the tooltip element and suggestions list
 const tooltip = document.querySelector('#search-tooltip');
 const suggestionsList = document.querySelector('#suggestions-list');
-
+ 
 // Get the review input and form
 const reviewInput = document.getElementById("review-input");
 const reviewForm = document.getElementById("review-form");
@@ -32,31 +32,39 @@ const similarAppsForm = document.getElementById("similar-apps-form");
 const appDetailsInput = document.getElementById("app-details-input");
 const appDetailsForm = document.getElementById("app-details-form");
 
+// Get app list amount select
+const appListForm = document.getElementById("app-list-form");
+const appListAmount = document.getElementById("app-list-amount");
+const appCollectionList = document.getElementById("app-list-collection");
+const appCategoryList = document.getElementById("app-list-category");
+const appAgeList = document.getElementById("app-list-age");
+
 document.getElementById("backButton").onclick = function() {
   location.href = "../index.html";
 };
 
 // Function to generate CSV data from an array of objects
-function generateCSVData(objects, fields) {
+function generateCSVData(data, fields) {
+  let objects = Array.isArray(data) ? data : [data];
   let csvData = "";
 
   // Loop through each object and add it to the CSV data string
   csvData += fields.join(",") + "\n";
-  for (const obj of objects) {
-      const row = [];
-      fields.forEach((field) => {
-          if (field in obj) {
-              if (typeof obj[field] === "string") {
-                  row.push(`"${obj[field].replace(/"/g, '""')}"`);
-              } else {
-                  row.push(obj[field]);
-              }
-          } else {
-              row.push("N/A");
-          }
-      });
-      csvData += row.join(",") + "\n";
-  }
+  objects.forEach((obj) => {
+    const row = [];
+    fields.forEach((field) => {
+      if (field in obj) {
+        if (typeof obj[field] === "string") {
+          row.push(`"${obj[field].replace(/"/g, '""')}"`);
+        } else {
+          row.push(obj[field]);
+        }
+      } else {
+        row.push("N/A");
+      }
+    });
+    csvData += row.join(",") + "\n";
+  });
 
   return csvData;
 }
@@ -190,6 +198,21 @@ if (searchInput && searchForm) {
     console.error("Error occurred while getting suggestions:", error);
   });
 }
+ 
+if (appListForm) {
+
+  // App list form event listener
+  appListForm.addEventListener("submit", (event) => {
+      event.preventDefault(); // prevent form submission
+      
+      const appListAmountValue = appListAmount.value;
+      const appCollectionListValue = appCollectionList.value;
+      const appCategoryListValue = appCategoryList.value;
+      const appAgeListValue = appAgeList.value;
+
+      ipcRenderer.send("get-app-list", appListAmountValue, appCollectionListValue, appCategoryListValue, appAgeListValue);
+  });
+}
 
 if (reviewInput && reviewForm) {
   // Review form event listener
@@ -293,6 +316,18 @@ ipcRenderer.on("search-results", async (event, resultsData, term) => {
   downloadCSVFile(csvData, `${term}-search.csv`);
 });
 
+// App list results event listener  
+ipcRenderer.on("app-list-results", async (event, appList, collectionName, categoryName, ageInput ) => {
+  console.log("Received app list results");
+
+  const fields = ["title", "appId", "url", "icon", "developer", "currency", "price", "free", "summary", "scoreText", "score"];
+
+  const csvData = generateCSVData(appList, fields);
+
+  // Download the CSV file with the app list
+  downloadCSVFile(csvData, `app-list-${collectionName}-${categoryName}-${ageInput}.csv`);
+});
+ 
 // Review results event listener
 ipcRenderer.on("reviews-results", async (event, paginatedReviews, appId) => {
   console.log("Received reviews for app:", appId);
@@ -432,5 +467,11 @@ ipcRenderer.on("similar-apps-error", (event, err) => {
 // App details error
 ipcRenderer.on("app-details-error", (event, err) => {
   console.error("Error occurred while getting app details:", err);
+  // Show error message to user
+});
+
+// App list error
+ipcRenderer.on("app-list-error", (event, err) => {
+  console.error("Error occurred while getting app list:", err);
   // Show error message to user
 });

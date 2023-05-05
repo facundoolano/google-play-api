@@ -88,7 +88,8 @@ input[type="submit"] {
 #permission-form input[type="submit"],
 #app-details-form input[type="submit"],
 #data-safety-form input[type="submit"],
-#similar-apps-form input[type="submit"] {
+#similar-apps-form input[type="submit"],
+#app-list-form input[type="submit"] {
   display: block;
   margin: 0 auto;
   margin-bottom: 10px; 

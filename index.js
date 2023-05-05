@@ -85,6 +85,99 @@ ipcMain.on('get-similar-apps', async (event, appId) => {
 		event.sender.send('app-details-error', err.message);
 	}
 });
+
+  /* App List */
+  ipcMain.on('get-app-list', async (event, numAppList, sortByCollection, sortByCategory, sortByAge ) => {
+	try {
+		const collectionOptions = (() => {
+			switch(sortByCollection) {
+			  case "TOP_PAID": return gplay.sort.TOP_PAID;
+			  case "GROSSING": return gplay.sort.GROSSING;
+			  default: return gplay.sort.TOP_FREE;
+			}
+		  })();
+
+		  const categoryOptions = (() => {
+			switch(sortByCategory) {
+				case "APPLICATION": return gplay.category.APPLICATION;
+				case "ANDROID_WEAR": return gplay.category.ANDROID_WEAR;
+				case "ART_AND_DESIGN": return gplay.category.ART_AND_DESIGN;
+				case "AUTO_AND_VEHICLES": return gplay.category.AUTO_AND_VEHICLES;
+				case "BEAUTY": return gplay.category.BEAUTY;
+				case "BOOKS_AND_REFERENCE": return gplay.category.BOOKS_AND_REFERENCE;
+				case "BUSINESS": return gplay.category.BUSINESS;
+				case "COMICS": return gplay.category.COMICS;
+				case "COMMUNICATION": return gplay.category.COMMUNICATION;
+				case "DATING": return gplay.category.DATING;
+				case "EDUCATION": return gplay.category.EDUCATION;
+				case "ENTERTAINMENT": return gplay.category.ENTERTAINMENT;
+				case "EVENTS": return gplay.category.EVENTS;
+				case "FINANCE": return gplay.category.FINANCE;
+				case "FOOD_AND_DRINK": return gplay.category.FOOD_AND_DRINK;
+				case "HEALTH_AND_FITNESS": return gplay.category.HEALTH_AND_FITNESS;
+				case "HOUSE_AND_HOME": return gplay.category.HOUSE_AND_HOME;
+				case "LIBRARIES_AND_DEMO": return gplay.category.LIBRARIES_AND_DEMO;
+				case "LIFESTYLE": return gplay.category.LIFESTYLE;
+				case "MAPS_AND_NAVIGATION": return gplay.category.MAPS_AND_NAVIGATION;
+				case "MEDICAL": return gplay.category.MEDICAL;
+				case "MUSIC_AND_AUDIO": return gplay.category.MUSIC_AND_AUDIO;
+				case "NEWS_AND_MAGAZINES": return gplay.category.NEWS_AND_MAGAZINES;
+				case "PARENTING": return gplay.category.PARENTING;
+				case "PERSONALIZATION": return gplay.category.PERSONALIZATION;
+				case "PHOTOGRAPHY": return gplay.category.PHOTOGRAPHY;
+				case "PRODUCTIVITY": return gplay.category.PRODUCTIVITY;
+				case "SHOPPING": return gplay.category.SHOPPING;
+				case "SOCIAL": return gplay.category.SOCIAL;
+				case "SPORTS": return gplay.category.SPORTS;
+				case "TOOLS": return gplay.category.TOOLS;
+				case "TRAVEL_AND_LOCAL": return gplay.category.TRAVEL_AND_LOCAL;
+				case "VIDEO_PLAYERS": return gplay.category.VIDEO_PLAYERS;
+				case "WATCH_FACE": return gplay.category.WATCH_FACE;
+				case "WEATHER": return gplay.category.WEATHER;
+				case "GAME": return gplay.category.GAME;
+				case "GAME_ACTION": return gplay.category.GAME_ACTION;
+				case "GAME_ADVENTURE": return gplay.category.GAME_ADVENTURE;
+				case "GAME_ARCADE": return gplay.category.GAME_ARCADE;
+				case "GAME_BOARD": return gplay.category.GAME_BOARD;
+				case "GAME_CARD": return gplay.category.GAME_CARD;
+				case "GAME_CASINO": return gplay.category.GAME_CASINO;
+				case "GAME_CASUAL": return gplay.category.GAME_CASUAL;
+				case "GAME_EDUCATIONAL": return gplay.category.GAME_EDUCATIONAL;
+				case "GAME_MUSIC": return gplay.category.GAME_MUSIC;
+				case "GAME_PUZZLE": return gplay.category.GAME_PUZZLE;
+				case "GAME_RACING": return gplay.category.GAME_RACING;
+				case "GAME_ROLE_PLAYING": return gplay.category.GAME_ROLE_PLAYING;
+				case "GAME_SIMULATION": return gplay.category.GAME_SIMULATION;
+				case "GAME_SPORTS": return gplay.category.GAME_SPORTS;
+				case "GAME_STRATEGY": return gplay.category.GAME_STRATEGY;
+				case "GAME_TRIVIA": return gplay.category.GAME_TRIVIA;
+				case "GAME_WORD": return gplay.category.GAME_WORD;
+			}
+		})();
+
+		const ageOptions = (() => {
+			switch(sortByAge) {
+				case "FIVE_UNDER": return gplay.age.FIVE_UNDER;
+				case "SIX_EIGHT": return gplay.age.SIX_EIGHT;
+				case "NINE_UP": return gplay.age.NINE_UP;
+			}
+		})();
+
+		const appList = await gplay.list({
+			collection: collectionOptions,
+			category: categoryOptions,
+			age: ageOptions,
+			num: parseInt(numAppList),
+			lang: 'en',
+			country: 'us'
+		});
+
+		event.sender.send('app-list-results', appList, sortByCollection, sortByCategory, sortByAge);
+		  
+	} catch (err) {
+		event.sender.send('app-list-error', err.message);
+	}
+});
  
 /* Data Safety */
 ipcMain.on('get-data-safety', async (event, appId) => {

@@ -35,6 +35,12 @@
           </li>
           <li>
             <label>
+              <input type="radio" id="app-list-radio" name="feature" value="app-list" required>
+              App List
+            </label>
+          </li>
+          <li>
+            <label>
               <input type="radio" id="reviews-radio" name="feature" value="reviews" required>
               Reviews
             </label>
@@ -73,6 +79,9 @@
             break;
           case "app-details":
             window.location.href = "./pages/app-details.html";
+            break;
+          case "app-list":
+            window.location.href = "./pages/app-list.html";
             break;
           case "reviews":
             window.location.href = "./pages/reviews.html";
