@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'">
+    <title>Google Play Scraper</title>
+    <link rel="stylesheet" href="../src/styles.css">
+    <!-- Scripts -->
+    <script nonce="randomnonce" src="../src/renderer.js" defer></script> 
+  </head>
+  <body>
+    <!-- Header -->
+    <h1>Google Play Scraper</h1> 
+    <h2>App List</h2> 
+    <button type="button" id="backButton" class="button">Back</button>
+    <!-- Instructions -->
+    <form id="instructions">
+      <fieldset>
+        <p>This retrieves a list of apps from one of Google Play's collections.</p>
+        <p>To use this function, toggle between the options below!</p>
+      </fieldset>
+    </form>
+    <!-- Search Form -->
+    <form id="app-list-form">
+      <fieldset>
+        <legend>App List</legend> 
+        <div class="form-group">
+          <label for="app-list-amount">Amount</label>
+          <input type="number" id="app-list-amount" name="app-list-amount" value="200" min="1" max="200" step="1" placeholder="Enter amount" required>
+        </div>
+        <div class="form-group">
+          <label for="app-list-collection">Collection</label>
+          <select id="app-list-collection" name="app-list-collection">
+            <option value="TOP_FREE" selected>Top Free</option>
+            <option value="TOP_PAID">Top Paid</option>
+            <option value="GROSSING">Grossing</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="app-list-category">Category</label>
+          <select id="app-list-category" name="app-list-category"> 
+            <option value="APPLICATION">Application</option>
+            <option value="ANDROID_WEAR">Android Wear</option>
+            <option value="ART_AND_DESIGN">Art & Design</option>
+            <option value="AUTO_AND_VEHICLES">Auto & Vehicles</option>
+            <option value="BEAUTY">Beauty</option>
+            <option value="BOOKS_AND_REFERENCE">Books & Reference</option>
+            <option value="BUSINESS">Business</option>
+            <option value="COMICS">Comics</option>
+            <option value="COMMUNICATION">Communication</option>
+            <option value="DATING">Dating</option>
+            <option value="EDUCATION">Education</option>
+            <option value="ENTERTAINMENT">Entertainment</option>
+            <option value="EVENTS">Events</option>
+            <option value="FINANCE">Finance</option>
+            <option value="FOOD_AND_DRINK">Food & Drink</option>
+            <option value="HEALTH_AND_FITNESS">Health & Fitness</option>
+            <option value="HOUSE_AND_HOME">House & Home</option>
+            <option value="LIBRARIES_AND_DEMO">Libraries & Demo</option>
+            <option value="LIFESTYLE">Lifestyle</option>
+            <option value="MAPS_AND_NAVIGATION">Maps & Navigation</option>
+            <option value="MEDICAL">Medical</option>
+            <option value="MUSIC_AND_AUDIO">Music & Audio</option>
+            <option value="NEWS_AND_MAGAZINES">News & Magazines</option>
+            <option value="PARENTING">Parenting</option>
+            <option value="PERSONALIZATION">Personalization</option>
+            <option value="PHOTOGRAPHY">Photography</option>
+            <option value="PRODUCTIVITY">Productivity</option>
+            <option value="SHOPPING">Shopping</option>
+            <option value="SOCIAL">Social</option>
+            <option value="SPORTS">Sports</option>
+            <option value="TOOLS">Tools</option>
+            <option value="TRAVEL_AND_LOCAL">Travel & Local</option>
+            <option value="VIDEO_PLAYERS">Video Players</option>
+            <option value="WEATHER">Weather</option>
+            <option value="GAME">Game</option>
+            <option value="GAME_ACTION">Game Action</option>
+            <option value="GAME_ADVENTURE">Game Adventure</option>
+            <option value="GAME_ARCADE">Game Arcade</option>
+            <option value="GAME_BOARD">Game Board</option>
+            <option value="GAME_CARD">Game Card</option>
+            <option value="GAME_CASINO">Game Casino</option>
+            <option value="GAME_CASUAL">Game Casual</option>
+            <option value="GAME_EDUCATIONAL">Game Educational</option>
+            <option value="GAME_MUSIC">Game Music</option>
+            <option value="GAME_PUZZLE">Game Puzzle</option>
+            <option value="GAME_RACING">Game Racing</option>
+            <option value="GAME_ROLE_PLAYING">Game Role Playing</option>
+            <option value="GAME_SIMULATION">Game Simulation</option>
+            <option value="GAME_SPORTS">Game Sports</option>
+            <option value="GAME_STRATEGY">Game Strategy</option>
+            <option value="GAME_TRIVIA">Game Trivia</option>
+            <option value="GAME_WORD">Game Word</option>
+            <option value="FAMILY">Family</option> 
+            </select>
+        </div>
+        <div class="form-group">
+          <label for="app-list-age">Age</label>
+          <select id="app-list-age" name="app-list-age"> 
+            <option value="FIVE_UNDER">Five Under</option>
+            <option value="SIX_EIGHT">Six Eight</option>
+            <option value="NINE_UP">Nine Up</option>
+          </select>
+        </div>
+        <input type="submit" value="Search"></input>
+      </fieldset>
+    </form> 
+  </body>
+</html>

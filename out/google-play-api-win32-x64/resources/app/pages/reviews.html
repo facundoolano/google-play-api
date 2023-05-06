@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'">
+    <title>Google Play Scraper</title>
+    <link rel="stylesheet" href="../src/styles.css">
+    <!-- Scripts -->
+    <script nonce="randomnonce" src="../src/renderer.js" defer></script> 
+  </head>
+  <body>
+    <!-- Header -->
+    <h1>Google Play Scraper</h1> 
+    <h2>Reviews</h2> 
+    <button type="button" id="backButton" class="button">Back</button>
+    <!-- Instructions -->
+    <form id="instructions">
+      <fieldset>
+        <p>This retrieves a page of reviews for a specific app.</p>
+        <p>To use this function, reference the image below and enter the App ID!</p>
+        <img src="../images/appID.png" alt="App ID" width="100%">
+      </fieldset>
+    </form>
+    <!-- Search Form -->
+    <form id="review-form">
+      <fieldset>
+        <legend>Reviews</legend>
+        <div class="form-group">
+          <label for="review-input">App ID</label> 
+          <div class="main-tooltip">
+            <input type="text" id="review-input" name="review-input" placeholder="Enter app id" required>
+            <span id="error-tooltip" class="tooltiptext">Please check the spelling of the app id and try again.</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="review-amount">Amount</label>
+          <input type="number" id="review-amount" name="review-amount" value="100" min="1" max="10000" placeholder="Enter amount" step="1" required>
+        </div>
+        <div class="form-group">
+          <label for="review-sort">Sort By</label>
+          <select id="review-sort" name="review-sort">
+            <option value="NEWEST" selected>Newest</option>
+            <option value="RATING">Rating</option>
+            <option value="HELPFULNESS">Helpfulness</option>
+          </select>
+        </div>
+        <input type="submit" value="Search">
+      </fieldset>
+    </form> 
+  </body>
+</html>

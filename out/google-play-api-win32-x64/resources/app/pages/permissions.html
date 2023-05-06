@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'">
+    <title>Google Play Scraper</title>
+    <link rel="stylesheet" href="../src/styles.css">
+    <script nonce="randomnonce" src="../src/renderer.js" defer></script> 
+  </head>
+  <body>
+    <!-- Header -->
+    <h1>Google Play Scraper</h1> 
+    <h2>Permissions</h2> 
+    <button type="button" id="backButton" class="button">Back</button>
+    <!-- Instructions -->
+    <form id="instructions">
+      <fieldset>
+        <p>This returns a list of permissions a specific app has access to.</p>
+        <p>To use this function, reference the image below and enter the App ID!</p>
+        <img src="../images/appID.png" alt="App ID" width="100%">
+      </fieldset>
+    </form>
+    <!-- Search Form -->
+    <form id="permission-form">
+      <fieldset>
+        <legend>Permissions</legend> 
+        <div class="main-tooltip">
+          <input type="text" id="permission-input" name="permission-input" placeholder="Enter app id" required>
+          <span id="error-tooltip" class="tooltiptext">Please check the spelling of the app id and try again.</span>
+        </div>
+        <input type="submit" value="Search"></input>
+      </fieldset>
+    </form>  
+</body>
+</html>
