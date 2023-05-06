@@ -1,6 +1,9 @@
 const { app, BrowserWindow, ipcMain, session } = require("electron");
 const gplay = require("google-play-scraper"); // https://www.npmjs.com/package/google-play-scraper
 
+// Set ELECTRON_DISABLE_SECURITY_WARNINGS environment variable
+process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = true;
+
 function createWindow() {
 	const mainWindow = new BrowserWindow({
 		webPreferences: {
@@ -52,7 +55,7 @@ ipcMain.on('search', async (event, searchTerm) => {
 		const results = await searchTermMore(searchTerm);
 		event.sender.send('search-results', JSON.stringify(results), searchTerm); 
 	} catch (err) {
-		event.sender.send('search-error', err);
+		event.sender.send('search-error', err.message);
 	}
 });
 
@@ -62,7 +65,7 @@ ipcMain.on('suggest', async (event, searchTerm) => {
 		const results = await gplay.suggest({term: searchTerm});
 		event.sender.send('suggest-results', JSON.stringify(results), searchTerm);
 	} catch (err) {
-		event.sender.send('suggest-error', err);
+		event.sender.send('suggest-error', err.message);
 	}
 });
 
@@ -87,7 +90,7 @@ ipcMain.on('get-similar-apps', async (event, appId) => {
 });
 
   /* App List */
-  ipcMain.on('get-app-list', async (event, numAppList, sortByCollection, sortByCategory, sortByAge ) => {
+  ipcMain.on('get-app-list', async (event, numAppList, sortByCollection, sortByCategory, sortByAge ) => { 
 	try {
 		const collectionOptions = (() => {
 			switch(sortByCollection) {
@@ -178,28 +181,63 @@ ipcMain.on('get-similar-apps', async (event, appId) => {
 		event.sender.send('app-list-error', err.message);
 	}
 });
- 
+
+/* Developer */
+ipcMain.on('get-developer', async (event, devId) => {
+	try {
+	  const options = {
+		devId: devId,
+		lang: 'en',
+		country: 'us'
+	  };
+  
+	  const developer = await gplay.developer(options);
+  
+	  if (developer.length === 0) {
+		event.sender.send('developer-error', 'Developer information is not available for this app.');
+	  }
+  
+	  event.sender.send('developer-results', developer, devId);
+	} catch (err) {
+	  	event.sender.send('developer-error', err.message);
+	}
+  });
+  
 /* Data Safety */
 ipcMain.on('get-data-safety', async (event, appId) => {
 	try { 
 	  const dataSafety = await gplay.datasafety({ appId: appId, lang: 'en', country: 'us' }); 
-	  event.sender.send('data-safety-results', dataSafety, appId);
+	  if (
+		!dataSafety.sharedData.length &&
+		!dataSafety.collectedData.length &&
+		!dataSafety.securityPractices.length &&
+		dataSafety.privacyPolicyUrl === undefined
+	  ) {
+		event.sender.send('data-safety-error', 'Data safety information is not available for this app.');
+	  } else {
+			event.sender.send('data-safety-results', dataSafety, appId);
+	  }
 	} catch (err) {
-	  event.sender.send('data-safety-error', err.message)
+	  event.sender.send('data-safety-error', err.message);
 	}
-  });
-  
+  });  
   
   /* App Permissions */
   ipcMain.on('get-app-permissions', async (event, appId) => {
 	try {
 	  const permissions = await gplay.permissions({ appId: appId, lang: 'en', country: 'us' }); 
-	  event.sender.send('permission-results', permissions, appId); 
+	  if (permissions.length === 0) {
+		// Display an error tooltip when the app has no permissions
+		event.sender.send('permission-error', 'Permission information is not available for this app.');
+	  } else {
+		event.sender.send('permission-results', permissions, appId);
+	  }
 	} catch (err) {
 		console.error("Error generating permissions for app:", appId, err);
-		event.sender.send('permission-results-error', err.message);
+		event.sender.send('permission-error', err.message);
 	}
-  });
+});
+
   
 /* App reviews */ 
 const NodeCache = require("node-cache");
@@ -234,20 +272,30 @@ ipcMain.on('get-reviews', async (event, appId, numReviews, sortBy) => {
 	let reviews; // Initialize the variable reviews before it is used
   
 	try {
-	  reviews = await gplay.reviews(options); // Assign the value returned by the API to reviews
-	  if (reviews.length > options.num) {
-		reviews = reviews.slice(0, options.num); // Truncate the reviews array to the desired length
+		reviews = await gplay.reviews(options); // Assign the value returned by the API to reviews
+		
+		// { data: [], nextPaginationToken: null }
+		if (reviews.data.length === 0) {
+		  event.sender.send('reviews-error', 'No reviews found for this app.');
+		  return;
+		}
+
+		if (reviews.length > options.num) {
+		  reviews = reviews.slice(0, options.num); // Truncate the reviews array to the desired length
+		}
+
+		reviewCache.set(cacheKey, reviews);
+
+		console.log(`Caching ${reviews.length} reviews for app: ${appId}`);
+
+		event.sender.send('reviews-results', reviews, appId);
+	  } catch (err) {
+			console.error("Error occurred while getting reviews:", err);
+			event.sender.send('reviews-error', err.message);
 	  }
-	  reviewCache.set(cacheKey, reviews);
-	  console.log(`Caching ${reviews.length} reviews for app: ${appId}`);
-	  event.sender.send('reviews-results', reviews, appId);
-	} catch (err) {
-	  console.error("Error occurred while getting reviews:", err);
-	  event.sender.send('reviews-error', err.message);
-	}
   });  
 
-async function searchTermMore(term, arr = {}) {
+async function searchTermMore(term, arr = {}) { // time complexity: O(n^2)
 	if (!term) {
 		console.error("Error: search term is undefined");
 		return;

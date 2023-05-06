@@ -24,8 +24,11 @@
     <form id="app-details-form">
       <fieldset>
         <legend>App Details</legend> 
-        <input type="text" id="app-details-input" name="app-details-input" placeholder="Enter app id" required>
-        <input type="submit" value="Search">
+        <div class="main-tooltip">
+          <input type="text" id="app-details-input" name="app-details-input" placeholder="Enter app id" required>
+          <span id="error-tooltip" class="tooltiptext">Please check the spelling of the app id and try again.</span>
+        </div>
+        <input type="submit" value="Search"></input>
       </fieldset>
     </form>  
 </body>

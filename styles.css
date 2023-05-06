@@ -89,7 +89,8 @@ input[type="submit"] {
 #app-details-form input[type="submit"],
 #data-safety-form input[type="submit"],
 #similar-apps-form input[type="submit"],
-#app-list-form input[type="submit"] {
+#app-list-form input[type="submit"],
+#developer-form input[type="submit"] {
   display: block;
   margin: 0 auto;
   margin-bottom: 10px; 
@@ -328,4 +329,31 @@ input[type="number"]:focus,
 select:focus {
   border-color: #5b9dd9;
   outline: none;
+}
+
+.main-tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltiptext {
+  visibility: hidden;
+  width: 180px;
+  background-color: #555;
+  color: #fff;
+  text-align: center;
+  padding: 5px 0;
+  border-radius: 6px;
+  position: absolute;
+  z-index: 1;
+  bottom: 100%;
+  left: 50%;
+  margin-left: -90px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.main-tooltip:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
 }

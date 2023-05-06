@@ -41,6 +41,12 @@
           </li>
           <li>
             <label>
+              <input type="radio" id="developer-radio" name="feature" value="developer" required>
+              Developer
+            </label>
+          </li>
+          <li>
+            <label>
               <input type="radio" id="reviews-radio" name="feature" value="reviews" required>
               Reviews
             </label>
@@ -82,6 +88,9 @@
             break;
           case "app-list":
             window.location.href = "./pages/app-list.html";
+            break;
+          case "developer":
+            window.location.href = "./pages/developer.html";
             break;
           case "reviews":
             window.location.href = "./pages/reviews.html";

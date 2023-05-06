@@ -7,14 +7,19 @@ const searchInput = document.getElementById("search-input");
 const searchForm = document.getElementById("search-form");
 
 // Get the tooltip element and suggestions list
-const tooltip = document.querySelector('#search-tooltip');
-const suggestionsList = document.querySelector('#suggestions-list');
+const tooltip = document.getElementById('search-tooltip');
+const suggestionsList = document.getElementById('suggestions-list');
  
 // Get the review input and form
 const reviewInput = document.getElementById("review-input");
 const reviewForm = document.getElementById("review-form");
-const reviewAmountSelect = document.querySelector("#review-amount");
-const reviewSortSelect = document.querySelector("#review-sort");
+const reviewAmountSelect = document.getElementById("review-amount");
+const reviewSortSelect = document.getElementById("review-sort");
+
+// Get developer input and form
+const developerInput = document.getElementById("developer-input");
+const developerForm = document.getElementById("developer-form"); 
+const ErrorTooltip = document.getElementById('error-tooltip');
 
 // Get permission input and form
 const permissionInput = document.getElementById("permission-input");
@@ -44,7 +49,7 @@ document.getElementById("backButton").onclick = function() {
 };
 
 // Function to generate CSV data from an array of objects
-function generateCSVData(data, fields) {
+function generateCSVData(data, fields) { // time complexity: O(N * M)
   let objects = Array.isArray(data) ? data : [data];
   let csvData = "";
 
@@ -70,7 +75,7 @@ function generateCSVData(data, fields) {
 }
 
 // Function to download a CSV file with the given data and filename
-function downloadCSVFile(csvData, filename) {
+function downloadCSVFile(csvData, filename) { // time complexity: O(1)
   // Create a temporary link to download the CSV file
   const link = document.createElement("a");
   link.setAttribute("href", "data:text/csv;charset=utf-8," + encodeURIComponent(csvData));
@@ -87,7 +92,7 @@ if (searchInput && searchForm) {
   let suggestTimeout;
 
   // Search form event listener
-  searchForm.addEventListener("submit", (event) => {
+  searchForm.addEventListener("submit", (event) => { // time complexity: O(1)
     event.preventDefault();
 
     const searchTerm = searchInput.value.trim();
@@ -99,7 +104,7 @@ if (searchInput && searchForm) {
   });
 
   // Search input event listeners
-  searchInput.addEventListener("input", async () => {
+  searchInput.addEventListener("input", async () => { // time complexity: O(1)
     const searchTerm = searchInput.value.trim();
 
     // Only show the tooltip if the search term is not empty
@@ -211,6 +216,22 @@ if (appListForm) {
       const appAgeListValue = appAgeList.value;
 
       ipcRenderer.send("get-app-list", appListAmountValue, appCollectionListValue, appCategoryListValue, appAgeListValue);
+  });
+}
+
+if (developerInput && developerForm) {
+  // Developer form event listener
+  developerForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const developerName = developerInput.value.trim();
+    if (developerName === '') {
+      // Display an error tooltip when the input is empty
+      ErrorTooltip.style.visibility = "visible";
+    } else {
+      // Hide the error tooltip when the input is not empty
+      ErrorTooltip.style.visibility = "hidden";
+      ipcRenderer.send('get-developer', developerName, 60);
+    }
   });
 }
 
@@ -327,6 +348,18 @@ ipcRenderer.on("app-list-results", async (event, appList, collectionName, catego
   // Download the CSV file with the app list
   downloadCSVFile(csvData, `app-list-${collectionName}-${categoryName}-${ageInput}.csv`);
 });
+
+// Developer results event listener
+ipcRenderer.on("developer-results", async (event, developerApps, developerId) => {
+  console.log("Received developer apps for developer:", developerId);
+
+  const fields = ["url", "appId", "title", "summary", "developer", "developerId", "icon", "score", "scoreText", "priceText", "free"];
+
+  const csvData = generateCSVData(developerApps, fields);
+
+  // Download the CSV file with the developer apps
+  downloadCSVFile(csvData, `${developerId}-developerApps.csv`);
+});
  
 // Review results event listener
 ipcRenderer.on("reviews-results", async (event, paginatedReviews, appId) => {
@@ -365,7 +398,7 @@ ipcRenderer.on("permission-results", async (event, permissions, appId) => {
 
 // Data safety results event listener
 ipcRenderer.on("data-safety-results", async (event, dataSafety, appId) => {
-  console.log("Received data safety:");
+  console.log("Received data safety results for app:", appId)
 
   const fields = ["category", "data", "optional", "purpose", "type", "securityPractices", "privacyPolicyUrl"];
 
@@ -442,36 +475,43 @@ ipcRenderer.on("search-error", (event, err) => {
 
 // Review error
 ipcRenderer.on("reviews-error", (event, err) => {
-  console.error("Error occurred while getting reviews:", err);
-  // Show error message to user
+  ErrorTooltip.style.visibility = "visible";
 });
 
 // Permission error
 ipcRenderer.on("permission-error", (event, err) => {
-  console.error("Error occurred while getting permissions:", err);
-  // Show error message to user
+  ErrorTooltip.style.visibility = "visible";
 });
 
 // Data safety error
 ipcRenderer.on("data-safety-error", (event, err) => {
-  console.error("Error occurred while getting data safety:", err);
-  // Show error message to user
+  // Display an error tooltip when the app is not found or data safety information is not available
+  ErrorTooltip.style.visibility = "visible";
 });
 
 // Similar apps error
 ipcRenderer.on("similar-apps-error", (event, err) => {
-  console.error("Error occurred while getting similar apps:", err);
-  // Show error message to user
+  if (err instanceof Error && err.message.includes("App not found (404)")) {
+    // Display an error tooltip when the app is not found
+    ErrorTooltip.style.visibility = "visible";
+  }
 });
 
 // App details error
 ipcRenderer.on("app-details-error", (event, err) => {
-  console.error("Error occurred while getting app details:", err);
-  // Show error message to user
+  if (err instanceof Error && err.message.includes("App not found (404)")) {
+    // Display an error tooltip when the app is not found
+    ErrorTooltip.style.visibility = "visible";
+  }
 });
 
 // App list error
 ipcRenderer.on("app-list-error", (event, err) => {
   console.error("Error occurred while getting app list:", err);
   // Show error message to user
+});
+
+// Developer error 
+ipcRenderer.on("developer-error", (event, err) => {
+  ErrorTooltip.style.visibility = "visible"; 
 });

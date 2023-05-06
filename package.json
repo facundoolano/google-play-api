@@ -9,7 +9,8 @@
     "make": "electron-forge make",
     "publish": "electron-forge publish",
     "lint": "eslint src --color"
-  },
+},
+
   "keywords": [],
   "author": "javab3ans",
   "license": "MIT",
@@ -20,7 +21,7 @@
           "squirrel"
         ],
         "darwin": [
-          "zip"
+          "dmg"
         ],
         "linux": [
           "deb",
@@ -36,7 +37,7 @@
       "electronInstallerDebian": {},
       "electronInstallerRedhat": {},
       "github_repository": {
-        "owner": "",
+        "owner": "javab3ans",
         "name": ""
       },
       "windowsStoreConfig": {
@@ -49,6 +50,7 @@
     "electron-compile": "^6.4.4",
     "electron-squirrel-startup": "^1.0.0",
     "electron-store": "^8.1.0",
+    "google-play-scraper": "^9.1.0",
     "node-cache": "^5.1.2"
   },
   "devDependencies": {
@@ -56,13 +58,13 @@
     "babel-preset-env": "^1.7.0",
     "babel-preset-react": "^6.24.1",
     "electron-forge": "^5.2.4",
+    "electron-packager": "^17.1.1",
     "electron-prebuilt-compile": "8.2.0",
     "eslint": "^3.19.0",
     "eslint-config-airbnb": "^15.1.0",
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-jsx-a11y": "^5.1.1",
-    "eslint-plugin-react": "^7.32.2",
-    "google-play-scraper": "^9.1.0"
+    "eslint-plugin-react": "^7.32.2"
   },
   "bugs": {
     "url": "https://github.com/facundoolano/google-play-api/issues"

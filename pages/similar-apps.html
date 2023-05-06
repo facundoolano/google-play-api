@@ -24,7 +24,10 @@
     <form id="similar-apps-form">
       <fieldset>
         <legend>Similar Apps</legend> 
-        <input type="text" id="similar-apps-input" name="similar-apps-input" placeholder="Enter app id" required>
+        <div class="main-tooltip">
+          <input type="text" id="similar-apps-input" name="similar-apps-input" placeholder="Enter app id" required>
+          <span id="error-tooltip" class="tooltiptext">Please check the spelling of the app id and try again.</span>
+        </div>
         <input type="submit" value="Search"></input>
       </fieldset>
     </form>  

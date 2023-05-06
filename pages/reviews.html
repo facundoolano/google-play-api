@@ -26,12 +26,15 @@
       <fieldset>
         <legend>Reviews</legend>
         <div class="form-group">
-          <label for="review-input">App ID</label>
-          <input type="text" id="review-input" name="review-input" placeholder="Enter app id" required>
+          <label for="review-input">App ID</label> 
+          <div class="main-tooltip">
+            <input type="text" id="review-input" name="review-input" placeholder="Enter app id" required>
+            <span id="error-tooltip" class="tooltiptext">Please check the spelling of the app id and try again.</span>
+          </div>
         </div>
         <div class="form-group">
           <label for="review-amount">Amount</label>
-          <input type="number" id="review-amount" name="review-amount" value="100" min="1" max="10000" step="1">
+          <input type="number" id="review-amount" name="review-amount" value="100" min="1" max="10000" placeholder="Enter amount" step="1" required>
         </div>
         <div class="form-group">
           <label for="review-sort">Sort By</label>
