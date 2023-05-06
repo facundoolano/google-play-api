@@ -45,7 +45,7 @@ const appCategoryList = document.getElementById("app-list-category");
 const appAgeList = document.getElementById("app-list-age");
 
 document.getElementById("backButton").onclick = function() {
-  location.href = "../index.html";
+  location.href = "../src/index.html";
 };
 
 // Function to generate CSV data from an array of objects

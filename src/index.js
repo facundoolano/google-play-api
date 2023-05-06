@@ -20,7 +20,7 @@ function createWindow() {
 		}
 	});
 
-	mainWindow.loadFile("index.html");
+	mainWindow.loadFile(__dirname + "/index.html");
 
 	// Open the DevTools.
 	// mainWindow.webContents.openDevTools();
