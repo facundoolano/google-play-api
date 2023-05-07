@@ -31,11 +31,7 @@ const dataSafetyForm = document.getElementById("data-safety-form");
 
 // Get similar apps input and form
 const similarAppsInput = document.getElementById("similar-apps-input");
-const similarAppsForm = document.getElementById("similar-apps-form");
-
-// Get app details input and form
-const appDetailsInput = document.getElementById("app-details-input");
-const appDetailsForm = document.getElementById("app-details-form");
+const similarAppsForm = document.getElementById("similar-apps-form"); 
 
 // Get app list amount select
 const appListForm = document.getElementById("app-list-form");
@@ -303,23 +299,7 @@ if (similarAppsInput && similarAppsForm) {
 
       ipcRenderer.send("get-similar-apps", appId);
   });
-}
-
-if (appDetailsInput && appDetailsForm) {
-  // App details form event listener
-  appDetailsForm.addEventListener("submit", (event) => {
-      event.preventDefault(); // prevent form submission
-
-      const appId = appDetailsInput.value.trim();
-
-      if (!appId) {
-          // do nothing if input is empty
-          return;
-      }
-
-      ipcRenderer.send("get-app-details", appId);
-  });
-}
+} 
 
 // Search results event listener
 ipcRenderer.on("search-results", async (event, resultsData, term) => {
@@ -450,27 +430,6 @@ ipcRenderer.on("similar-apps-results", async (event, similarApps, appId) => {
   downloadCSVFile(csvData, `${appId}-similarApps.csv`);
 });
 
-// App details results event listener
-ipcRenderer.on("app-details-results", async (event, appDetails, appId) => {
-  console.log("Received app details for app:", appId);
-
-  // get all fields
-  const fields = ["title", "description", "descriptionHTML", "summary", "installs", "minInstalls", "maxInstalls", "score", "scoreText", "ratings", "reviews", "price", "free", "currency", "priceText", "available", "offersIAP", "IAPRange", "androidVersion", "androidVersionText", "developer", "developerId", "developerEmail", "developerWebsite", "developerAddress", "privacyPolicy", "developerInternalID", "genre", "genreId", "icon", "headerImage", "screenshots", "contentRating", "contentRatingDescription", "adSupported", "released", "updated", "version", "recentChanges", "appId", "url"];
-
-  // concatenate screenshot URLs with ;
-  // check if screenshots property exists
-  // concatenate screenshot urls with ;
-  if (Array.isArray(appDetails.screenshots)) {
-      const screenshots = appDetails.screenshots.join(",");
-      appDetails.screenshots = screenshots;
-  }
-
-  const csvData = generateCSVData([appDetails], fields);
-
-  // Download the CSV file with the app details
-  downloadCSVFile(csvData, `${appId}-appDetails.csv`);
-});
-
 // Search error event listener
 ipcRenderer.on("search-error", (event, err) => {
   ErrorTooltip.style.visibility = "visible";
@@ -498,15 +457,7 @@ ipcRenderer.on("similar-apps-error", (event, err) => {
     // Display an error tooltip when the app is not found
     ErrorTooltip.style.visibility = "visible";
   }
-});
-
-// App details error
-ipcRenderer.on("app-details-error", (event, err) => {
-  if (err instanceof Error && err.message.includes("App not found (404)")) {
-    // Display an error tooltip when the app is not found
-    ErrorTooltip.style.visibility = "visible";
-  }
-});
+}); 
 
 // App list error
 ipcRenderer.on("app-list-error", (event, err) => {

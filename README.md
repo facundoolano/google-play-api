@@ -13,18 +13,6 @@ npm start
 
 The parameters for each endpoint are taken directly from google-play-scraper. For a full reference check its [documentation](https://github.com/facundoolano/google-play-scraper/#usage).
  
-Get the top free apps with full detail
-
-```http
-GET /api/apps/?fullDetail=true
-``` 
-
-Get app required permissions with full descriptions
-
-```http
-GET /api/apps/org.wikipedia/permissions/
-```
-
 Get app data safety information
 
 ```http
@@ -61,10 +49,6 @@ Get apps by developer
 GET /api/developers/Wikimedia%20Foundation/
 ```
 
-Get categories
-```http
-GET /api/categories/
-```
-
 ## License
-This project is licensed under the MIT License - see the LICENSE file for details.
+
+- This project is licensed under the MIT License - see the LICENSE file for details. 

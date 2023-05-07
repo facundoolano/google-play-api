@@ -79,21 +79,12 @@ ipcMain.on('suggest', async (event, searchTerm) => {
 ipcMain.on('get-similar-apps', async (event, appId) => {
 	try {
 		const similarApps = await gplay.similar({ appId: appId, lang: 'en', country: 'us' });
+		 
 		event.sender.send('similar-apps-results', similarApps, appId);
 	} catch (err) {
 		event.sender.send('similar-apps-error', err.message);
 	}
-});
-
-  /* App Details */
-  ipcMain.on('get-app-details', async (event, appId) => {
-	try {
-		const appDetails = await gplay.app({ appId: appId, lang: 'en', country: 'us' });
-		event.sender.send('app-details-results', appDetails, appId);
-	} catch (err) {
-		event.sender.send('app-details-error', err.message);
-	}
-});
+}); 
 
   /* App List */
   ipcMain.on('get-app-list', async (event, numAppList, sortByCollection, sortByCategory, sortByAge ) => { 
