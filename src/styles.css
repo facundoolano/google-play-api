@@ -3,6 +3,7 @@ body {
   background-color: #f5f5f5;
   color: #333;
   margin: 0;
+  margin-bottom: 20px;
   padding: 0;
 }
 
@@ -20,7 +21,7 @@ ul {
  
 h1 {
   text-align: center;
-  font-size: 2.5em; 
+  font-size: 2.5em;  
 }
 
 h2 {
@@ -32,10 +33,10 @@ form {
   flex-direction: column;
   align-items: center;
   background-color: #fff;
-  padding: 20px;
+  padding: 15px; 
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  margin-bottom: 30px;
+  margin-bottom: 20px;
   max-width: 600px;
   margin-left: auto;
   margin-right: auto;
@@ -125,7 +126,9 @@ select {
 
 #backButton {
   display: block;
-  margin: 20px auto;
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
   background-color: #B30738;
   color: #fff;
   font-size: 1.2em;
@@ -135,10 +138,10 @@ select {
   cursor: pointer;
   transition: background-color 0.3s ease;
   box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16);
-} 
+}
 
 #backButton:hover {
-  background-color: #FF2D55;
+  background-color: #e50000;
 }
 
 #backButton:active,
@@ -243,7 +246,7 @@ input[type="radio"]:checked {
 } 
 
 #instructions {
-  text-align: center;;
+  text-align: center; 
 }
 
 /* Define the styles for the tooltip */
@@ -355,4 +358,55 @@ select:focus {
 .main-tooltip:hover .tooltiptext {
   visibility: visible;
   opacity: 1;
+}
+.section {
+  margin-top: 50px;
+}
+
+.section-title {
+  text-align: center;
+  margin-bottom: 20px;
+}
+.example-research-form {
+  background-color: #f4f4f4;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 20px;
+}
+
+.example-research-title {
+  color: #555;
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-size: 1.0rem;
+}
+
+.example-research-question {
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-size: 1.0rem;
+  font-weight: bold;
+}
+
+.citation {
+  font-size: 0.8rem;
+  color: #777;
+  margin-top: 0;
+}
+
+.citation a {
+  color: #555;
+}
+
+.citation a:hover {
+  text-decoration: underline;
+}
+
+@media screen and (max-width: 768px) {
+  .example-research-form {
+    margin-left: 0;
+    margin-right: 0;
+
+  }
 }
