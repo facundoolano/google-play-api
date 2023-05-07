@@ -53,6 +53,11 @@ app.on("window-all-closed", function() {
 ipcMain.on('search', async (event, searchTerm) => {
 	try {
 		const results = await searchTermMore(searchTerm);
+
+		if (results.length === 0) {
+			event.sender.send('search-error', 'No searches found for this app.'); 
+		}
+
 		event.sender.send('search-results', JSON.stringify(results), searchTerm); 
 	} catch (err) {
 		event.sender.send('search-error', err.message);
@@ -214,9 +219,9 @@ ipcMain.on('get-data-safety', async (event, appId) => {
 		dataSafety.privacyPolicyUrl === undefined
 	  ) {
 		event.sender.send('data-safety-error', 'Data safety information is not available for this app.');
-	  } else {
-			event.sender.send('data-safety-results', dataSafety, appId);
 	  }
+	  
+	  event.sender.send('data-safety-results', dataSafety, appId);
 	} catch (err) {
 	  event.sender.send('data-safety-error', err.message);
 	}
@@ -229,9 +234,9 @@ ipcMain.on('get-data-safety', async (event, appId) => {
 	  if (permissions.length === 0) {
 		// Display an error tooltip when the app has no permissions
 		event.sender.send('permission-error', 'Permission information is not available for this app.');
-	  } else {
-		event.sender.send('permission-results', permissions, appId);
 	  }
+	  
+	  event.sender.send('permission-results', permissions, appId); 
 	} catch (err) {
 		console.error("Error generating permissions for app:", appId, err);
 		event.sender.send('permission-error', err.message);

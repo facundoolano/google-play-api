@@ -200,8 +200,12 @@ if (searchInput && searchForm) {
 
   // Suggestions error
   ipcRenderer.on('suggest-error', (event, error) => {
+    if (error.includes("Cannot read property 'map' of null")) {
+      return;
+    }
     console.error("Error occurred while getting suggestions:", error);
   });
+   
 }
  
 if (appListForm) {
@@ -469,8 +473,7 @@ ipcRenderer.on("app-details-results", async (event, appDetails, appId) => {
 
 // Search error event listener
 ipcRenderer.on("search-error", (event, err) => {
-  console.error("Error occurred during search:", err);
-  // Show error message to user
+  ErrorTooltip.style.visibility = "visible";
 });
 
 // Review error

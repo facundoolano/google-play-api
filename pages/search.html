@@ -24,7 +24,10 @@
     <form id="search-form">
       <fieldset>
         <legend>Search</legend> 
-        <input type="text" id="search-input" name="search-input" placeholder="Enter app name/keyword" required>
+        <div class="main-tooltip">
+          <input type="text" id="search-input" name="search-input" placeholder="Enter app name/keyword" required>
+          <span id="error-tooltip" class="tooltiptext">Please check the spelling of the app name!</span>
+        </div>
         <div id="search-tooltip" class="tooltip hidden">  
           <ul id="suggestions-list"></ul>
         </div> 
