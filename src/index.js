@@ -55,7 +55,8 @@ ipcMain.on('search', async (event, searchTerm) => {
 		const results = await searchTermMore(searchTerm);
 
 		if (results.length === 0) {
-			event.sender.send('search-error', 'No searches found for this app.'); 
+			event.sender.send('search-error', 'No apps found for this search term.');
+			return;
 		}
 
 		event.sender.send('search-results', JSON.stringify(results), searchTerm); 
@@ -200,6 +201,7 @@ ipcMain.on('get-developer', async (event, devId) => {
   
 	  if (developer.length === 0) {
 		event.sender.send('developer-error', 'Developer information is not available for this app.');
+		return;
 	  }
   
 	  event.sender.send('developer-results', developer, devId);
@@ -219,6 +221,7 @@ ipcMain.on('get-data-safety', async (event, appId) => {
 		dataSafety.privacyPolicyUrl === undefined
 	  ) {
 		event.sender.send('data-safety-error', 'Data safety information is not available for this app.');
+		return;
 	  }
 	  
 	  event.sender.send('data-safety-results', dataSafety, appId);
@@ -234,6 +237,7 @@ ipcMain.on('get-data-safety', async (event, appId) => {
 	  if (permissions.length === 0) {
 		// Display an error tooltip when the app has no permissions
 		event.sender.send('permission-error', 'Permission information is not available for this app.');
+		return;
 	  }
 	  
 	  event.sender.send('permission-results', permissions, appId); 
