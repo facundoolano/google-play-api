@@ -4,13 +4,12 @@
   "description": "My Electron application description",
   "main": "src/index.js",
   "scripts": {
-    "start": "electron-forge start --enable-logging",
+    "start": "electron-forge start",
     "package": "electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish",
     "lint": "eslint src --color"
-},
-
+  },
   "keywords": [],
   "author": "javab3ans",
   "license": "MIT",
@@ -50,8 +49,7 @@
     "electron-compile": "^6.4.4",
     "electron-squirrel-startup": "^1.0.0",
     "electron-store": "^8.1.0",
-    "google-play-scraper": "^9.1.0",
-    "node-cache": "^5.1.2"
+    "google-play-scraper": "^9.1.0"
   },
   "devDependencies": {
     "babel-plugin-transform-async-to-generator": "^6.24.1",

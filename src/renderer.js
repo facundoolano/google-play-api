@@ -1,44 +1,47 @@
-const {
-  ipcRenderer
-} = require("electron");
+const { ipcRenderer } = require("electron");
 
-// Get the search input and form
-const searchInput = document.getElementById("search-input");
-const searchForm = document.getElementById("search-form");
+const search = {
+  input: document.getElementById("search-input"),
+  form: document.getElementById("search-form"),
+  tooltip: document.getElementById('search-tooltip'),
+  suggestionsList: document.getElementById('suggestions-list')
+};
 
-// Get the tooltip element and suggestions list
-const tooltip = document.getElementById('search-tooltip');
-const suggestionsList = document.getElementById('suggestions-list');
- 
-// Get the review input and form
-const reviewInput = document.getElementById("review-input");
-const reviewForm = document.getElementById("review-form");
-const reviewAmountSelect = document.getElementById("review-amount");
-const reviewSortSelect = document.getElementById("review-sort");
+const review = {
+  input: document.getElementById("review-input"),
+  form: document.getElementById("review-form"),
+  amountSelect: document.getElementById("review-amount"),
+  sortSelect: document.getElementById("review-sort")
+};
 
-// Get developer input and form
-const developerInput = document.getElementById("developer-input");
-const developerForm = document.getElementById("developer-form"); 
-const ErrorTooltip = document.getElementById('error-tooltip');
+const developer = {
+  input: document.getElementById("developer-input"),
+  form: document.getElementById("developer-form"),
+  errorTooltip: document.getElementById('error-tooltip')
+};
 
-// Get permission input and form
-const permissionInput = document.getElementById("permission-input");
-const permissionForm = document.getElementById("permission-form");
+const permission = {
+  input: document.getElementById("permission-input"),
+  form: document.getElementById("permission-form")
+};
 
-// Get data safety input and form
-const dataSafetyInput = document.getElementById("data-safety-input");
-const dataSafetyForm = document.getElementById("data-safety-form");
+const dataSafety = {
+  input: document.getElementById("data-safety-input"),
+  form: document.getElementById("data-safety-form")
+};
 
-// Get similar apps input and form
-const similarAppsInput = document.getElementById("similar-apps-input");
-const similarAppsForm = document.getElementById("similar-apps-form"); 
+const similarApps = {
+  input: document.getElementById("similar-apps-input"),
+  form: document.getElementById("similar-apps-form")
+};
 
-// Get app list amount select
-const appListForm = document.getElementById("app-list-form");
-const appListAmount = document.getElementById("app-list-amount");
-const appCollectionList = document.getElementById("app-list-collection");
-const appCategoryList = document.getElementById("app-list-category");
-const appAgeList = document.getElementById("app-list-age");
+const appList = {
+  form: document.getElementById("app-list-form"),
+  amountSelect: document.getElementById("app-list-amount"),
+  collectionList: document.getElementById("app-list-collection"),
+  categoryList: document.getElementById("app-list-category"),
+  ageList: document.getElementById("app-list-age")
+};
 
 document.getElementById("backButton").onclick = function() {
   location.href = "../src/index.html";
@@ -84,27 +87,24 @@ function downloadCSVFile(csvData, filename) { // time complexity: O(1)
   document.body.removeChild(link);
 }
 
-if (searchInput && searchForm) {
+if (search.input && search.form) {
   let suggestTimeout;
 
   // Search form event listener
-  searchForm.addEventListener("submit", (event) => { // time complexity: O(1)
-    event.preventDefault();
-
-    const searchTerm = searchInput.value.trim();
+  search.form.addEventListener("submit", (event) => { // time complexity: O(1)
+    event.preventDefault(); 
 
     // Clear the previous suggestions
-    suggestionsList.innerHTML = '';
+    search.suggestionsList.innerHTML = '';
 
-    ipcRenderer.send("search", searchTerm);
+    ipcRenderer.send("search", search.input.value.trim());
   });
 
   // Search input event listeners
-  searchInput.addEventListener("input", async () => { // time complexity: O(1)
-    const searchTerm = searchInput.value.trim();
+  search.input.addEventListener("input", async () => { // time complexity: O(1) 
 
     // Only show the tooltip if the search term is not empty
-    if (searchTerm !== '') {
+    if (search.input.value.trim() !== '') {
       // Check if there is a pending suggest request
       if (suggestTimeout) {
         clearTimeout(suggestTimeout);
@@ -114,10 +114,10 @@ if (searchInput && searchForm) {
       suggestTimeout = setTimeout(async () => {
         try {
           // Get the suggestions from the main process
-          const suggestions = await ipcRenderer.send('suggest', searchTerm);
+          const suggestions = await ipcRenderer.send('suggest', search.input.value.trim());
 
           // Clear the previous suggestions
-          suggestionsList.innerHTML = '';
+          search.suggestionsList.innerHTML = '';
 
           // Check if suggestions is iterable and has at least one suggestion
           if (Symbol.iterator in Object(suggestions) && suggestions.length > 0) {
@@ -132,29 +132,29 @@ if (searchInput && searchForm) {
             // If no suggestions, display "No suggestions"
             const noSuggestionsElement = document.createElement('li');
             noSuggestionsElement.textContent = "No suggestions";
-            suggestionsList.appendChild(noSuggestionsElement);
+            search.suggestionsList.appendChild(noSuggestionsElement);
           }
 
           // Show the tooltip
-          tooltip.classList.remove('hidden');
+          search.tooltip.classList.remove('hidden');
         } catch (err) {
           console.error("Error occurred while getting suggestions:", err);
         }
       }, 500);
     } else {
       // Hide the tooltip when the search input is empty
-      tooltip.classList.add('hidden');
+      search.tooltip.classList.add('hidden');
       // Clear the suggestions list when hiding the tooltip
-      suggestionsList.innerHTML = '';
+      search.suggestionsList.innerHTML = '';
     }
   });
 
   // Hide the tooltip when the user clicks outside of it or the search input
   document.addEventListener('click', (event) => {
-    if (!tooltip.contains(event.target) && !searchInput.contains(event.target)) {
-      tooltip.classList.add('hidden');
+    if (!search.tooltip.contains(event.target) && !search.input.contains(event.target)) {
+      search.tooltip.classList.add('hidden');
       // Clear the suggestions list when hiding the tooltip
-      suggestionsList.innerHTML = '';
+      search.suggestionsList.innerHTML = '';
     }
   });
 
@@ -163,7 +163,7 @@ if (searchInput && searchForm) {
     const results = JSON.parse(resultsJSON);
 
     // Clear the previous suggestions
-    suggestionsList.innerHTML = '';
+    search.suggestionsList.innerHTML = '';
 
     // Check if results has at least one suggestion
     if (results.length > 0) {
@@ -172,26 +172,26 @@ if (searchInput && searchForm) {
         const suggestionElement = document.createElement('li');
         suggestionElement.classList.add('suggestion');
         suggestionElement.textContent = suggestion;
-        suggestionsList.appendChild(suggestionElement);
+        search.suggestionsList.appendChild(suggestionElement);
 
         // Add click event listener to suggestion element
         suggestionElement.addEventListener('click', () => {
           // Set the value of the search input to the suggestion text
-          searchInput.value = suggestion;
-          tooltip.classList.add('hidden');
+          search.input.value = suggestion;
+          search.tooltip.classList.add('hidden');
           // Clear the suggestions list when hiding the tooltip
-          suggestionsList.innerHTML = '';
+          search.suggestionsList.innerHTML = '';
         });
       }
     } else {
       // If no suggestions, display "No suggestions"
       const noSuggestionsElement = document.createElement('li');
       noSuggestionsElement.textContent = "No suggestions";
-      suggestionsList.appendChild(noSuggestionsElement);
+      search.suggestionsList.appendChild(noSuggestionsElement);
     }
 
     // Show the tooltip
-    tooltip.classList.remove('hidden');
+    search.tooltip.classList.remove('hidden');
   });
 
   // Suggestions error
@@ -204,100 +204,82 @@ if (searchInput && searchForm) {
    
 }
  
-if (appListForm) {
-
+if (appList.form) { 
   // App list form event listener
-  appListForm.addEventListener("submit", (event) => {
-      event.preventDefault(); // prevent form submission
-      
-      const appListAmountValue = appListAmount.value;
-      const appCollectionListValue = appCollectionList.value;
-      const appCategoryListValue = appCategoryList.value;
-      const appAgeListValue = appAgeList.value;
-
-      ipcRenderer.send("get-app-list", appListAmountValue, appCollectionListValue, appCategoryListValue, appAgeListValue);
+  appList.form.addEventListener("submit", (event) => {
+      event.preventDefault(); // prevent form submission 
+      ipcRenderer.send("get-app-list", appList.amountSelect.value,  appList.collectionList.value, appList.categoryList.value, appList.ageList.value);
   });
 }
 
-if (developerInput && developerForm) {
+if (developer.input && developer.form) {
   // Developer form event listener
-  developerForm.addEventListener("submit", (event) => {
-    event.preventDefault();
-    const developerName = developerInput.value.trim();
-    if (developerName === '') {
+  developer.form.addEventListener("submit", (event) => {
+    event.preventDefault(); 
+    if (developer.input.value.trim() === '') {
       // Display an error tooltip when the input is empty
-      ErrorTooltip.style.visibility = "visible";
+      developer.errorTooltip.style.visibility = "visible";
     } else {
       // Hide the error tooltip when the input is not empty
-      ErrorTooltip.style.visibility = "hidden";
-      ipcRenderer.send('get-developer', developerName, 60);
+      developer.errorTooltip.style.visibility = "hidden";
+      ipcRenderer.send('get-developer', developer.input.value.trim(), 60);
     }
   });
 }
 
-if (reviewInput && reviewForm) {
+if (review.input && review.form) {
   // Review form event listener
-  reviewForm.addEventListener("submit", (event) => {
-      event.preventDefault(); // prevent form submission
+  review.form.addEventListener("submit", (event) => {
+      event.preventDefault(); // prevent form submission 
 
-      const appId = reviewInput.value.trim();
-      const reviewAmount = reviewAmountSelect.value;
-      const reviewSort = reviewSortSelect.value;
-
-      if (!appId) {
+      if (!review.input) {
           // do nothing if input is empty
           return;
       }
 
-      ipcRenderer.send("get-reviews", appId, reviewAmount, reviewSort);
+      ipcRenderer.send("get-reviews", review.input.value.trim(), review.amountSelect.value, review.sortSelect.value);
   });
 }
 
-if (permissionInput && permissionForm) {
+if (permission.input && permission.form) {
   // Permission form event listener
-  permissionForm.addEventListener("submit", (event) => {
+  permission.form.addEventListener("submit", (event) => {
       event.preventDefault(); // prevent form submission
-
-      const appId = permissionInput.value.trim();
-
-      if (!appId) {
+  
+      if (!permission.input) {
           // do nothing if input is empty
           return;
       }
 
-      ipcRenderer.send("get-app-permissions", appId);
+      ipcRenderer.send("get-app-permissions", permission.input.value.trim());
   });
 }
 
-if (dataSafetyInput && dataSafetyForm) {
+if (dataSafety.input && dataSafety.form) {
   // Data safety form event listener
-  dataSafetyForm.addEventListener("submit", (event) => {
+  dataSafety.form.addEventListener("submit", (event) => {
       event.preventDefault(); // prevent form submission
-
-      const appId = dataSafetyInput.value.trim();
-
-      if (!appId) {
+ 
+      if (!dataSafety.input) {
           // do nothing if input is empty
           return;
       }
 
-      ipcRenderer.send("get-data-safety", appId);
+      ipcRenderer.send("get-data-safety", dataSafety.input.value.trim());
   });
 }
 
-if (similarAppsInput && similarAppsForm) {
+if (similarApps.input && similarApps.form) {
   // Similar apps form event listener
-  similarAppsForm.addEventListener("submit", (event) => {
-      event.preventDefault(); // prevent form submission
+  similarApps.form.addEventListener("submit", (event) => {
+      event.preventDefault(); // prevent form submission 
 
-      const appId = similarAppsInput.value.trim();
-
-      if (!appId) {
+      if (!similarApps.input) {
           // do nothing if input is empty 
           return;
       }
 
-      ipcRenderer.send("get-similar-apps", appId);
+      ipcRenderer.send("get-similar-apps", similarApps.input.value.trim());
   });
 } 
 
@@ -306,51 +288,38 @@ ipcRenderer.on("search-results", async (event, resultsData, term) => {
   console.log("Received search results for term:", term);
 
   let results;
+
   try {
       results = JSON.parse(resultsData);
   } catch (err) {
       console.error("Error parsing search results data:", err);
       return;
-  }
-
-  const fields = ["url", "appId", "summary", "title", "developer", "developerId", "icon", "score", "scoreText", "priceText", "free"];
-
-  const csvData = generateCSVData(results, fields);
+  }  
 
   // Download the CSV file with the search results
-  downloadCSVFile(csvData, `${term}-search.csv`);
+  downloadCSVFile(generateCSVData(results, ["url", "appId", "summary", "title", "developer", "developerId", "icon", "score", "scoreText", "priceText", "free"]), `${term}-search.csv`);
 });
 
 // App list results event listener  
 ipcRenderer.on("app-list-results", async (event, appList, collectionName, categoryName, ageInput ) => {
-  console.log("Received app list results");
-
-  const fields = ["title", "appId", "url", "icon", "developer", "currency", "price", "free", "summary", "scoreText", "score"];
-
-  const csvData = generateCSVData(appList, fields);
+  console.log("Received app list results");  
 
   // Download the CSV file with the app list
-  downloadCSVFile(csvData, `app-list-${collectionName}-${categoryName}-${ageInput}.csv`);
+  downloadCSVFile(generateCSVData(appList, ["title", "appId", "url", "icon", "developer", "currency", "price", "free", "summary", "scoreText", "score"]), `app-list-${collectionName}-${categoryName}-${ageInput}.csv`);
 });
 
 // Developer results event listener
 ipcRenderer.on("developer-results", async (event, developerApps, developerId) => {
-  console.log("Received developer apps for developer:", developerId);
-
-  const fields = ["url", "appId", "title", "summary", "developer", "developerId", "icon", "score", "scoreText", "priceText", "free"];
-
-  const csvData = generateCSVData(developerApps, fields);
+  console.log("Received developer apps for developer:", developerId); 
 
   // Download the CSV file with the developer apps
-  downloadCSVFile(csvData, `${developerId}-developerApps.csv`);
-});
- 
+  downloadCSVFile(generateCSVData(developerApps, ["url", "appId", "title", "summary", "developer", "developerId", "icon", "score", "scoreText", "priceText", "free"]), `${developerId}-developerApps.csv`);
+}); 
+
 // Review results event listener
 ipcRenderer.on("reviews-results", async (event, paginatedReviews, appId) => {
-  console.log("Received reviews for app:", appId);
+  console.log("Received reviews for app:", appId); 
 
-  const fields = [ "id", "userName", "userImage", "score", "date", "score", "scoreText", "url", "text", "replyDate", "replyText", "version", "thumbsUp"];
-  
   // if replyDate is null, N/A
     paginatedReviews.data.forEach((review) => {
       if (review.replyDate === null) {
@@ -360,24 +329,18 @@ ipcRenderer.on("reviews-results", async (event, paginatedReviews, appId) => {
       if (review.replyText === null) {
         review.replyText = "N/A";
       }
-    });
-
-  const csvData = generateCSVData(paginatedReviews.data, fields);
+    }); 
 
   // Download the CSV file with the reviews
-  downloadCSVFile(csvData, `${appId}-reviews.csv`);
+  downloadCSVFile(generateCSVData(paginatedReviews.data, [ "id", "userName", "userImage", "score", "date", "score", "scoreText", "url", "text", "replyDate", "replyText", "version", "thumbsUp"]), `${appId}-reviews.csv`);
 }); 
 
 // Permission results event listener
 ipcRenderer.on("permission-results", async (event, permissions, appId) => {
-  console.log("Received permissions for app:", appId);
-
-  const fields = ["permission", "type"];
-
-  const csvData = generateCSVData(permissions, fields);
+  console.log("Received permissions for app:", appId); 
 
   // Download the CSV file with the permissions
-  downloadCSVFile(csvData, `${appId}-permissions.csv`);
+  downloadCSVFile(generateCSVData(permissions, ["permission", "type"]), `${appId}-permissions.csv`);
 });
 
 // Data safety results event listener
@@ -432,30 +395,30 @@ ipcRenderer.on("similar-apps-results", async (event, similarApps, appId) => {
 
 // Search error event listener
 ipcRenderer.on("search-error", (event, err) => {
-  ErrorTooltip.style.visibility = "visible";
+  developer.errorTooltip.style.visibility = "visible";
 });
 
 // Review error
 ipcRenderer.on("reviews-error", (event, err) => {
-  ErrorTooltip.style.visibility = "visible";
+  developer.errorTooltip.style.visibility = "visible";
 });
 
 // Permission error
 ipcRenderer.on("permission-error", (event, err) => {
-  ErrorTooltip.style.visibility = "visible";
+  developer.errorTooltip.style.visibility = "visible";
 });
 
 // Data safety error
 ipcRenderer.on("data-safety-error", (event, err) => {
   // Display an error tooltip when the app is not found or data safety information is not available
-  ErrorTooltip.style.visibility = "visible";
+  developer.errorTooltip.style.visibility = "visible";
 });
 
 // Similar apps error
 ipcRenderer.on("similar-apps-error", (event, err) => {
   if (err instanceof Error && err.message.includes("App not found (404)")) {
     // Display an error tooltip when the app is not found
-    ErrorTooltip.style.visibility = "visible";
+    developer.errorTooltip.style.visibility = "visible";
   }
 }); 
 
@@ -467,5 +430,6 @@ ipcRenderer.on("app-list-error", (event, err) => {
 
 // Developer error 
 ipcRenderer.on("developer-error", (event, err) => {
-  ErrorTooltip.style.visibility = "visible"; 
+  developer.errorTooltip.style.visibility = "visible";
 });
+
