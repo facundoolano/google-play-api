@@ -9,8 +9,7 @@ const search = {
 
 const review = {
   input: document.getElementById("review-input"),
-  form: document.getElementById("review-form"),
-  amountSelect: document.getElementById("review-amount"),
+  form: document.getElementById("review-form"), 
   sortSelect: document.getElementById("review-sort")
 };
 
@@ -36,8 +35,7 @@ const similarApps = {
 };
 
 const appList = {
-  form: document.getElementById("app-list-form"),
-  amountSelect: document.getElementById("app-list-amount"),
+  form: document.getElementById("app-list-form"), 
   collectionList: document.getElementById("app-list-collection"),
   categoryList: document.getElementById("app-list-category"),
   ageList: document.getElementById("app-list-age")
@@ -87,6 +85,17 @@ function downloadCSVFile(csvData, filename) { // time complexity: O(1)
   document.body.removeChild(link);
 }
 
+// Function to show buffer animation
+function showBufferAnimation() {
+  const bufferDiv = document.createElement("div");
+  bufferDiv.classList.add("buffer-div");
+  const bufferAnimation = document.createElement("div");
+  bufferAnimation.classList.add("buffer-animation");
+  bufferDiv.appendChild(bufferAnimation);
+  document.body.appendChild(bufferDiv);
+  return bufferDiv;
+}
+
 if (search.input && search.form) {
   let suggestTimeout;
 
@@ -97,7 +106,15 @@ if (search.input && search.form) {
     // Clear the previous suggestions
     search.suggestionsList.innerHTML = '';
 
+    // Show buffer animation while search results are being fetched
+    const bufferDiv = showBufferAnimation();
+
     ipcRenderer.send("search", search.input.value.trim());
+
+    // Remove the buffer animation div from the DOM once search results are fetched
+    ipcRenderer.once("search-results", () => {
+      document.body.removeChild(bufferDiv);
+    });
   });
 
   // Search input event listeners
@@ -208,7 +225,16 @@ if (appList.form) {
   // App list form event listener
   appList.form.addEventListener("submit", (event) => {
       event.preventDefault(); // prevent form submission 
-      ipcRenderer.send("get-app-list", appList.amountSelect.value,  appList.collectionList.value, appList.categoryList.value, appList.ageList.value);
+
+      // Show buffer animation while app list is being fetched
+      const bufferDiv = showBufferAnimation();
+
+      ipcRenderer.send("get-app-list",  appList.collectionList.value, appList.categoryList.value, appList.ageList.value);
+      
+      // Remove the buffer animation div from the DOM once app list is fetched
+      ipcRenderer.once("app-list-results", () => {
+        document.body.removeChild(bufferDiv);
+      });
   });
 }
 
@@ -222,7 +248,15 @@ if (developer.input && developer.form) {
     } else {
       // Hide the error tooltip when the input is not empty
       developer.errorTooltip.style.visibility = "hidden";
-      ipcRenderer.send('get-developer', developer.input.value.trim(), 60);
+
+      // Show buffer animation while developer apps are being fetched
+      const bufferDiv = showBufferAnimation();
+      ipcRenderer.send('get-developer', developer.input.value.trim());
+
+      // Remove the buffer animation div from the DOM once developer apps are fetched
+      ipcRenderer.once("developer-results", () => {
+        document.body.removeChild(bufferDiv);
+      });
     }
   });
 }
@@ -235,9 +269,17 @@ if (review.input && review.form) {
       if (!review.input) {
           // do nothing if input is empty
           return;
-      }
+      } 
 
-      ipcRenderer.send("get-reviews", review.input.value.trim(), review.amountSelect.value, review.sortSelect.value);
+      // Show buffer animation while reviews are being fetched
+      const bufferDiv = showBufferAnimation();
+
+      ipcRenderer.send("get-reviews", review.input.value.trim(), review.sortSelect.value);
+
+      // Remove the buffer animation div from the DOM once reviews are fetched
+      ipcRenderer.once("reviews-results", () => {
+        document.body.removeChild(bufferDiv);
+      });
   });
 }
 
@@ -251,7 +293,15 @@ if (permission.input && permission.form) {
           return;
       }
 
+      // Show buffer animation while permissions are being fetched
+      const bufferDiv = showBufferAnimation();
+
       ipcRenderer.send("get-app-permissions", permission.input.value.trim());
+
+      // Remove the buffer animation div from the DOM once permissions are fetched
+      ipcRenderer.once("permission-results", () => {
+        document.body.removeChild(bufferDiv);
+      });
   });
 }
 
@@ -263,9 +313,17 @@ if (dataSafety.input && dataSafety.form) {
       if (!dataSafety.input) {
           // do nothing if input is empty
           return;
-      }
+      } 
+      
+      // Show buffer animation while data safety is being fetched
+      const bufferDiv = showBufferAnimation();
 
       ipcRenderer.send("get-data-safety", dataSafety.input.value.trim());
+
+      // Remove the buffer animation div from the DOM once data safety is fetched
+      ipcRenderer.once("data-safety-results", () => {
+        document.body.removeChild(bufferDiv);
+      });
   });
 }
 
@@ -279,7 +337,15 @@ if (similarApps.input && similarApps.form) {
           return;
       }
 
+      // Show buffer animation while similar apps are being fetched
+      const bufferDiv = showBufferAnimation();
+
       ipcRenderer.send("get-similar-apps", similarApps.input.value.trim());
+
+      // Remove the buffer animation div from the DOM once similar apps are fetched
+      ipcRenderer.once("similar-apps-results", () => {
+        document.body.removeChild(bufferDiv);
+      });
   });
 } 
 
@@ -318,22 +384,28 @@ ipcRenderer.on("developer-results", async (event, developerApps, developerId) =>
 
 // Review results event listener
 ipcRenderer.on("reviews-results", async (event, paginatedReviews, appId) => {
-  console.log("Received reviews for app:", appId); 
+  console.log("Received reviews for app:", appId);
 
   // if replyDate is null, N/A
-    paginatedReviews.data.forEach((review) => {
-      if (review.replyDate === null) {
-        review.replyDate = "N/A";
-      }
+  paginatedReviews.forEach((review) => {
+    if (review.replyDate === null) {
+      review.replyDate = "N/A";
+    }
 
-      if (review.replyText === null) {
-        review.replyText = "N/A";
-      }
-    }); 
+    if (review.replyText === null) {
+      review.replyText = "N/A";
+    }
+
+    if (review.version === null) {
+      review.version = "N/A";
+    }
+  }); 
 
   // Download the CSV file with the reviews
-  downloadCSVFile(generateCSVData(paginatedReviews.data, [ "id", "userName", "userImage", "score", "date", "score", "scoreText", "url", "text", "replyDate", "replyText", "version", "thumbsUp"]), `${appId}-reviews.csv`);
-}); 
+  downloadCSVFile(generateCSVData(paginatedReviews, ["id", "userName", "userImage", "score", "date", "score", "scoreText", "url", "text", "replyDate", "replyText", "version", "thumbsUp"]), `${appId}-reviews.csv`);
+
+  console.log(`Downloaded CSV file for app: ${appId}`);
+});
 
 // Permission results event listener
 ipcRenderer.on("permission-results", async (event, permissions, appId) => {
@@ -432,4 +504,3 @@ ipcRenderer.on("app-list-error", (event, err) => {
 ipcRenderer.on("developer-error", (event, err) => {
   developer.errorTooltip.style.visibility = "visible";
 });
-

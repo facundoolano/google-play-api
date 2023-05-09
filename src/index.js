@@ -97,7 +97,7 @@ ipcMain.on('get-similar-apps', async (event, appId) => {
 }); 
 
   /* App List */
-  ipcMain.on('get-app-list', async (event, numAppList, sortByCollection, sortByCategory, sortByAge ) => { 
+  ipcMain.on('get-app-list', async (event, sortByCollection, sortByCategory, sortByAge ) => { 
 	try {
 		const optionsMap = {
 			sortByCollection: {
@@ -174,7 +174,7 @@ ipcMain.on('get-similar-apps', async (event, appId) => {
 			collection: collectionOptions,
 			category: categoryOptions,
 			age: ageOptions,
-			num: parseInt(numAppList),
+			num: 200,
 			lang: 'en',
 			country: 'us'
 		});
@@ -247,8 +247,7 @@ ipcMain.on('get-data-safety', async (event, appId) => {
  
 /* App reviews */ 
 
-ipcMain.on('get-reviews', async (event, appId, numReviews, sortBy) => { // time complexity: O(n)
-  
+ipcMain.on('get-reviews', async (event, appId, sortBy) => { // Time Complexity: O(N / P) where N is the number of reviews and P is the number of reviews per page
 	const sortOption = (() => {
 	  switch(sortBy) {
 		case "RATING": return gplay.sort.RATING;
@@ -261,35 +260,47 @@ ipcMain.on('get-reviews', async (event, appId, numReviews, sortBy) => { // time 
 	  appId: appId, 
 	  sort: sortOption,
 	  lang: 'en',
-	  country: 'us',
-	  num: parseInt(numReviews)
+	  country: 'us', 
+	  paginate: true,
 	};
 	
-	let reviews;
-  
+	let reviews = []; // initialize reviews as an empty array
+	
 	try {
-		reviews = await gplay.reviews(options);
-		
-		// { data: [], nextPaginationToken: null }
-		if (reviews.data.length === 0) {
-		  event.sender.send('reviews-error', 'No reviews found for this app.');
-		  return;
+	  let nextToken; // initialize nextToken as undefined
+	  
+	  do {
+		if (nextToken) { // if nextToken is defined, add it to the options object
+		  options.nextPaginationToken = nextToken;
 		}
+		
+		const result = await gplay.reviews(options);
+		const newData = result.data || []; // ensure newData is an array
+		
+		// if no new data is received, exit the loop
+		if (!newData.length) {
+		  break;
+		}
+		
+		reviews = reviews.concat(newData); // concatenate the new data to the reviews array
+		nextToken = result.nextPaginationToken; // set nextToken to the token for the next page
+	  } while (nextToken);
+	  
+	  if (!reviews.length) {
+		event.sender.send('reviews-error', 'No reviews found for this app.');
+		return;
+	  } 
+	  
+	  console.log(`Received ${reviews.length} reviews for app: ${appId}`);
+	  
+	  event.sender.send('reviews-results', reviews, appId);
+	} catch (err) {
+	  console.error("Error occurred while getting reviews:", err);
+	  event.sender.send('reviews-error', err.message);
+	}
+  });  
 
-		if (reviews.data.length > options.num) {
-		  reviews = reviews.slice(0, options.num);
-		} 
-
-		console.log(`Received ${reviews.data.length} reviews for app: ${appId}`);
-
-		event.sender.send('reviews-results', reviews, appId);
-	  } catch (err) {
-			console.error("Error occurred while getting reviews:", err);
-			event.sender.send('reviews-error', err.message);
-	  }
-  });
-
-async function searchTermMore(term, arr = {}) { // time complexity: O(n^2)
+async function searchTermMore(term, arr = {}) { // time complexity: O(n^2) where n is the number of apps returned by the search
 	if (!term) {
 		console.error("Error: search term is undefined");
 		return;
