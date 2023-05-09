@@ -21,19 +21,13 @@ function createWindow() {
 	});
 
 	mainWindow.loadFile(__dirname + "/index.html");
-
-	// load fullscreen
-	mainWindow.maximize();
 	
 	// make it so user can't use dev tools
 	mainWindow.webContents.on("devtools-opened", () => {
 		mainWindow.webContents.closeDevTools();
 	});
 
-	mainWindow.setMenuBarVisibility(false)
-
-	// make it so user can't resize window
-	mainWindow.setResizable(false);
+	mainWindow.setMenuBarVisibility(false) // hide the menu bar
 }
 
 app.whenReady().then(() => {
