@@ -27,6 +27,9 @@ function createWindow() {
 		mainWindow.webContents.closeDevTools();
 	});
 
+	// maximize the screen
+	mainWindow.maximize();
+
 	mainWindow.setMenuBarVisibility(false) // hide the menu bar
 }
 
