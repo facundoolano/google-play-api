@@ -1,7 +1,6 @@
 permission,type
-"read your contacts","Contacts"
 "view Wi-Fi connections","Wi-Fi connection information"
-"Google Play license check","Other"
-"full network access","Other"
-"prevent device from sleeping","Other"
 "view network connections","Other"
+"full network access","Other"
+"control vibration","Other"
+"prevent device from sleeping","Other"

@@ -59,16 +59,10 @@ app.on("window-all-closed", function() {
 /* App Search */ 
 ipcMain.on('search', async (event, searchTerm) => {
 	try {
-		const results = await searchTermMore(searchTerm);
-
-		if (results.length === 0) {
-			event.sender.send('search-error', 'No apps found for this search term.');
-			return;
-		}
-
+		const results = await searchTermMore(searchTerm); // time complexity: O(n^2) where n is the number of apps returned by the search
 		event.sender.send('search-results', JSON.stringify(results), searchTerm); 
 	} catch (err) {
-		event.sender.send('search-error', err.message);
+		event.sender.send('app-error', err.message);
 	}
 });
 
@@ -78,7 +72,7 @@ ipcMain.on('suggest', async (event, searchTerm) => {
 		const results = await gplay.suggest({term: searchTerm});
 		event.sender.send('suggest-results', JSON.stringify(results), searchTerm);
 	} catch (err) {
-		event.sender.send('suggest-error', err.message);
+		event.sender.send('app-error', err.message);
 	}
 });
 
@@ -89,7 +83,7 @@ ipcMain.on('get-similar-apps', async (event, appId) => {
 		 
 		event.sender.send('similar-apps-results', similarApps, appId);
 	} catch (err) {
-		event.sender.send('similar-apps-error', err.message);
+		event.sender.send('app-error', err.message);
 	}
 }); 
 
@@ -179,7 +173,7 @@ ipcMain.on('get-similar-apps', async (event, appId) => {
 		event.sender.send('app-list-results', appList, sortByCollection, sortByCategory, sortByAge);
 		  
 	} catch (err) {
-		event.sender.send('app-list-error', err.message);
+		event.sender.send('app-error', err.message);
 	}
 });
 
@@ -195,16 +189,16 @@ ipcMain.on('get-developer', async (event, devId) => {
 	  const developer = await gplay.developer(options);
   
 	  if (developer.length === 0) {
-		event.sender.send('developer-error', 'Developer information is not available for this app.');
+		event.sender.send('app-error', 'Developer information not found for app');
 		return;
 	  }
   
 	  event.sender.send('developer-results', developer, devId);
 	} catch (err) {
-	  	event.sender.send('developer-error', err.message);
+		event.sender.send('app-error', err.message);
 	}
   });
-  
+
 /* Data Safety */
 ipcMain.on('get-data-safety', async (event, appId) => {
 	try { 
@@ -215,13 +209,13 @@ ipcMain.on('get-data-safety', async (event, appId) => {
 		!dataSafety.securityPractices.length &&
 		dataSafety.privacyPolicyUrl === undefined
 	  ) {
-		event.sender.send('data-safety-error', 'Data safety information is not available for this app.');
+		event.sender.send('app-error', 'Data safety information not found for app');
 		return;
 	  }
 	  
 	  event.sender.send('data-safety-results', dataSafety, appId);
 	} catch (err) {
-	  event.sender.send('data-safety-error', err.message);
+	  event.sender.send('app-error', err.message);
 	}
   });  
   
@@ -231,14 +225,14 @@ ipcMain.on('get-data-safety', async (event, appId) => {
 	  const permissions = await gplay.permissions({ appId: appId, lang: 'en', country: 'us' }); 
 	  if (permissions.length === 0) {
 		// Display an error tooltip when the app has no permissions
-		event.sender.send('permission-error', 'Permission information is not available for this app.');
+		event.sender.send('app-error', 'Permission information not found for app');
 		return;
 	  }
 	  
 	  event.sender.send('permission-results', permissions, appId); 
 	} catch (err) {
 		console.error("Error generating permissions for app:", appId, err);
-		event.sender.send('permission-error', err.message);
+		event.sender.send('app-error', err.message);
 	}
 });
  
@@ -284,7 +278,7 @@ ipcMain.on('get-reviews', async (event, appId, sortBy) => { // Time Complexity: 
 	  } while (nextToken);
 	  
 	  if (!reviews.length) {
-		event.sender.send('reviews-error', 'No reviews found for this app.');
+		event.sender.send('app-error', 'No reviews found for app');
 		return;
 	  } 
 	  
@@ -293,7 +287,7 @@ ipcMain.on('get-reviews', async (event, appId, sortBy) => { // Time Complexity: 
 	  event.sender.send('reviews-results', reviews, appId);
 	} catch (err) {
 	  console.error("Error occurred while getting reviews:", err);
-	  event.sender.send('reviews-error', err.message);
+	  event.sender.send('app-error', err.message);
 	}
   });  
 

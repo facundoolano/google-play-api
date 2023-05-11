@@ -7,7 +7,7 @@ const search = {
   suggestionsList: document.getElementById('suggestions-list')
 };
 
-const review = {
+const reviews = {
   input: document.getElementById("review-input"),
   form: document.getElementById("review-form"), 
   sortSelect: document.getElementById("review-sort")
@@ -210,15 +210,6 @@ if (search.input && search.form) {
     // Show the tooltip
     search.tooltip.classList.remove('hidden');
   });
-
-  // Suggestions error
-  ipcRenderer.on('suggest-error', (event, error) => {
-    if (error.includes("Cannot read property 'map' of null")) {
-      return;
-    }
-    console.error("Error occurred while getting suggestions:", error);
-  });
-   
 }
  
 if (appList.form) { 
@@ -255,157 +246,120 @@ if (developer.input && developer.form) {
 
       // Remove the buffer animation div from the DOM once developer apps are fetched
       ipcRenderer.once("developer-results", () => {
-        document.body.removeChild(bufferDiv);
+        if (bufferDiv && bufferDiv.parentNode) {
+          bufferDiv.parentNode.removeChild(bufferDiv);
+        }
+      });
+
+      // Remove the buffer animation div from the DOM if an error occurs
+      ipcRenderer.once("app-error", () => {
+        if (bufferDiv && bufferDiv.parentNode) {
+          bufferDiv.parentNode.removeChild(bufferDiv);
+        }
       });
     }
   });
 }
 
-if (review.input && review.form) {
-  // Review form event listener
-  review.form.addEventListener("submit", (event) => {
-      event.preventDefault(); // prevent form submission 
-
-      if (!review.input) {
-          // do nothing if input is empty
-          return;
-      } 
-
-      // Show buffer animation while reviews are being fetched
-      const bufferDiv = showBufferAnimation();
-
-      ipcRenderer.send("get-reviews", review.input.value.trim(), review.sortSelect.value);
-
-      // Remove the buffer animation div from the DOM once reviews are fetched
-      ipcRenderer.once("reviews-results", () => {
-        document.body.removeChild(bufferDiv);
-      });
-  });
-}
-
-if (permission.input && permission.form) {
-  // Permission form event listener
-  permission.form.addEventListener("submit", (event) => {
-      event.preventDefault(); // prevent form submission
-  
-      if (!permission.input) {
-          // do nothing if input is empty
-          return;
-      }
-
-      // Show buffer animation while permissions are being fetched
-      const bufferDiv = showBufferAnimation();
-
-      ipcRenderer.send("get-app-permissions", permission.input.value.trim());
-
-      // Remove the buffer animation div from the DOM once permissions are fetched
-      ipcRenderer.once("permission-results", () => {
-        document.body.removeChild(bufferDiv);
-      });
-  });
-}
-
-if (dataSafety.input && dataSafety.form) {
-  // Data safety form event listener
-  dataSafety.form.addEventListener("submit", (event) => {
-      event.preventDefault(); // prevent form submission
- 
-      if (!dataSafety.input) {
-          // do nothing if input is empty
-          return;
-      } 
-      
-      // Show buffer animation while data safety is being fetched
-      const bufferDiv = showBufferAnimation();
-
-      ipcRenderer.send("get-data-safety", dataSafety.input.value.trim());
-
-      // Remove the buffer animation div from the DOM once data safety is fetched
-      ipcRenderer.once("data-safety-results", () => {
-        document.body.removeChild(bufferDiv);
-      });
-  });
-}
-
-if (similarApps.input && similarApps.form) {
-  // Similar apps form event listener
-  similarApps.form.addEventListener("submit", (event) => {
-      event.preventDefault(); // prevent form submission 
-
-      if (!similarApps.input) {
-          // do nothing if input is empty 
-          return;
-      }
-
-      // Show buffer animation while similar apps are being fetched
-      const bufferDiv = showBufferAnimation();
-
-      ipcRenderer.send("get-similar-apps", similarApps.input.value.trim());
-
-      // Remove the buffer animation div from the DOM once similar apps are fetched
-      ipcRenderer.once("similar-apps-results", () => {
-        document.body.removeChild(bufferDiv);
-      });
-  });
-} 
-
-// Search results event listener
-ipcRenderer.on("search-results", async (event, resultsData, term) => {
-  console.log("Received search results for term:", term);
-
-  let results;
-
-  try {
-      results = JSON.parse(resultsData);
-  } catch (err) {
-      console.error("Error parsing search results data:", err);
-      return;
-  }  
-
-  // Download the CSV file with the search results
-  downloadCSVFile(generateCSVData(results, ["url", "appId", "summary", "title", "developer", "developerId", "icon", "score", "scoreText", "priceText", "free"]), `${term}-search.csv`);
-});
-
-// App list results event listener  
-ipcRenderer.on("app-list-results", async (event, appList, collectionName, categoryName, ageInput ) => {
-  console.log("Received app list results");  
-
-  // Download the CSV file with the app list
-  downloadCSVFile(generateCSVData(appList, ["title", "appId", "url", "icon", "developer", "currency", "price", "free", "summary", "scoreText", "score"]), `app-list-${collectionName}-${categoryName}-${ageInput}.csv`);
-});
-
-// Developer results event listener
+// Developer results event listener 
 ipcRenderer.on("developer-results", async (event, developerApps, developerId) => {
   console.log("Received developer apps for developer:", developerId); 
 
   // Download the CSV file with the developer apps
   downloadCSVFile(generateCSVData(developerApps, ["url", "appId", "title", "summary", "developer", "developerId", "icon", "score", "scoreText", "priceText", "free"]), `${developerId}-developerApps.csv`);
-}); 
+});  
 
-// Review results event listener
-ipcRenderer.on("reviews-results", async (event, paginatedReviews, appId) => {
-  console.log("Received reviews for app:", appId);
+if (reviews.input && reviews.form) {
+  // Developer form event listener
+  reviews.form.addEventListener("submit", (event) => {
+    event.preventDefault(); 
+    if (reviews.input.value.trim() === '') {
+      // Display an error tooltip when the input is empty
+      developer.errorTooltip.style.visibility = "visible";
+    } else {
+      // Hide the error tooltip when the input is not empty
+      developer.errorTooltip.style.visibility = "hidden";
 
-  // if replyDate is null, N/A
-  paginatedReviews.forEach((review) => {
-    if (review.replyDate === null) {
-      review.replyDate = "N/A";
+      // Show buffer animation while developer apps are being fetched
+      const bufferDiv = showBufferAnimation();
+      ipcRenderer.send('get-reviews', reviews.input.value.trim());
+
+      // Remove the buffer animation div from the DOM once developer apps are fetched
+      ipcRenderer.once("reviews-results", () => {
+        if (bufferDiv && bufferDiv.parentNode) {
+          bufferDiv.parentNode.removeChild(bufferDiv);
+        }
+      });
+
+      // Remove the buffer animation div from the DOM if an error occurs
+      ipcRenderer.once("app-error", () => {
+        if (bufferDiv && bufferDiv.parentNode) {
+          bufferDiv.parentNode.removeChild(bufferDiv);
+        }
+      });
     }
+  });
+}
 
-    if (review.replyText === null) {
-      review.replyText = "N/A";
+    // Remove the buffer animation div from the DOM once reviews are fetched
+    ipcRenderer.once("reviews-results", (event, reviewsData, appId) => {
+      console.log("Received reviews for app:", appId);
+
+      if (reviewsData.length === 0) {
+        // Remove buffer div from DOM if no reviews are returned
+        document.body.removeChild(bufferDiv);
+        return;
+      }
+
+      reviewsData.forEach((review) => {
+        if (review.replyDate === null) {
+          review.replyDate = "N/A";
+        }
+
+        if (review.replyText === null) {
+          review.replyText = "N/A";
+        }
+
+        if (review.version === null) {
+          review.version = "N/A";
+        }
+      }); 
+
+      // Download the CSV file with the reviews
+      downloadCSVFile(generateCSVData(reviewsData, ["id", "userName", "userImage", "score", "scoreText", "date", "url", "text", "replyDate", "replyText", "version", "thumbsUp"]), `${appId}-reviews.csv`);
+    }); 
+
+if (permission.input && permission.form) {
+  // Developer form event listener
+  permission.form.addEventListener("submit", (event) => {
+    event.preventDefault(); 
+    if (permission.input.value.trim() === '') {
+      // Display an error tooltip when the input is empty
+      developer.errorTooltip.style.visibility = "visible";
+    } else {
+      // Hide the error tooltip when the input is not empty
+      developer.errorTooltip.style.visibility = "hidden";
+
+      // Show buffer animation while developer apps are being fetched
+      const bufferDiv = showBufferAnimation();
+      ipcRenderer.send('get-app-permissions', permission.input.value.trim());
+
+      // Remove the buffer animation div from the DOM once developer apps are fetched
+      ipcRenderer.once("permission-results", () => {
+        if (bufferDiv && bufferDiv.parentNode) {
+          bufferDiv.parentNode.removeChild(bufferDiv);
+        }
+      });
+
+      // Remove the buffer animation div from the DOM if an error occurs
+      ipcRenderer.once("app-error", () => {
+        if (bufferDiv && bufferDiv.parentNode) {
+          bufferDiv.parentNode.removeChild(bufferDiv);
+        }
+      });
     }
-
-    if (review.version === null) {
-      review.version = "N/A";
-    }
-  }); 
-
-  // Download the CSV file with the reviews
-  downloadCSVFile(generateCSVData(paginatedReviews, ["id", "userName", "userImage", "score", "date", "score", "scoreText", "url", "text", "replyDate", "replyText", "version", "thumbsUp"]), `${appId}-reviews.csv`);
-
-  console.log(`Downloaded CSV file for app: ${appId}`);
-});
+  });
+}
 
 // Permission results event listener
 ipcRenderer.on("permission-results", async (event, permissions, appId) => {
@@ -414,6 +368,52 @@ ipcRenderer.on("permission-results", async (event, permissions, appId) => {
   // Download the CSV file with the permissions
   downloadCSVFile(generateCSVData(permissions, ["permission", "type"]), `${appId}-permissions.csv`);
 });
+
+ipcRenderer.on("permission-error", (event, errorMessage) => {
+  console.error(errorMessage);
+
+  // Show error message in tooltip
+  developer.errorTooltip.innerText = errorMessage;
+  developer.errorTooltip.style.visibility = "visible";
+
+  // Remove the buffer animation div from the DOM
+  const bufferDiv = document.getElementById("buffer-div");
+  if (bufferDiv) {
+    document.body.removeChild(bufferDiv);
+  }
+});
+
+if (dataSafety.input && dataSafety.form) {
+  // Developer form event listener
+  dataSafety.form.addEventListener("submit", (event) => {
+    event.preventDefault(); 
+    if (dataSafety.input.value.trim() === '') {
+      // Display an error tooltip when the input is empty
+      developer.errorTooltip.style.visibility = "visible";
+    } else {
+      // Hide the error tooltip when the input is not empty
+      developer.errorTooltip.style.visibility = "hidden";
+
+      // Show buffer animation while developer apps are being fetched
+      const bufferDiv = showBufferAnimation();
+      ipcRenderer.send('get-data-safety', dataSafety.input.value.trim());
+
+      // Remove the buffer animation div from the DOM once developer apps are fetched
+      ipcRenderer.once("data-safety-results", () => {
+        if (bufferDiv && bufferDiv.parentNode) {
+          bufferDiv.parentNode.removeChild(bufferDiv);
+        }
+      });
+
+      // Remove the buffer animation div from the DOM if an error occurs
+      ipcRenderer.once("app-error", () => {
+        if (bufferDiv && bufferDiv.parentNode) {
+          bufferDiv.parentNode.removeChild(bufferDiv);
+        }
+      });
+    }
+  });
+}  
 
 // Data safety results event listener
 ipcRenderer.on("data-safety-results", async (event, dataSafety, appId) => {
@@ -453,6 +453,68 @@ ipcRenderer.on("data-safety-results", async (event, dataSafety, appId) => {
   downloadCSVFile(csvData, `${appId}-dataSafety.csv`);
 });
 
+if (similarApps.input && similarApps.form) {
+  // Developer form event listener
+  similarApps.form.addEventListener("submit", (event) => {
+    event.preventDefault(); 
+    if (similarApps.input.value.trim() === '') {
+      // Display an error tooltip when the input is empty
+      developer.errorTooltip.style.visibility = "visible";
+    } else {
+      // Hide the error tooltip when the input is not empty
+      developer.errorTooltip.style.visibility = "hidden";
+
+      // Show buffer animation while developer apps are being fetched
+      const bufferDiv = showBufferAnimation();
+      ipcRenderer.send('get-similar-apps', similarApps.input.value.trim());
+
+      // Remove the buffer animation div from the DOM once developer apps are fetched
+      ipcRenderer.once("similar-apps-results", () => {
+        if (bufferDiv && bufferDiv.parentNode) {
+          bufferDiv.parentNode.removeChild(bufferDiv);
+        }
+      });
+
+      // Remove the buffer animation div from the DOM if an error occurs
+      ipcRenderer.once("app-error", () => {
+        if (bufferDiv && bufferDiv.parentNode) {
+          bufferDiv.parentNode.removeChild(bufferDiv);
+        }
+      });
+    }
+  });
+} 
+
+// Search results event listener
+ipcRenderer.on("search-results", async (event, resultsData, term) => {
+  console.log("Received search results for term:", term); 
+
+  let results;
+
+  try {
+      results = JSON.parse(resultsData);
+  } catch (err) {
+      console.error("Error parsing search results data:", err);
+      return;
+  }  
+
+  // If no search results, return without doing anything else
+  if (results.length === 0) {
+    return;
+  }
+
+  // Download the CSV file with the search results
+  downloadCSVFile(generateCSVData(results, ["url", "appId", "summary", "title", "developer", "developerId", "icon", "score", "scoreText", "priceText", "free"]), `${term}-search.csv`);
+});
+
+// App list results event listener  
+ipcRenderer.on("app-list-results", async (event, appList, collectionName, categoryName, ageInput ) => {
+  console.log("Received app list results");  
+
+  // Download the CSV file with the app list
+  downloadCSVFile(generateCSVData(appList, ["title", "appId", "url", "icon", "developer", "currency", "price", "free", "summary", "scoreText", "score"]), `app-list-${collectionName}-${categoryName}-${ageInput}.csv`);
+});  
+
 // Similar apps results event listener
 ipcRenderer.on("similar-apps-results", async (event, similarApps, appId) => {
   console.log("Received similar apps for app:", appId);
@@ -465,42 +527,22 @@ ipcRenderer.on("similar-apps-results", async (event, similarApps, appId) => {
   downloadCSVFile(csvData, `${appId}-similarApps.csv`);
 });
 
-// Search error event listener
-ipcRenderer.on("search-error", (event, err) => {
-  developer.errorTooltip.style.visibility = "visible";
-});
+// apps error
+ipcRenderer.on("app-error", (event, errorMessage) => {
+  console.error(errorMessage);
 
-// Review error
-ipcRenderer.on("reviews-error", (event, err) => {
-  developer.errorTooltip.style.visibility = "visible";
-});
-
-// Permission error
-ipcRenderer.on("permission-error", (event, err) => {
-  developer.errorTooltip.style.visibility = "visible";
-});
-
-// Data safety error
-ipcRenderer.on("data-safety-error", (event, err) => {
-  // Display an error tooltip when the app is not found or data safety information is not available
-  developer.errorTooltip.style.visibility = "visible";
-});
-
-// Similar apps error
-ipcRenderer.on("similar-apps-error", (event, err) => {
-  if (err instanceof Error && err.message.includes("App not found (404)")) {
-    // Display an error tooltip when the app is not found
-    developer.errorTooltip.style.visibility = "visible";
+  // Show error message in tooltip
+  developer.errorTooltip.innerText = errorMessage;
+ 
+  if (errorMessage === "Cannot read property 'map' of null") {
+    developer.errorTooltip.innerText = "No apps found";
   }
-}); 
 
-// App list error
-ipcRenderer.on("app-list-error", (event, err) => {
-  console.error("Error occurred while getting app list:", err);
-  // Show error message to user
-});
-
-// Developer error 
-ipcRenderer.on("developer-error", (event, err) => {
   developer.errorTooltip.style.visibility = "visible";
-});
+
+  // Remove the buffer animation div from the DOM
+  const bufferDiv = document.getElementById("buffer-div");
+  if (bufferDiv) {
+    document.body.removeChild(bufferDiv);
+  }
+});  
