@@ -114,6 +114,7 @@ if (search.input && search.form) {
     // Remove the buffer animation div from the DOM once search results are fetched
     ipcRenderer.once("search-results", () => {
       document.body.removeChild(bufferDiv);
+      search.input.value = ''; // Clear search input after query
     });
   });
 
@@ -210,8 +211,67 @@ if (search.input && search.form) {
     // Show the tooltip
     search.tooltip.classList.remove('hidden');
   });
+} 
+
+// Define the handleFormEvent function
+function handleFormEvent(form, input, ipcMessage, ipcSuccessEvent, ipcErrorEvent) {
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+    if (input.value.trim() === '') {
+      // Display an error tooltip when the input is empty
+      developer.errorTooltip.style.visibility = "visible";
+    } else {
+      // Hide the error tooltip when the input is not empty
+      developer.errorTooltip.style.visibility = "hidden";
+
+      // Show buffer animation while developer apps are being fetched
+      const bufferDiv = showBufferAnimation();
+      ipcRenderer.send(ipcMessage, input.value.trim());
+
+      // Remove the buffer animation div from the DOM once developer apps are fetched
+      ipcRenderer.once(ipcSuccessEvent, () => {
+        if (bufferDiv && bufferDiv.parentNode) {
+          bufferDiv.parentNode.removeChild(bufferDiv);
+
+          // Clear the input after the query is complete
+          input.value = '';
+        }
+      });
+
+      // Remove the buffer animation div from the DOM if an error occurs
+      ipcRenderer.once(ipcErrorEvent, () => {
+        if (bufferDiv && bufferDiv.parentNode) {
+          bufferDiv.parentNode.removeChild(bufferDiv);
+
+          // Clear the input regardless if the query is successful or not
+          input.value = '';
+        }
+      });
+    }
+  });
 }
- 
+
+// Call the handleFormEvent function for each form
+if (permission.input && permission.form) {
+  handleFormEvent(permission.form, permission.input, 'get-app-permissions', 'permission-results', 'app-error');
+}
+
+if (reviews.input && reviews.form) {
+  handleFormEvent(reviews.form, reviews.input, 'get-reviews', 'reviews-results', 'app-error');
+}
+
+if (developer.input && developer.form) {
+  handleFormEvent(developer.form, developer.input, 'get-developer', 'developer-results', 'app-error');
+}
+
+if (dataSafety.input && dataSafety.form) {
+  handleFormEvent(dataSafety.form, dataSafety.input, 'get-data-safety', 'data-safety-results', 'app-error');
+}
+
+if (similarApps.input && similarApps.form) {
+  handleFormEvent(similarApps.form, similarApps.input, 'get-similar-apps', 'similar-apps-results', 'app-error');
+}
+
 if (appList.form) { 
   // App list form event listener
   appList.form.addEventListener("submit", (event) => {
@@ -229,38 +289,6 @@ if (appList.form) {
   });
 }
 
-if (developer.input && developer.form) {
-  // Developer form event listener
-  developer.form.addEventListener("submit", (event) => {
-    event.preventDefault(); 
-    if (developer.input.value.trim() === '') {
-      // Display an error tooltip when the input is empty
-      developer.errorTooltip.style.visibility = "visible";
-    } else {
-      // Hide the error tooltip when the input is not empty
-      developer.errorTooltip.style.visibility = "hidden";
-
-      // Show buffer animation while developer apps are being fetched
-      const bufferDiv = showBufferAnimation();
-      ipcRenderer.send('get-developer', developer.input.value.trim());
-
-      // Remove the buffer animation div from the DOM once developer apps are fetched
-      ipcRenderer.once("developer-results", () => {
-        if (bufferDiv && bufferDiv.parentNode) {
-          bufferDiv.parentNode.removeChild(bufferDiv);
-        }
-      });
-
-      // Remove the buffer animation div from the DOM if an error occurs
-      ipcRenderer.once("app-error", () => {
-        if (bufferDiv && bufferDiv.parentNode) {
-          bufferDiv.parentNode.removeChild(bufferDiv);
-        }
-      });
-    }
-  });
-}
-
 // Developer results event listener 
 ipcRenderer.on("developer-results", async (event, developerApps, developerId) => {
   console.log("Received developer apps for developer:", developerId); 
@@ -269,97 +297,33 @@ ipcRenderer.on("developer-results", async (event, developerApps, developerId) =>
   downloadCSVFile(generateCSVData(developerApps, ["url", "appId", "title", "summary", "developer", "developerId", "icon", "score", "scoreText", "priceText", "free"]), `${developerId}-developerApps.csv`);
 });  
 
-if (reviews.input && reviews.form) {
-  // Developer form event listener
-  reviews.form.addEventListener("submit", (event) => {
-    event.preventDefault(); 
-    if (reviews.input.value.trim() === '') {
-      // Display an error tooltip when the input is empty
-      developer.errorTooltip.style.visibility = "visible";
-    } else {
-      // Hide the error tooltip when the input is not empty
-      developer.errorTooltip.style.visibility = "hidden";
+// Remove the buffer animation div from the DOM once reviews are fetched
+ipcRenderer.once("reviews-results", (event, reviewsData, appId) => {
+  console.log("Received reviews for app:", appId);
 
-      // Show buffer animation while developer apps are being fetched
-      const bufferDiv = showBufferAnimation();
-      ipcRenderer.send('get-reviews', reviews.input.value.trim());
+  if (reviewsData.length === 0) {
+    // Remove buffer div from DOM if no reviews are returned
+    document.body.removeChild(bufferDiv);
+    return;
+  }
 
-      // Remove the buffer animation div from the DOM once developer apps are fetched
-      ipcRenderer.once("reviews-results", () => {
-        if (bufferDiv && bufferDiv.parentNode) {
-          bufferDiv.parentNode.removeChild(bufferDiv);
-        }
-      });
-
-      // Remove the buffer animation div from the DOM if an error occurs
-      ipcRenderer.once("app-error", () => {
-        if (bufferDiv && bufferDiv.parentNode) {
-          bufferDiv.parentNode.removeChild(bufferDiv);
-        }
-      });
+  reviewsData.forEach((review) => {
+    if (review.replyDate === null) {
+      review.replyDate = "N/A";
     }
-  });
-}
 
-    // Remove the buffer animation div from the DOM once reviews are fetched
-    ipcRenderer.once("reviews-results", (event, reviewsData, appId) => {
-      console.log("Received reviews for app:", appId);
-
-      if (reviewsData.length === 0) {
-        // Remove buffer div from DOM if no reviews are returned
-        document.body.removeChild(bufferDiv);
-        return;
-      }
-
-      reviewsData.forEach((review) => {
-        if (review.replyDate === null) {
-          review.replyDate = "N/A";
-        }
-
-        if (review.replyText === null) {
-          review.replyText = "N/A";
-        }
-
-        if (review.version === null) {
-          review.version = "N/A";
-        }
-      }); 
-
-      // Download the CSV file with the reviews
-      downloadCSVFile(generateCSVData(reviewsData, ["id", "userName", "userImage", "score", "scoreText", "date", "url", "text", "replyDate", "replyText", "version", "thumbsUp"]), `${appId}-reviews.csv`);
-    }); 
-
-if (permission.input && permission.form) {
-  // Developer form event listener
-  permission.form.addEventListener("submit", (event) => {
-    event.preventDefault(); 
-    if (permission.input.value.trim() === '') {
-      // Display an error tooltip when the input is empty
-      developer.errorTooltip.style.visibility = "visible";
-    } else {
-      // Hide the error tooltip when the input is not empty
-      developer.errorTooltip.style.visibility = "hidden";
-
-      // Show buffer animation while developer apps are being fetched
-      const bufferDiv = showBufferAnimation();
-      ipcRenderer.send('get-app-permissions', permission.input.value.trim());
-
-      // Remove the buffer animation div from the DOM once developer apps are fetched
-      ipcRenderer.once("permission-results", () => {
-        if (bufferDiv && bufferDiv.parentNode) {
-          bufferDiv.parentNode.removeChild(bufferDiv);
-        }
-      });
-
-      // Remove the buffer animation div from the DOM if an error occurs
-      ipcRenderer.once("app-error", () => {
-        if (bufferDiv && bufferDiv.parentNode) {
-          bufferDiv.parentNode.removeChild(bufferDiv);
-        }
-      });
+    if (review.replyText === null) {
+      review.replyText = "N/A";
     }
-  });
-}
+
+    if (review.version === null) {
+      review.version = "N/A";
+    }
+  }); 
+
+  // Download the CSV file with the reviews
+  downloadCSVFile(generateCSVData(reviewsData, ["id", "userName", "userImage", "score", "scoreText", "date", "url", "text", "replyDate", "replyText", "version", "thumbsUp"]), `${appId}-reviews.csv`);
+});  
 
 // Permission results event listener
 ipcRenderer.on("permission-results", async (event, permissions, appId) => {
@@ -368,52 +332,6 @@ ipcRenderer.on("permission-results", async (event, permissions, appId) => {
   // Download the CSV file with the permissions
   downloadCSVFile(generateCSVData(permissions, ["permission", "type"]), `${appId}-permissions.csv`);
 });
-
-ipcRenderer.on("permission-error", (event, errorMessage) => {
-  console.error(errorMessage);
-
-  // Show error message in tooltip
-  developer.errorTooltip.innerText = errorMessage;
-  developer.errorTooltip.style.visibility = "visible";
-
-  // Remove the buffer animation div from the DOM
-  const bufferDiv = document.getElementById("buffer-div");
-  if (bufferDiv) {
-    document.body.removeChild(bufferDiv);
-  }
-});
-
-if (dataSafety.input && dataSafety.form) {
-  // Developer form event listener
-  dataSafety.form.addEventListener("submit", (event) => {
-    event.preventDefault(); 
-    if (dataSafety.input.value.trim() === '') {
-      // Display an error tooltip when the input is empty
-      developer.errorTooltip.style.visibility = "visible";
-    } else {
-      // Hide the error tooltip when the input is not empty
-      developer.errorTooltip.style.visibility = "hidden";
-
-      // Show buffer animation while developer apps are being fetched
-      const bufferDiv = showBufferAnimation();
-      ipcRenderer.send('get-data-safety', dataSafety.input.value.trim());
-
-      // Remove the buffer animation div from the DOM once developer apps are fetched
-      ipcRenderer.once("data-safety-results", () => {
-        if (bufferDiv && bufferDiv.parentNode) {
-          bufferDiv.parentNode.removeChild(bufferDiv);
-        }
-      });
-
-      // Remove the buffer animation div from the DOM if an error occurs
-      ipcRenderer.once("app-error", () => {
-        if (bufferDiv && bufferDiv.parentNode) {
-          bufferDiv.parentNode.removeChild(bufferDiv);
-        }
-      });
-    }
-  });
-}  
 
 // Data safety results event listener
 ipcRenderer.on("data-safety-results", async (event, dataSafety, appId) => {
@@ -452,38 +370,6 @@ ipcRenderer.on("data-safety-results", async (event, dataSafety, appId) => {
   // Download the CSV file with the data safety
   downloadCSVFile(csvData, `${appId}-dataSafety.csv`);
 });
-
-if (similarApps.input && similarApps.form) {
-  // Developer form event listener
-  similarApps.form.addEventListener("submit", (event) => {
-    event.preventDefault(); 
-    if (similarApps.input.value.trim() === '') {
-      // Display an error tooltip when the input is empty
-      developer.errorTooltip.style.visibility = "visible";
-    } else {
-      // Hide the error tooltip when the input is not empty
-      developer.errorTooltip.style.visibility = "hidden";
-
-      // Show buffer animation while developer apps are being fetched
-      const bufferDiv = showBufferAnimation();
-      ipcRenderer.send('get-similar-apps', similarApps.input.value.trim());
-
-      // Remove the buffer animation div from the DOM once developer apps are fetched
-      ipcRenderer.once("similar-apps-results", () => {
-        if (bufferDiv && bufferDiv.parentNode) {
-          bufferDiv.parentNode.removeChild(bufferDiv);
-        }
-      });
-
-      // Remove the buffer animation div from the DOM if an error occurs
-      ipcRenderer.once("app-error", () => {
-        if (bufferDiv && bufferDiv.parentNode) {
-          bufferDiv.parentNode.removeChild(bufferDiv);
-        }
-      });
-    }
-  });
-} 
 
 // Search results event listener
 ipcRenderer.on("search-results", async (event, resultsData, term) => {

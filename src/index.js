@@ -59,6 +59,17 @@ app.on("window-all-closed", function() {
 /* App Search */ 
 ipcMain.on('search', async (event, searchTerm) => {
 	try {
+		const apps = await gplay.search({
+			term: searchTerm,
+			num: 20,
+		});
+
+		if (apps.length === 0) {
+			console.log(`No apps found for term: ${searchTerm}`);
+			event.sender.send('search-results', '[]', searchTerm);
+			return;
+		}
+
 		const results = await searchTermMore(searchTerm); // time complexity: O(n^2) where n is the number of apps returned by the search
 		event.sender.send('search-results', JSON.stringify(results), searchTerm); 
 	} catch (err) {
