@@ -4,59 +4,18 @@
   "description": "My Electron application description",
   "main": "src/index.js",
   "scripts": {
-    "start": "electron-forge start",
-    "package": "electron-forge package",
-    "make": "electron-forge make",
-    "publish": "electron-forge publish",
-    "lint": "eslint src --color"
+    "lint": "eslint src --color",
+    "dist": "electron-builder"
   },
   "keywords": [],
   "author": "javab3ans",
   "license": "MIT",
-  "config": {
-    "forge": {
-      "make_targets": {
-        "win32": [
-          "squirrel"
-        ],
-        "darwin": [
-          "dmg"
-        ],
-        "linux": [
-          "deb",
-          "rpm"
-        ]
-      },
-      "electronPackagerConfig": {
-        "packageManager": "npm"
-      },
-      "electronWinstallerConfig": {
-        "name": "csv_prototype"
-      },
-      "electronInstallerDebian": {},
-      "electronInstallerRedhat": {},
-      "github_repository": {
-        "owner": "javab3ans",
-        "name": ""
-      },
-      "windowsStoreConfig": {
-        "packageName": "",
-        "name": "csvprototype"
-      }
-    }
-  },
   "dependencies": {
-    "electron-compile": "^6.4.4",
-    "electron-squirrel-startup": "^1.0.0",
     "electron-store": "^8.1.0",
     "google-play-scraper": "^9.1.0"
   },
   "devDependencies": {
-    "babel-plugin-transform-async-to-generator": "^6.24.1",
-    "babel-preset-env": "^1.7.0",
-    "babel-preset-react": "^6.24.1",
-    "electron-forge": "^5.2.4",
-    "electron-packager": "^17.1.1",
+    "electron-builder": "^22.10.5",
     "electron-prebuilt-compile": "8.2.0",
     "eslint": "^3.19.0",
     "eslint-config-airbnb": "^15.1.0",
@@ -68,7 +27,14 @@
     "url": "https://github.com/facundoolano/google-play-api/issues"
   },
   "homepage": "https://github.com/facundoolano/google-play-api#readme",
-  "directories": {
-    "lib": "lib"
+  "build": {
+    "win": {
+      "target": "nsis", 
+      "icon": "dist/icon.ico"
+    },
+    "mac": {
+      "target": "dmg",  
+      "icon": "dist/icon.icns"
+    }
   }
 }
