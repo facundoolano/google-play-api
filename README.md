@@ -11,31 +11,31 @@
 
 ## App Features
 
-**Search** 
+### Search
   
 https://github.com/scuhci/google-play-api/assets/42426861/55b45e70-3471-4f09-8112-0a23b9e7a9e3
 
-**App List**
+### App List
 
 https://github.com/scuhci/google-play-api/assets/42426861/1723c076-625e-46a2-997d-b19d14ec39ad
 
-**Developer** 
+### Developer
  
 https://github.com/scuhci/google-play-api/assets/42426861/243726e7-5369-4b80-a9a5-cf1f1eeacf46
 
-**Reviews**
+### Reviews
 
 https://github.com/scuhci/google-play-api/assets/42426861/fb7cc678-f72f-4744-b0b4-aedc0a48ca3c
 
-**Similar Apps**
+### Similar Apps
   
 https://github.com/scuhci/google-play-api/assets/42426861/6a670d4c-e1e4-4ae3-82fe-a095c8e95896
 
-**Permissions**
+### Permissions
    
 https://github.com/scuhci/google-play-api/assets/42426861/bdee9bc5-9db0-4b8b-99c8-2dee54930e0d
 
-**Data Safety**
+### Data Safety
  
 https://github.com/scuhci/google-play-api/assets/42426861/c0f4b0d9-7aff-403e-8f43-5060c9074076
 
