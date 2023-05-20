@@ -24,6 +24,7 @@ https://github.com/scuhci/google-play-api/assets/42426861/1723c076-625e-46a2-997
 https://github.com/scuhci/google-play-api/assets/42426861/243726e7-5369-4b80-a9a5-cf1f1eeacf46
 
 **Reviews**
+
 https://github.com/scuhci/google-play-api/assets/42426861/fb7cc678-f72f-4744-b0b4-aedc0a48ca3c
 
 **Similar Apps**
