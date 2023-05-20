@@ -12,32 +12,31 @@
 ## App Features
 
 **Search** 
- 
-https://github.com/scuhci/google-play-api/assets/42426861/75dfe44e-6456-438a-86b6-03e3685a75f3
   
+https://github.com/scuhci/google-play-api/assets/42426861/55b45e70-3471-4f09-8112-0a23b9e7a9e3
+
 **App List**
 
-https://github.com/scuhci/google-play-api/assets/42426861/f3fa3cf7-501e-441f-84d1-d9f131b9efa3
+https://github.com/scuhci/google-play-api/assets/42426861/1723c076-625e-46a2-997d-b19d14ec39ad
 
 **Developer** 
-
-https://github.com/scuhci/google-play-api/assets/42426861/53aa2f4d-bac5-41d8-b0e3-9ddece026d06
+ 
+https://github.com/scuhci/google-play-api/assets/42426861/243726e7-5369-4b80-a9a5-cf1f1eeacf46
 
 **Reviews**
-
-https://github.com/scuhci/google-play-api/assets/42426861/ac11f02a-2bff-4ace-9a2c-7a528df4ad1f
+https://github.com/scuhci/google-play-api/assets/42426861/fb7cc678-f72f-4744-b0b4-aedc0a48ca3c
 
 **Similar Apps**
- 
-https://github.com/scuhci/google-play-api/assets/42426861/b763e222-bd1a-453e-abbf-896cb219a4a6
+  
+https://github.com/scuhci/google-play-api/assets/42426861/6a670d4c-e1e4-4ae3-82fe-a095c8e95896
 
 **Permissions**
- 
-https://github.com/scuhci/google-play-api/assets/42426861/fb73ab09-fea4-43a8-bac4-9d5e9f4002b2
- 
-**Data Safety**
+   
+https://github.com/scuhci/google-play-api/assets/42426861/bdee9bc5-9db0-4b8b-99c8-2dee54930e0d
 
-https://github.com/scuhci/google-play-api/assets/42426861/ce619487-0d6d-45da-8361-141ed8125b11
+**Data Safety**
+ 
+https://github.com/scuhci/google-play-api/assets/42426861/c0f4b0d9-7aff-403e-8f43-5060c9074076
 
 ## License
 
