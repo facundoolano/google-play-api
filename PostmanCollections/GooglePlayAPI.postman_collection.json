@@ -2,7 +2,7 @@
 	"info": {
 		"_postman_id": "6c81de84-6e95-48af-8f67-2c9d993a6162",
 		"name": "Google Play API",
-		"description": "## About\n\n*   Google Play API turns [google-play-scraper](https://github.com/facundoolano/google-play-scraper/), a Google Play scraper written in javascript into a RESTful API. Google Play Scraper can be get broken as and when Google updates its Google Play pages, hence Google Play API can be broken at times too. This is not an official API from Google.\n*   To run locally via docker\n    *   `docker pull ghcr.io/srikanthlogic/google-play-api:latest`\n*   `gplayapi.srik.me` is free hosted instance of this API run by [Srikanth L](https://www.srik.me/) without any guarantee on up-time.\n*   Status Page - [https://cashlessconsumer.statuspage.io/](https://cashlessconsumer.statuspage.io/)",
+		"description": "## About\n\n- Google Play API turns [google-play-scraper](https://github.com/facundoolano/google-play-scraper/), a Google Play scraper written in javascript into a RESTful API. Google Play Scraper can be get broken as and when Google updates its Google Play pages, hence Google Play API can be broken at times too. This is not an official API from Google.\n- To run locally via docker\n    - `docker pull ghcr.io/srikanthlogic/google-play-api:latest`\n- `gplayapi.srik.me` is free hosted instance of this API run by [Srikanth L](https://www.srik.me/) without any guarantee on up-time.\n- Status Page - [https://cashlessconsumer.statuspage.io/](https://cashlessconsumer.statuspage.io/)",
 		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
 	},
 	"item": [
@@ -1518,37 +1518,37 @@
 	],
 	"variable": [
 		{
-			"id": "7ecc9392-c987-4c30-bba3-c7466c4af869",
+			"id": "da708034-8cd5-427f-942b-6dcb7f9edd5e",
 			"key": "APP_ID",
 			"value": "org.wikipedia"
 		},
 		{
-			"id": "10f02be8-4609-42de-bd92-38a44323d681",
+			"id": "8426c6fb-9acf-44b3-8493-4b9392e29247",
 			"key": "DEV_ID",
 			"value": "Wikimedia Foundation"
 		},
 		{
-			"id": "ee2b9929-be2c-46a8-b071-417257936425",
+			"id": "db9f3f86-e12e-467b-8348-e3776147585f",
 			"key": "COUNTRY_CODE",
 			"value": "IN"
 		},
 		{
-			"id": "bfbff45d-130e-4a93-a431-a5034dce42e0",
+			"id": "01d752c1-8751-40e2-9cb8-0e9917d059be",
 			"key": "LANGUAGE_CODE",
 			"value": "en"
 		},
 		{
-			"id": "2057e1e6-c62e-454c-afe6-6c4ae700f447",
+			"id": "704431dc-6ae0-4fd4-9d1c-a7a0ff4eb2b5",
 			"key": "expectedResponseTime",
 			"value": 20
 		},
 		{
-			"id": "00e174e5-6d26-490f-9ded-1fb6076347b2",
+			"id": "c8257a1d-7f81-4f47-bce0-2b48e00a0786",
 			"key": "expectedResponseStatusCode",
 			"value": 200
 		},
 		{
-			"id": "d248f1b8-b349-429e-9094-c8585987dca4",
+			"id": "33c40c27-66b9-487c-b745-1edb23560489",
 			"key": "HOST",
 			"value": "gplayapi.srik.me",
 			"type": "string"
