@@ -17,9 +17,9 @@
 							"script": {
 								"id": "18e59106-879a-43cc-8cb1-96be407bd8e7",
 								"exec": [
-									"pm.test(\"List of all apps equals 500\", function () {",
+									"pm.test(\"List of all apps equals 200\", function () {",
 									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData.results.length).to.eql(500);",
+									"    pm.expect(jsonData.results.length).to.eql(200);",
 									"});"
 								],
 								"type": "text/javascript"
@@ -278,7 +278,7 @@
 								"exec": [
 									"pm.test(\"Get Google Maps via Search\", function () {",
 									"    var jsonData = pm.response.json();",
-									"    pm.expect(jsonData.results[0].appId).to.eql(\"com.google.android.apps.maps\");",
+									"    pm.expect(jsonData.results[0].appId).to.eql(\"org.wikipedia\");",
 									"})"
 								],
 								"type": "text/javascript"
@@ -303,7 +303,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{HOST}}/api/apps/?q=maps",
+							"raw": "{{HOST}}/api/apps/?q=wikipedia",
 							"host": [
 								"{{HOST}}"
 							],
@@ -313,11 +313,6 @@
 								""
 							],
 							"query": [
-								{
-									"key": "q",
-									"value": "maps",
-									"description": "Optional - Search term"
-								},
 								{
 									"key": "price",
 									"value": "all",
@@ -343,6 +338,10 @@
 									"description": "Optional - defaults to EN; 2 letter langauge code",
 									"type": "text",
 									"disabled": true
+								},
+								{
+									"key": "q",
+									"value": "wikipedia"
 								}
 							]
 						},
@@ -1491,7 +1490,7 @@
 		{
 			"listen": "prerequest",
 			"script": {
-				"id": "ed9476f8-5a6f-4720-b27c-1521d67d829f",
+				"id": "8fd34273-abba-4c58-acff-740caf906b52",
 				"type": "text/javascript",
 				"exec": [
 					"let expectedResponseStatusCode = pm.collectionVariables.get(\"expectedResponseStatusCode\");"
@@ -1501,7 +1500,7 @@
 		{
 			"listen": "test",
 			"script": {
-				"id": "bf02075e-78a6-4807-84db-8c546e3df21d",
+				"id": "21889d27-0fef-4174-8017-7bf4c74f5274",
 				"type": "text/javascript",
 				"exec": [
 					"pm.test(\"Status Code should be equal to \" + pm.collectionVariables.get(\"expectedResponseStatusCode\"), function () {",
@@ -1519,34 +1518,40 @@
 	],
 	"variable": [
 		{
-			"id": "9ec9a350-cc38-4d54-9f98-a026d2bdcb8f",
+			"id": "2a742880-4851-4cdd-a499-f647d8401347",
 			"key": "APP_ID",
 			"value": "org.wikipedia"
 		},
 		{
-			"id": "24025661-0d97-4869-adaf-4706c9d6b5e0",
+			"id": "cc508c10-0070-4769-8482-87a52989171d",
 			"key": "DEV_ID",
 			"value": "Wikimedia Foundation"
 		},
 		{
-			"id": "3436eeea-5df4-4b6e-8561-973cfa2b3f33",
+			"id": "d8e9d25c-5878-4ea4-8c0d-6473a65603c7",
 			"key": "COUNTRY_CODE",
 			"value": "IN"
 		},
 		{
-			"id": "f3a433cb-3e6f-4772-bb4d-7fded1bb64ec",
+			"id": "d43202ac-fa84-4351-a96a-235d85ca74d2",
 			"key": "LANGUAGE_CODE",
 			"value": "en"
 		},
 		{
-			"id": "4280a858-69b3-4d15-a09d-b8d80fa0ff18",
+			"id": "d7f5442c-ec92-4ac5-8f4c-c0c14cd04e70",
 			"key": "expectedResponseTime",
 			"value": 20
 		},
 		{
-			"id": "8e5f7fd2-ecfa-4cff-8812-2a95deee55ae",
+			"id": "f6eec3cb-86f4-4be2-92ae-370e6e5aba5a",
 			"key": "expectedResponseStatusCode",
 			"value": 200
+		},
+		{
+			"id": "2703f33a-f39b-4a0c-9ea8-bd414f746e49",
+			"key": "HOST",
+			"value": "gplayapi.srik.me",
+			"type": "string"
 		}
 	]
 }
