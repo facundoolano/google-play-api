@@ -1,0 +1,19 @@
+name: Deploy
+
+on:
+  workflow_run:
+    workflows: [Create and publish a Docker image]
+    types: [completed]
+
+jobs:
+  deploy:
+    if: |
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.head_branch == github.event.repository.default_branch
+    concurrency: deploy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: dentarg/fly@v1
+        with:
+          fly-token: ${{ secrets.FLY_API_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
