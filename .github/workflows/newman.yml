@@ -3,6 +3,9 @@ name: Newman Run
 on:
   push:
     branches: [ "main" ]
+    paths: 
+    - [ '!PostmanCollections/**' , '!./github/**' ]
+
   pull_request:
     branches: [ "main" ]
 
