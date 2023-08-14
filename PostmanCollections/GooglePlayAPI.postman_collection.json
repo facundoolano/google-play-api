@@ -279,7 +279,49 @@
 									"pm.test(\"Get Google Maps via Search\", function () {",
 									"    var jsonData = pm.response.json();",
 									"    pm.expect(jsonData.results[0].appId).to.eql(\"org.wikipedia\");",
-									"})"
+									"})",
+									"",
+									"",
+									"pm.test(\"Response status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"AppId is a non-empty string\", function () {",
+									"    const responseData = pm.response.json();",
+									"",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData.results).to.be.an('array');",
+									"    responseData.results.forEach(function (result) {",
+									"        pm.expect(result.appId).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Value should not be empty\");",
+									"    });",
+									"});",
+									"",
+									"",
+									"pm.test(\"Url is in a valid format\", function () {",
+									"    const responseData = pm.response.json();",
+									"",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData.results).to.be.an('array').and.to.have.lengthOf.at.least(1, \"Results array should not be empty\");",
+									"",
+									"    responseData.results.forEach(function (result) {",
+									"        pm.expect(result.url).to.be.a('string').and.to.match(/^https?:\\/\\/[^\\s/$.?#].[^\\s]*$/, \"Url is not in a valid format\");",
+									"    });",
+									"});",
+									"",
+									"pm.test(\"Developer object has the required fields - devId, url\", function () {",
+									"    const responseData = pm.response.json();",
+									"",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData.results).to.be.an('array');",
+									"",
+									"    responseData.results.forEach(function (result) {",
+									"        pm.expect(result.developer).to.exist.and.to.be.an('object');",
+									"        pm.expect(result.developer.devId).to.exist.and.to.be.a('string');",
+									"        pm.expect(result.developer.url).to.exist.and.to.be.a('string');",
+									"    });",
+									"});",
+									""
 								],
 								"type": "text/javascript"
 							}
@@ -1537,37 +1579,37 @@
 	],
 	"variable": [
 		{
-			"id": "cd96d7ac-d073-4f52-a7c5-c21630d7ba30",
+			"id": "5f11f3bb-a7d3-441d-bd8a-db8adedfd098",
 			"key": "APP_ID",
 			"value": "org.wikipedia"
 		},
 		{
-			"id": "20b33f32-522e-4337-bc59-20e378376051",
+			"id": "82a2c9af-355e-4841-af77-0ff801f7694c",
 			"key": "DEV_ID",
 			"value": "Wikimedia Foundation"
 		},
 		{
-			"id": "ebdf7daf-6eb8-4f90-90f5-11401a8de4d0",
+			"id": "bbe82f92-17fb-4bae-9d25-1075bac2e9d5",
 			"key": "COUNTRY_CODE",
 			"value": "IN"
 		},
 		{
-			"id": "5b0eca1f-82b1-441e-8ddd-54503c2c8702",
+			"id": "e7374845-27b0-43a2-bdc8-690b56fbb454",
 			"key": "LANGUAGE_CODE",
 			"value": "en"
 		},
 		{
-			"id": "7a85c220-a9ff-47d5-9e51-d49691f27971",
+			"id": "6ae8ffd6-223e-4428-86bb-b70a09eecbd9",
 			"key": "expectedResponseTime",
 			"value": 20
 		},
 		{
-			"id": "29b4145a-e045-45e6-aa83-e5cb16f6b4b9",
+			"id": "e6f4f645-23e0-433d-90da-b5c330e2d9d9",
 			"key": "expectedResponseStatusCode",
 			"value": 200
 		},
 		{
-			"id": "26ffdefa-85ef-4c90-b471-82825cdbbeea",
+			"id": "1624cf3d-4bab-45d1-af4d-0bc126284098",
 			"key": "HOST",
 			"value": "gplayapi.srik.me",
 			"type": "string"
