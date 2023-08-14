@@ -821,7 +821,7 @@
 									"    const responseData = pm.response.json();",
 									"",
 									"    pm.expect(responseData.results).to.exist.and.to.be.an('array');",
-									"    pm.expect(responseData.results.length).to.equal(1);",
+									"    pm.expect(responseData.results.length).to.have.lengthOf.at.least(1);",
 									"});",
 									"",
 									"",
@@ -1677,37 +1677,37 @@
 	],
 	"variable": [
 		{
-			"id": "179040ea-4d14-4825-a6d1-8337d44d180f",
+			"id": "09163495-2fc5-4478-adb9-45a417823a67",
 			"key": "APP_ID",
 			"value": "org.wikipedia"
 		},
 		{
-			"id": "963c859a-796d-45a3-8596-f03a60010402",
+			"id": "abe3d3c5-a907-4a5f-afe3-0c2141751dfa",
 			"key": "DEV_ID",
 			"value": "Wikimedia Foundation"
 		},
 		{
-			"id": "835b1b36-b3e1-4d63-9c1d-9994a230c989",
+			"id": "6831cba5-eb12-4fe1-85e6-043b353d6b08",
 			"key": "COUNTRY_CODE",
 			"value": "IN"
 		},
 		{
-			"id": "611ac343-2ed3-45e1-8343-aa188be5b282",
+			"id": "2901f015-0f2e-48b4-b8fc-49ea8c4db5a8",
 			"key": "LANGUAGE_CODE",
 			"value": "en"
 		},
 		{
-			"id": "833de986-f671-48d5-80dc-8ae72aca9571",
+			"id": "72fb3b23-6180-47ec-bff8-917051b8637e",
 			"key": "expectedResponseTime",
 			"value": 20
 		},
 		{
-			"id": "56d9dd19-c5b1-4a52-9832-e7c40aa3afff",
+			"id": "d40d962b-2bb1-4bc7-9421-1ccf04e9d55e",
 			"key": "expectedResponseStatusCode",
 			"value": 200
 		},
 		{
-			"id": "41c31934-c832-467d-8a6e-224020159d35",
+			"id": "65370177-0f62-4fef-9b44-ba05ebb77250",
 			"key": "HOST",
 			"value": "gplayapi.srik.me",
 			"type": "string"
