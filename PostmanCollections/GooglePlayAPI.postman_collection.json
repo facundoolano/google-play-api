@@ -549,7 +549,6 @@
 									"    var jsonData = pm.response.json();",
 									"    pm.expect(jsonData.title).to.eql(\"Wikipedia\");",
 									"});",
-									"",
 									""
 								],
 								"type": "text/javascript"
@@ -1596,37 +1595,37 @@
 	],
 	"variable": [
 		{
-			"id": "21850e65-d5e0-448f-ac79-af20e6e0dc13",
+			"id": "76b8b810-870e-4bb3-af74-8aab01b3dc39",
 			"key": "APP_ID",
 			"value": "org.wikipedia"
 		},
 		{
-			"id": "a84454a2-cf0d-4f38-8487-878c114e3881",
+			"id": "ba4a17ce-e280-4d78-85a1-5a715d39732d",
 			"key": "DEV_ID",
 			"value": "Wikimedia Foundation"
 		},
 		{
-			"id": "68d34f7b-0092-4a49-b787-6e76d4d1a570",
+			"id": "b0315e1b-5727-4760-ad5a-8c91eaea9b25",
 			"key": "COUNTRY_CODE",
 			"value": "IN"
 		},
 		{
-			"id": "892ecc17-6262-4eb8-80cf-5ef653212270",
+			"id": "68d86a4f-430b-4997-95d7-ba5a8ba6aec0",
 			"key": "LANGUAGE_CODE",
 			"value": "en"
 		},
 		{
-			"id": "c3976dd3-5130-4e89-9853-1df868e595e7",
+			"id": "cfc170c6-3dca-47e2-b2d4-302ca05962bc",
 			"key": "expectedResponseTime",
 			"value": 20
 		},
 		{
-			"id": "11adfec2-2dfe-4fb3-8e47-2b67be9b3065",
+			"id": "7bc3a4c4-165c-46d0-aee9-db82fb3780c3",
 			"key": "expectedResponseStatusCode",
 			"value": 200
 		},
 		{
-			"id": "e17bdf9b-d79a-4016-ab5e-79ed3453de1e",
+			"id": "a68ae16e-1c49-4828-ae7a-8d81a1bd09be",
 			"key": "HOST",
 			"value": "gplayapi.srik.me",
 			"type": "string"
