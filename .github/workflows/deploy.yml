@@ -64,3 +64,30 @@ jobs:
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
 
+      
+      - name: Get deploy url
+        run: FLY_DEPLOY_URL=$(flyctl status --app your-app-name -j | jq -r '.url')
+
+      - name: Set FLY_DEPLOY_URL
+        run: echo "FLY_DEPLOY_URL=$FLY_DEPLOY_URL" >> $GITHUB_ENV
+
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+
+
+      - name: Create Deployment Status
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const deploymentUrl = process.env.FLY_DEPLOY_URL;
+            const octokit = context.github;
+
+            await octokit.repos.createDeploymentStatus({
+              ...context.repo,
+              deployment_id: context.payload.deployment.id,
+              state: 'success',
+              log_url: deploymentUrl,
+              description: 'Deployment to Fly.io',
+              environment_url: deploymentUrl,
+            });
