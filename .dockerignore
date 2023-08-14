@@ -9,3 +9,4 @@ fly.toml
 PostmanCollections
 .eslintrc
 newman
+openapi/options.json

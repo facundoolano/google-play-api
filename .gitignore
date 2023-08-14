@@ -31,3 +31,5 @@ build/
 .idea
 
 newman
+
+openapi/swagger.json

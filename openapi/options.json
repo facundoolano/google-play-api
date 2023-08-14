@@ -1,0 +1,33 @@
+{
+    "folders": {
+        "concat": true,
+        "separator": " > "
+    },
+    "info": {
+        "contact": {
+            "email": "cashlessconsumerin+googleplayapi@gmail.com",
+            "name": "Cashless Consumer",
+            "url": "https://www.cashlessconsumer.in/about/contact/"
+        },
+        "description": "Google Play Metadata  API",
+        "license": {
+            "name": "MIT",
+            "url": "https://en.wikipedia.org/wiki/MIT_License"
+        },
+        "title": "Google Play API",
+        "version": "0.2.0",
+        "xLogo": {
+            "altText": "CashlessConsumer logo",
+            "backgroundColor": "#FFFFFF",
+            "url": "https://www.cashlessconsumer.in/static/img/favicon.png"
+        }
+    },
+    "operationId": "auto",
+    "outputFormat": "json",
+    "servers": [
+        {
+            "description": "Play API on Fly",
+            "url": "https://googleplayapi.fly.dev/"
+        }
+    ]
+}

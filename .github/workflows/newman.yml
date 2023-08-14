@@ -15,6 +15,7 @@ jobs:
       - name: Check out repository code and Install
         uses: actions/checkout@v3
       - run: npm install
-      - run: npm start & npx wait-on http://localhost:3000      
+      - run: npm run generateoas
+      - run: npm start & npx wait-on http://localhost:3000
       - run: npm test
         

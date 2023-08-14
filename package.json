@@ -5,8 +5,9 @@
   "main": "server.js",
   "type": "module",
   "scripts": {
-    "start": "node server.js",
-    "test": "node --es-module-specifier-resolution=node test.js"
+    "test": "node --es-module-specifier-resolution=node test.js",
+    "generateoas": "p2o ./PostmanCollections/GooglePlayAPI.postman_collection.json -o openapi/options.json -f openapi/swagger.json",
+    "start": "node server.js"
   },
   "author": "Facundo Olano",
   "license": "ISC",
@@ -17,7 +18,9 @@
   "dependencies": {
     "express": "^4.18.2",
     "google-play-scraper": "^10.0.0",
-    "npm-check-updates": "^16.11.1"
+    "npm-check-updates": "^16.11.1",
+    "postman-to-openapi": "^3.0.1",
+    "swagger-ui-express": "^5.0.0"
   },
   "devDependencies": {
     "eslint": "^8.47.0",
@@ -27,7 +30,7 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^6.1.1",
     "eslint-plugin-standard": "^5.0.0",
-    "newman-reporter-htmlextra": "^1.22.11",
-    "newman": "^5.3.2"
+    "newman": "^5.3.2",
+    "newman-reporter-htmlextra": "^1.22.11"
   }
 }
