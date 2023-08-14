@@ -12,15 +12,23 @@ jobs:
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v2
+
+      - name: Cache Node.js dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-npm-
 
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v2
         with:
           node-version: 18
 
       - name: Install Dependencies
-        run: npm install
+        run: npm ci
       
       - name: Start Server
         run: npm start & npx wait-on http://localhost:3000
@@ -34,13 +42,21 @@ jobs:
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v2
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
       - name: Log into GitHub Container Registry
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Cache Docker layers
+        uses: actions/cache@v2
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-docker-${{ hashFiles('**/Dockerfile') }}
+          restore-keys: |
+            ${{ runner.os }}-docker-
 
       - name: Build and Push Docker Image
         run: |
@@ -54,25 +70,29 @@ jobs:
 
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v2
       
       - name: Get FlyCtl
         uses: superfly/flyctl-actions/setup-flyctl@master
       
       - name: Deploy to Fly        
-        run: flyctl deploy --remote-only
+        run: |
+          flyctl deploy --remote-only
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
 
-      
+      - name: Cache FlyCtl binary
+        uses: actions/cache@v2
+        with:
+          path: ~/.fly
+          key: ${{ runner.os }}-flyctl
+          restore-keys: |
+            ${{ runner.os }}-flyctl-
+
       - name: Get deploy url
-        run: FLY_DEPLOY_URL=$(flyctl status --app googleplayapi -j | jq -r '.url')
-
-      - name: Set FLY_DEPLOY_URL
-        run: echo "FLY_DEPLOY_URL=$FLY_DEPLOY_URL" >> $GITHUB_ENV
-
-        env:
-          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+        run: |
+          FLY_DEPLOY_URL=$(flyctl status --app googleplayapi -j | jq -r '.url')
+          echo "FLY_DEPLOY_URL=$FLY_DEPLOY_URL" >> $GITHUB_ENV
 
       - name: Create Deployment Check
         uses: actions/github-script@v6
@@ -80,19 +100,22 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const deploymentUrl = process.env.FLY_DEPLOY_URL;
-            const { context, github } = require('@actions/github');
-
+            
             const repo = context.repo;
             const sha = context.sha;
 
-            await github.checks.create({
-              ...repo,
-              name: 'Deployment to Fly.io',
-              head_sha: sha,
-              conclusion: 'success',
-              output: {
-                title: 'Deployment Successful',
-                summary: `Deployment to Fly.io: [${deploymentUrl}](${deploymentUrl})`,
-              },
-            });
+            async function createCheck() {
+              await github.checks.create({
+                ...repo,
+                name: 'Deployment to Fly.io',
+                head_sha: sha,
+                status: 'completed',
+                conclusion: 'success',
+                output: {
+                  title: 'Deployment Successful',
+                  summary: `Deployment to Fly.io: [${deploymentUrl}](${deploymentUrl})`,
+                },
+              });
+            }
 
+            createCheck();
