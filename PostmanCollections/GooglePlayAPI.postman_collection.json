@@ -1832,37 +1832,37 @@
 	],
 	"variable": [
 		{
-			"id": "13388ca4-cbe1-4c59-9584-e0bc4bf0ad5f",
+			"id": "d7967987-a31c-41df-9599-a350c6ba3a43",
 			"key": "APP_ID",
 			"value": "org.wikipedia"
 		},
 		{
-			"id": "e38a9c29-9de7-4ca1-9621-650be0ab85e4",
+			"id": "f3b8e926-26df-48ef-aade-1d2f5d291a3a",
 			"key": "DEV_ID",
 			"value": "Wikimedia Foundation"
 		},
 		{
-			"id": "3ff701f1-5146-45ff-90f1-716ae1de514c",
+			"id": "20e9c937-0445-49cf-9432-4e5527b17d4d",
 			"key": "COUNTRY_CODE",
 			"value": "IN"
 		},
 		{
-			"id": "a55fc480-c8a4-4574-96d8-621afdc08615",
+			"id": "e41ebb87-a6c6-4026-87a5-227c5f8aaa29",
 			"key": "LANGUAGE_CODE",
 			"value": "en"
 		},
 		{
-			"id": "1b9d3810-8f81-413f-817e-5c7ad1990be7",
+			"id": "c6f013a0-c70e-4f08-9eb0-f8afb3d072a6",
 			"key": "expectedResponseTime",
 			"value": 20
 		},
 		{
-			"id": "91cd3c2d-7b43-4110-8939-987451db9faa",
+			"id": "23be6b61-eb54-40a9-97d8-b5e102802476",
 			"key": "expectedResponseStatusCode",
 			"value": 200
 		},
 		{
-			"id": "e11b0f38-ee0c-47a7-9bf1-21aa73607cd5",
+			"id": "220fdd36-fdf9-4077-9348-86908205016c",
 			"key": "HOST",
 			"value": "gplayapi.srik.me",
 			"type": "string"
