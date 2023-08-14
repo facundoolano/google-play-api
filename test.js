@@ -7,7 +7,7 @@ const runTests = async () => {
     await newman.run({
       collection: collectionData,
       environment: environmentData,
-      reporters: 'cli'
+      reporters: ['cli', 'htmlextra']
     });
 
     console.log('API tests completed successfully!');

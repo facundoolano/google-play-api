@@ -29,3 +29,5 @@ node_modules
 build/
 
 .idea
+
+newman

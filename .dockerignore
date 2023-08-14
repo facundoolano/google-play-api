@@ -8,3 +8,4 @@ fly.toml
 .gitignore
 PostmanCollections
 .eslintrc
+newman
