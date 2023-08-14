@@ -74,12 +74,30 @@ jobs:
       
       - name: Get FlyCtl
         uses: superfly/flyctl-actions/setup-flyctl@master
-      
+                
+      - name: start deployment
+        uses: bobheadxi/deployments@v1
+        id: deployment
+        with:
+          step: start
+          token: ${{ secrets.GITHUB_TOKEN }}
+          env: release
+
       - name: Deploy to Fly        
         run: |
           flyctl deploy --remote-only
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+
+      - name: update deployment status
+        uses: bobheadxi/deployments@v1
+        if: always()
+        with:
+          step: finish
+          token: ${{ secrets.GITHUB_TOKEN }}
+          status: ${{ job.status }}
+          env: ${{ steps.deployment.outputs.env }}
+          deployment_id: ${{ steps.deployment.outputs.deployment_id }}
 
       - name: Cache FlyCtl binary
         uses: actions/cache@v2
@@ -88,8 +106,3 @@ jobs:
           key: ${{ runner.os }}-flyctl
           restore-keys: |
             ${{ runner.os }}-flyctl-
-
-      - name: Create GitHub deployment
-        uses: github-actions/create-deployment@v1
-        with:
-          fly_deployment_id: ${{ steps.deploy.outputs.fly_deployment_id }}
