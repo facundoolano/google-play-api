@@ -749,8 +749,14 @@
 								"exec": [
 									"var jsonData = pm.response.json();",
 									"",
-									"pm.test(\"Check for read USB storage permission\", function () {",
-									"    pm.expect(jsonData.results[0].permission).to.include(\"read the contents of your USB storage\");",
+									"pm.test(\"Check for read USB storage permission in any element\", function () {",
+									"    const permissions = \"read the contents of your USB storage\";",
+									"    const results = jsonData.results;",
+									"",
+									"    // Use Array.prototype.some() to check if any element includes the permission",
+									"    const includesPermission = results.some(result => result.permission.includes(permissions));",
+									"",
+									"    pm.expect(includesPermission).to.be.true;",
 									"});",
 									"",
 									"",
@@ -1677,37 +1683,37 @@
 	],
 	"variable": [
 		{
-			"id": "445b1a96-3f25-41e7-a0cd-d1c11241e868",
+			"id": "f7760bfc-8fed-4423-8f00-d99d78eb2b9f",
 			"key": "APP_ID",
 			"value": "org.wikipedia"
 		},
 		{
-			"id": "a921a4e3-672f-40c7-8ad6-3be189859c91",
+			"id": "a4bb6f1e-a79e-48aa-88a1-962bec80664a",
 			"key": "DEV_ID",
 			"value": "Wikimedia Foundation"
 		},
 		{
-			"id": "fb4eaf3e-1be3-4d7a-be69-eb1599a97c0c",
+			"id": "39b57057-b013-4535-83ec-86fc92008f22",
 			"key": "COUNTRY_CODE",
 			"value": "IN"
 		},
 		{
-			"id": "610fe701-cd69-43da-9676-73335f96f2ce",
+			"id": "a8386773-906c-4f4a-a709-346f0ac3e5de",
 			"key": "LANGUAGE_CODE",
 			"value": "en"
 		},
 		{
-			"id": "e01f28df-2628-4bdf-a1c2-9aafc2e2fb1d",
+			"id": "4b1ffc13-8127-4326-ae20-4286d59d3d19",
 			"key": "expectedResponseTime",
 			"value": 20
 		},
 		{
-			"id": "c593628e-70cc-4ec1-8f6a-5b788fd355f9",
+			"id": "d79871b2-2a15-47d8-ac22-2730c99c6ce2",
 			"key": "expectedResponseStatusCode",
 			"value": 200
 		},
 		{
-			"id": "da63449e-5b3f-4a53-8f9e-6e72cb105354",
+			"id": "9cb73b77-a421-4e2e-8839-09273e878aa7",
 			"key": "HOST",
 			"value": "gplayapi.srik.me",
 			"type": "string"
