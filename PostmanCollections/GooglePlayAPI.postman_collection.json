@@ -450,7 +450,43 @@
 									"pm.test(\"Search face and expect facebook as first suggestion\", function () {",
 									"    var jsonData = pm.response.json();",
 									"    pm.expect(jsonData.results[0].term).to.eql(\"facebook\");",
-									"});"
+									"});",
+									"",
+									"",
+									"pm.test(\"Response has the required fields\", function () {",
+									"    const responseData = pm.response.json();",
+									"",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData.results).to.exist;",
+									"});",
+									"",
+									"",
+									"pm.test(\"Verify that the 'results' array is present in the response and contains at least one element\", function () {",
+									"    const responseData = pm.response.json();",
+									"",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData.results).to.exist.and.to.be.an('array');",
+									"    pm.expect(responseData.results.length).to.be.at.least(1);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Verify that the term in the first suggestion is a non-empty string\", function () {",
+									"    const responseData = pm.response.json();",
+									"",
+									"    pm.expect(responseData.results).to.be.an('array').that.is.not.empty;",
+									"    pm.expect(responseData.results[0].term).to.be.a('string').and.to.have.lengthOf.at.least(1);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Verify that the 'url' in the first suggestion is a non-empty string\", function () {",
+									"    const responseData = pm.response.json();",
+									"",
+									"    pm.expect(responseData.results).to.be.an('array');",
+									"    pm.expect(responseData.results[0]).to.be.an('object');",
+									"    pm.expect(responseData.results[0].url).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Value should not be empty\");",
+									"});",
+									"",
+									""
 								],
 								"type": "text/javascript"
 							}
@@ -1595,37 +1631,37 @@
 	],
 	"variable": [
 		{
-			"id": "5f68ae8c-7567-498b-92cc-bd24ec20b2f7",
+			"id": "a7031d50-4cbf-48c4-861e-42df41fcb6c9",
 			"key": "APP_ID",
 			"value": "org.wikipedia"
 		},
 		{
-			"id": "3793bba9-d473-4396-9fbb-0e131ff24f70",
+			"id": "40555aad-a557-4bdb-99c8-35f3c2b5104f",
 			"key": "DEV_ID",
 			"value": "Wikimedia Foundation"
 		},
 		{
-			"id": "01b10048-a901-4aed-b9f8-28d2492c0149",
+			"id": "ac65997c-43e3-4629-9418-10292ff40da3",
 			"key": "COUNTRY_CODE",
 			"value": "IN"
 		},
 		{
-			"id": "6ae43999-c35f-4d3c-b351-97b7ec509dbc",
+			"id": "51a6e255-c090-4a49-9704-77aec2ad1e07",
 			"key": "LANGUAGE_CODE",
 			"value": "en"
 		},
 		{
-			"id": "72b2b405-2a9e-440f-8fdd-aebbebf04a72",
+			"id": "c2b6dbba-71c3-455c-b6d1-7eb72b13535b",
 			"key": "expectedResponseTime",
 			"value": 20
 		},
 		{
-			"id": "d477079c-baf4-4bdc-bb89-cd9f48473100",
+			"id": "2ef5d5ea-c1a0-4d90-adfb-114ba7fc826a",
 			"key": "expectedResponseStatusCode",
 			"value": 200
 		},
 		{
-			"id": "a2b7e960-2811-4439-83b9-d34d565fdc11",
+			"id": "95ad31e0-e570-420e-88bc-8ceb8ef27245",
 			"key": "HOST",
 			"value": "gplayapi.srik.me",
 			"type": "string"
