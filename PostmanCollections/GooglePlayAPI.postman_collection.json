@@ -1270,6 +1270,51 @@
 				},
 				{
 					"name": "Get Similar Apps",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "a3644c2b-2110-4275-9518-fdea75fe70ea",
+								"exec": [
+									"\r",
+									"pm.test(\"Validate the results array is present and contains at least one element\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"\r",
+									"    pm.expect(responseData).to.be.an('object');\r",
+									"    pm.expect(responseData.results).to.exist.and.to.be.an('array').that.is.not.empty;\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Validate that devId and url fields are present in the developer object\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"\r",
+									"    pm.expect(responseData.results).to.be.an('array').and.to.have.lengthOf.at.least(1);\r",
+									"\r",
+									"    responseData.results.forEach(function (result) {\r",
+									"        pm.expect(result.developer).to.exist.and.to.be.an('object');\r",
+									"        pm.expect(result.developer.devId).to.exist.and.to.be.a('string');\r",
+									"        pm.expect(result.developer.url).to.exist.and.to.be.a('string');\r",
+									"    });\r",
+									"});\r",
+									"\r",
+									"pm.test(\"The price should be a non-negative number\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"\r",
+									"    pm.expect(responseData).to.be.an('object');\r",
+									"    pm.expect(responseData.results).to.exist.and.to.be.an('array');\r",
+									"\r",
+									"    responseData.results.forEach(function (result) {\r",
+									"        pm.expect(result.price).to.exist.and.to.be.a('number');\r",
+									"        pm.expect(result.price).to.be.at.least(0);\r",
+									"    });\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"id": "86522864-ba54-4453-bf41-f9c0b9f7aa7e",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
@@ -1737,37 +1782,37 @@
 	],
 	"variable": [
 		{
-			"id": "d5a16c2c-2554-46ee-a6fe-a312ffed7b62",
+			"id": "1cb67066-320e-4284-90a1-071f80ca5a0d",
 			"key": "APP_ID",
 			"value": "org.wikipedia"
 		},
 		{
-			"id": "de2b3a59-af85-4a72-a4bb-bd7453182080",
+			"id": "a72a5ec4-1089-47ee-9519-2a35e1426232",
 			"key": "DEV_ID",
 			"value": "Wikimedia Foundation"
 		},
 		{
-			"id": "3c04ab9a-962b-4976-b896-9b9cb21d2972",
+			"id": "e7c66ec2-176a-4b8a-9def-87a49c001c7d",
 			"key": "COUNTRY_CODE",
 			"value": "IN"
 		},
 		{
-			"id": "04104e07-2637-4cfb-9e37-93bbeb3777f8",
+			"id": "1f9f7393-00cb-42e7-98c2-68bfef1013a1",
 			"key": "LANGUAGE_CODE",
 			"value": "en"
 		},
 		{
-			"id": "8c0beb90-37fd-4384-b0bb-8bf9b773de89",
+			"id": "dc529676-2b4c-45f3-b18b-5308227e9f71",
 			"key": "expectedResponseTime",
 			"value": 20
 		},
 		{
-			"id": "8cf6c2e6-792f-4e3f-8a3f-f327291c1380",
+			"id": "491f87b9-360b-4076-8512-5b86d8855e2a",
 			"key": "expectedResponseStatusCode",
 			"value": 200
 		},
 		{
-			"id": "e120009d-5c78-4be9-b081-456a607205e7",
+			"id": "bdc4e816-51e8-4376-89ad-22737fab07e3",
 			"key": "HOST",
 			"value": "gplayapi.srik.me",
 			"type": "string"
