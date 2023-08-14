@@ -984,15 +984,43 @@
 							"script": {
 								"id": "d809719c-5c11-4569-9f9b-02051ece9368",
 								"exec": [
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.have.status(200);",
-									"});",
-									"",
 									"var jsonData = pm.response.json();",
 									"",
 									"pm.test(\"Check privacy policy link\", function () {",
 									"    pm.expect(jsonData.results.privacyPolicyUrl).to.eql(\"http://wikimediafoundation.org/wiki/Privacy_policy\");",
-									"});"
+									"});",
+									"",
+									"",
+									"pm.test(\"Verify that the 'sharedData' array is present and empty\", function () {",
+									"    const responseData = pm.response.json();",
+									"",
+									"    pm.expect(responseData.results.sharedData).to.exist;",
+									"    pm.expect(responseData.results.sharedData).to.be.an('array');",
+									"    pm.expect(responseData.results.sharedData).to.have.lengthOf(0);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Verify that the 'collectedData' array is present and empty\", function () {",
+									"    const responseData = pm.response.json();",
+									"",
+									"    pm.expect(responseData.results).to.be.an('object');",
+									"    pm.expect(responseData.results.collectedData).to.be.an('array');",
+									"    pm.expect(responseData.results.collectedData).to.be.empty;",
+									"});",
+									"",
+									"",
+									"pm.test(\"Validate the structure of the securityPractices array\", function () {",
+									"    const responseData = pm.response.json();",
+									"",
+									"    pm.expect(responseData.results.securityPractices).to.be.an('array').that.is.not.empty;",
+									"    responseData.results.securityPractices.forEach(function (practice) {",
+									"        pm.expect(practice).to.be.an('object');",
+									"        pm.expect(practice.practice).to.be.a('string');",
+									"        pm.expect(practice.description).to.be.a('string');",
+									"    });",
+									"});",
+									"",
+									""
 								],
 								"type": "text/javascript"
 							}
@@ -1683,37 +1711,37 @@
 	],
 	"variable": [
 		{
-			"id": "f7760bfc-8fed-4423-8f00-d99d78eb2b9f",
+			"id": "20641e35-1f34-4220-a375-620ea961417c",
 			"key": "APP_ID",
 			"value": "org.wikipedia"
 		},
 		{
-			"id": "a4bb6f1e-a79e-48aa-88a1-962bec80664a",
+			"id": "9109d64b-3279-4efb-8a8b-822094b72f4d",
 			"key": "DEV_ID",
 			"value": "Wikimedia Foundation"
 		},
 		{
-			"id": "39b57057-b013-4535-83ec-86fc92008f22",
+			"id": "0b2447cd-eae7-4c04-85bd-902847a7cdee",
 			"key": "COUNTRY_CODE",
 			"value": "IN"
 		},
 		{
-			"id": "a8386773-906c-4f4a-a709-346f0ac3e5de",
+			"id": "e4ededaf-fffc-4658-94f1-52a760dc62c6",
 			"key": "LANGUAGE_CODE",
 			"value": "en"
 		},
 		{
-			"id": "4b1ffc13-8127-4326-ae20-4286d59d3d19",
+			"id": "4a009924-c4a2-4ac5-86a0-2dd9a89ce20d",
 			"key": "expectedResponseTime",
 			"value": 20
 		},
 		{
-			"id": "d79871b2-2a15-47d8-ac22-2730c99c6ce2",
+			"id": "ffccd5e6-4b57-4e9a-bbb5-01e7f5b665b7",
 			"key": "expectedResponseStatusCode",
 			"value": 200
 		},
 		{
-			"id": "9cb73b77-a421-4e2e-8839-09273e878aa7",
+			"id": "51825673-bed2-4676-aac4-c0c88a8f05ae",
 			"key": "HOST",
 			"value": "gplayapi.srik.me",
 			"type": "string"
