@@ -20,7 +20,29 @@
 									"pm.test(\"List of all apps equals 200\", function () {",
 									"    var jsonData = pm.response.json();",
 									"    pm.expect(jsonData.results.length).to.eql(200);",
-									"});"
+									"});",
+									"",
+									"",
+									"pm.test(\"appId is a non-empty string\", function () {",
+									"    const responseData = pm.response.json();",
+									"    responseData.results.forEach(function (app) {",
+									"        pm.expect(app.appId).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Value should not be empty\");",
+									"    });",
+									"});",
+									"",
+									"",
+									"pm.test(\"Price is a non-negative number\", function () {",
+									"    const responseData = pm.response.json();",
+									"",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData.results).to.exist.and.to.be.an('array');",
+									"",
+									"    responseData.results.forEach(function (app) {",
+									"        pm.expect(app.price).to.exist.and.to.be.at.least(0, \"Price should be a non-negative number\");",
+									"    });",
+									"});",
+									"",
+									""
 								],
 								"type": "text/javascript"
 							}
@@ -45,7 +67,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{HOST}}/api/apps?fullDetail=true",
+							"raw": "{{HOST}}/api/apps?q=map&fullDetail=true",
 							"host": [
 								"{{HOST}}"
 							],
@@ -58,8 +80,7 @@
 									"key": "q",
 									"value": "map",
 									"description": "Optional - defaults to none; Search term",
-									"type": "text",
-									"disabled": true
+									"type": "text"
 								},
 								{
 									"key": "fullDetail",
@@ -1579,37 +1600,37 @@
 	],
 	"variable": [
 		{
-			"id": "f3281847-7a87-4d0c-9e5f-f9d98c78ce0d",
+			"id": "3dc4e632-b91a-4b6b-8fc7-50b190538c2b",
 			"key": "APP_ID",
 			"value": "org.wikipedia"
 		},
 		{
-			"id": "d29928cd-4a05-450e-8211-be631e276df3",
+			"id": "e8cf9f9b-dd43-40a5-8780-89a326d1f10e",
 			"key": "DEV_ID",
 			"value": "Wikimedia Foundation"
 		},
 		{
-			"id": "1f6dfcf7-57c1-437b-872c-d2a59b128085",
+			"id": "1216b16b-ed9e-47ee-a10c-3b77580a4e9f",
 			"key": "COUNTRY_CODE",
 			"value": "IN"
 		},
 		{
-			"id": "39786652-e747-4816-8e32-093f86941311",
+			"id": "7d70b021-b88f-44ed-9253-89af8fa623ca",
 			"key": "LANGUAGE_CODE",
 			"value": "en"
 		},
 		{
-			"id": "c2df3f46-ba4c-46fd-bca6-3804c0846517",
+			"id": "d6edd91d-6ce0-4fbc-abf0-ea5ac64bf947",
 			"key": "expectedResponseTime",
 			"value": 20
 		},
 		{
-			"id": "751aa231-2174-4ed6-874c-af224b379663",
+			"id": "9fc5bc47-075d-47a6-8553-7bb13b4cf44f",
 			"key": "expectedResponseStatusCode",
 			"value": 200
 		},
 		{
-			"id": "44440858-d435-43a7-bcd2-f5476e359dbe",
+			"id": "35c923e7-9c5d-44ee-b01f-e2a5c06f31d4",
 			"key": "HOST",
 			"value": "gplayapi.srik.me",
 			"type": "string"
