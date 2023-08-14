@@ -1441,6 +1441,56 @@
 								],
 								"type": "text/javascript"
 							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "7b9c1401-0870-4ff6-9e7f-37e32460bea2",
+								"exec": [
+									"\r",
+									"pm.test(\"Validate devId is not empty\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"\r",
+									"    pm.expect(responseData.devId).to.exist.and.to.not.be.empty;\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Verify that the 'apps' array is present in the response\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"\r",
+									"    pm.expect(responseData).to.be.an('object');\r",
+									"    pm.expect(responseData.apps).to.exist.and.to.be.an('array');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify the expected number of elements in the 'apps' array\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"\r",
+									"    pm.expect(responseData.apps.length).to.equal(1);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Validate title is a non-empty string\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"\r",
+									"    pm.expect(responseData.apps).to.be.an('array');\r",
+									"    responseData.apps.forEach(function (app) {\r",
+									"        pm.expect(app.title).to.exist.and.to.be.a('string').and.to.have.lengthOf.at.least(1, \"Value should not be empty\");\r",
+									"    });\r",
+									"});\r",
+									"\r",
+									"pm.test(\"The developer object is present and has the required fields\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"\r",
+									"    pm.expect(responseData).to.be.an('object');\r",
+									"    pm.expect(responseData.developer).to.exist.and.to.be.an('object');\r",
+									"    pm.expect(responseData.developer.devId).to.exist.and.to.be.a('string');\r",
+									"    pm.expect(responseData.developer.url).to.exist.and.to.be.a('string');\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
 						}
 					],
 					"id": "fd05b516-30d2-4f9e-8085-f60142f7a496",
@@ -1782,37 +1832,37 @@
 	],
 	"variable": [
 		{
-			"id": "c2e23aa8-54f8-4e4e-8456-55832cd4c4a9",
+			"id": "5f108f48-4f12-421f-b34d-0bf41fb1c3a0",
 			"key": "APP_ID",
 			"value": "org.wikipedia"
 		},
 		{
-			"id": "6e27d1e6-a985-44b4-bd30-b6c64075ca9c",
+			"id": "2a73c3d3-2a7d-4c5f-8322-b9ca45957d6c",
 			"key": "DEV_ID",
 			"value": "Wikimedia Foundation"
 		},
 		{
-			"id": "5fd7ac7f-2082-4578-a220-77216ac763d6",
+			"id": "b860e894-0824-4505-b110-66b6ba5bcfd9",
 			"key": "COUNTRY_CODE",
 			"value": "IN"
 		},
 		{
-			"id": "84173cf0-a124-4e21-9c5e-f20f35b43974",
+			"id": "e91ca0f7-34ac-4fd2-bd64-cf77c534b5dc",
 			"key": "LANGUAGE_CODE",
 			"value": "en"
 		},
 		{
-			"id": "96328376-7301-4355-aadc-c170d51b918b",
+			"id": "ae39f3ed-93d7-4295-b7b1-d7f524fc1b95",
 			"key": "expectedResponseTime",
 			"value": 20
 		},
 		{
-			"id": "48ba52a4-2464-4f99-be1b-3ec143ee3dd2",
+			"id": "994e6582-972e-4f61-b9ae-1a7d7204d045",
 			"key": "expectedResponseStatusCode",
 			"value": 200
 		},
 		{
-			"id": "8b89ef8b-b78e-49cf-b1f8-969e74006052",
+			"id": "c120ddfe-0dec-4ab1-8c2e-310bc0c309c5",
 			"key": "HOST",
 			"value": "gplayapi.srik.me",
 			"type": "string"
