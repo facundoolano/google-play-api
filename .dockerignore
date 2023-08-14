@@ -4,3 +4,7 @@ Dockerfile
 .dockerignore
 .github
 fly.toml
+.gitpod.yml
+.gitignore
+PostmanCollections
+.eslintrc

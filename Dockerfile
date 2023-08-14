@@ -1,23 +1,26 @@
-FROM node:alpine
+# Use the official Node.js image as base
+FROM node:16-alpine
 
-LABEL maintainer="Srikanth <srikanth@cashlessconsumer.in>"
+# Set metadata labels
+LABEL maintainer="Srikanth <srikanth@cashlessconsumer.in>" \
+      version="1.0" \
+      description="Docker image for running Google Play API"
 
-LABEL version="1.0"
-
-LABEL description="Docker image for running Google Play API"
-
-RUN mkdir -p /home/node/app/node_modules && chown -R node:node /home/node/app
-
+# Create and set the working directory
 WORKDIR /home/node/app
 
-COPY --chown=node:node package*.json ./
+# Copy only the package.json and package-lock.json first to leverage Docker caching
+COPY package*.json ./
 
-USER node
+# Install dependencies
+RUN npm ci --quiet --only=production
 
-RUN npm install
+# Copy the rest of the application code
+COPY . .
 
-COPY --chown=node:node . .
-
+# Expose port 3000
 EXPOSE 3000
 
+# Set the user to 'node' and run the application using npm start
+USER node
 CMD [ "npm", "start" ]

@@ -62,6 +62,7 @@ jobs:
         run: |
           docker buildx create --use
           docker buildx build --platform linux/amd64 -t ghcr.io/${{ github.repository }}:latest .
+          docker buildx build --platform linux/amd64 -t ghcr.io/${{ github.repository }}:main .
           docker buildx stop
           
   deploy_to_fly:
