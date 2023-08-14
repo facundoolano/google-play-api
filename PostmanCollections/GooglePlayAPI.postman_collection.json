@@ -1137,6 +1137,37 @@
 				},
 				{
 					"name": "Get App Reviews",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "410c82eb-12b2-489e-a8e3-3e907fde0279",
+								"exec": [
+									"\r",
+									"pm.test(\"Response status code is 200\", function () {\r",
+									"    pm.expect(pm.response.code).to.equal(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Validate the results object\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"\r",
+									"    pm.expect(responseData).to.be.an('object');\r",
+									"    pm.expect(responseData.results).to.exist.and.to.be.an('object');\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"The 'data' array is present and contains at least one element\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"\r",
+									"    pm.expect(responseData).to.be.an('object');\r",
+									"    pm.expect(responseData.results.data).to.exist.and.to.be.an('array').and.to.have.lengthOf.at.least(1);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"id": "49750cf1-e454-4217-b122-c3f852168bf8",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
@@ -1711,37 +1742,37 @@
 	],
 	"variable": [
 		{
-			"id": "20641e35-1f34-4220-a375-620ea961417c",
+			"id": "f56dccfd-fbed-46af-b7c5-21d7744a4169",
 			"key": "APP_ID",
 			"value": "org.wikipedia"
 		},
 		{
-			"id": "9109d64b-3279-4efb-8a8b-822094b72f4d",
+			"id": "e32dc937-a73b-44c4-9e1e-46d36a81006f",
 			"key": "DEV_ID",
 			"value": "Wikimedia Foundation"
 		},
 		{
-			"id": "0b2447cd-eae7-4c04-85bd-902847a7cdee",
+			"id": "41e16b51-2a94-4ec5-abde-c3ddde50bebb",
 			"key": "COUNTRY_CODE",
 			"value": "IN"
 		},
 		{
-			"id": "e4ededaf-fffc-4658-94f1-52a760dc62c6",
+			"id": "d31e10b8-f436-4486-b289-7fc44031057e",
 			"key": "LANGUAGE_CODE",
 			"value": "en"
 		},
 		{
-			"id": "4a009924-c4a2-4ac5-86a0-2dd9a89ce20d",
+			"id": "9f2ab0f2-7907-4266-a260-9fb43c467ff3",
 			"key": "expectedResponseTime",
 			"value": 20
 		},
 		{
-			"id": "ffccd5e6-4b57-4e9a-bbb5-01e7f5b665b7",
+			"id": "c5b0b207-9e68-4b01-94e1-e1227f028624",
 			"key": "expectedResponseStatusCode",
 			"value": 200
 		},
 		{
-			"id": "51825673-bed2-4676-aac4-c0c88a8f05ae",
+			"id": "7339a98c-7cb0-4256-bb6f-9fb8011108db",
 			"key": "HOST",
 			"value": "gplayapi.srik.me",
 			"type": "string"
