@@ -1447,7 +1447,6 @@
 							"script": {
 								"id": "7b9c1401-0870-4ff6-9e7f-37e32460bea2",
 								"exec": [
-									"\r",
 									"pm.test(\"Validate devId is not empty\", function () {\r",
 									"    const responseData = pm.response.json();\r",
 									"\r",
@@ -1834,37 +1833,37 @@
 	],
 	"variable": [
 		{
-			"id": "99c3b195-ad3b-4287-8622-180c922d40c4",
+			"id": "1f5898ee-5ca9-4332-80be-38892861a1cb",
 			"key": "APP_ID",
 			"value": "org.wikipedia"
 		},
 		{
-			"id": "0f6d902b-7e14-4d5b-aa41-ae9dbfaf82f0",
+			"id": "d221b7ca-f550-4188-b0b6-d3e2948d92fd",
 			"key": "DEV_ID",
 			"value": "Wikimedia Foundation"
 		},
 		{
-			"id": "966d374d-c734-4c31-9756-41139a0082a0",
+			"id": "c78b27f1-eee7-4394-8f57-fb41ad6886a1",
 			"key": "COUNTRY_CODE",
 			"value": "IN"
 		},
 		{
-			"id": "298d41d9-29f2-482e-8ab5-10c5714a9e0d",
+			"id": "9dc2cb26-3336-4a81-8db2-f515cd7a4db3",
 			"key": "LANGUAGE_CODE",
 			"value": "en"
 		},
 		{
-			"id": "83333547-175b-4d3f-86bc-40ffa2f9b474",
+			"id": "f3bf08e9-5e8b-444c-afa3-644ea424f273",
 			"key": "expectedResponseTime",
 			"value": 20
 		},
 		{
-			"id": "05f4b18f-9382-48c8-b141-a073536e937a",
+			"id": "fae78c86-129d-4cde-9353-58365e522a2e",
 			"key": "expectedResponseStatusCode",
 			"value": 200
 		},
 		{
-			"id": "89391d65-a628-48c8-87d0-abfbcbb6c8e2",
+			"id": "4c1fd93c-3d4c-4825-9dc9-a2489e1bf113",
 			"key": "HOST",
 			"value": "gplayapi.srik.me",
 			"type": "string"
