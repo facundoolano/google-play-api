@@ -1,14 +1,14 @@
 'use strict';
 
-const Express = require('express');
-const router = require('./lib');
+import Express from 'express';
+import router from './lib/index.js';
 
 const app = Express();
 const port = process.env.PORT || 3000;
 
 app.use('/api/', router);
 
-app.get('/', function(req, res){
+app.get('/', function (req, res) {
   res.redirect('/api');
 });
 
