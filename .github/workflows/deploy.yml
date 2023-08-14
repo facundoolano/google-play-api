@@ -74,19 +74,25 @@ jobs:
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
 
-
-      - name: Create Deployment Status
+      - name: Create Deployment Check
         uses: actions/github-script@v6
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const deploymentUrl = process.env.FLY_DEPLOY_URL;            
+            const deploymentUrl = process.env.FLY_DEPLOY_URL;
+            const { context, github } = require('@actions/github');
 
-            await github.repos.createDeploymentStatus({
-              ...context.repo,
-              deployment_id: context.payload.deployment.id,
-              state: 'success',
-              log_url: deploymentUrl,
-              description: 'Deployment to Fly.io',
-              environment_url: deploymentUrl,
+            const repo = context.repo;
+            const sha = context.sha;
+
+            await github.checks.create({
+              ...repo,
+              name: 'Deployment to Fly.io',
+              head_sha: sha,
+              conclusion: 'success',
+              output: {
+                title: 'Deployment Successful',
+                summary: `Deployment to Fly.io: [${deploymentUrl}](${deploymentUrl})`,
+              },
             });
+
