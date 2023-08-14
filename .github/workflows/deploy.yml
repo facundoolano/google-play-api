@@ -80,8 +80,7 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const deploymentUrl = process.env.FLY_DEPLOY_URL;
-            const github = context.github;
+            const deploymentUrl = process.env.FLY_DEPLOY_URL;            
 
             await github.repos.createDeploymentStatus({
               ...context.repo,
