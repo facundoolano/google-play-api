@@ -81,9 +81,9 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const deploymentUrl = process.env.FLY_DEPLOY_URL;
-            const octokit = context.github;
+            const github = context.github;
 
-            await octokit.repos.createDeploymentStatus({
+            await github.repos.createDeploymentStatus({
               ...context.repo,
               deployment_id: context.payload.deployment.id,
               state: 'success',
