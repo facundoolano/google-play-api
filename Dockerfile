@@ -18,6 +18,8 @@ RUN npm ci --quiet --only=production
 # Copy the rest of the application code
 COPY . .
 
+RUN npm run generateoas
+
 # Expose port 3000
 EXPOSE 3000
 
