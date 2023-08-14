@@ -1,19 +1,63 @@
-name: Deploy
+name: CI/CD Pipeline
 
 on:
-  workflow_run:
-    workflows: [Create and publish a Docker image]
-    types: [completed]
+  workflow_dispatch:
+  push:
+    branches: [ "main" ]
+    paths: [ '!PostmanCollections/**' , '!./github/**' ]
 
 jobs:
-  deploy:
-    if: |
-      github.event.workflow_run.conclusion == 'success' &&
-      github.event.workflow_run.head_branch == github.event.repository.default_branch
-    concurrency: deploy
+  build_and_test:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: dentarg/fly@v1
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
         with:
-          fly-token: ${{ secrets.FLY_API_TOKEN }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          node-version: 18
+
+      - name: Install Dependencies
+        run: npm install
+      
+      - name: Start Server
+        run: npm start & npx wait-on http://localhost:3000
+
+      - name: Run Tests
+        run: npm test
+
+  build_and_push_docker_image:
+    needs: build_and_test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Log into GitHub Container Registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Build and Push Docker Image
+        run: |
+          docker buildx create --use
+          docker buildx build --platform linux/amd64 -t ghcr.io/${{ github.repository }}:latest .
+          docker buildx stop
+          
+  deploy_to_fly:
+    needs: build_and_push_docker_image
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Deploy to Fly.io
+        uses: superfly/flyctl-actions@v2
+        with:
+          api-token: ${{ secrets.FLY_API_TOKEN }}
+          config: fly.toml

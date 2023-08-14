@@ -1,0 +1,22 @@
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = "googleplayapi"
+primary_region = "sin"
+
+[build]
+  image = "ghcr.io/srikanthlogic/google-play-api:main"
+
+[services]
+  [services.http]
+    ports = ["http"]
+
+[http_service]
+  protocol = "tcp"
+  internal_port = 3000
+  force_https = true
+  auto_stop_machines = true
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ["app"]
