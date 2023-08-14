@@ -61,8 +61,7 @@ jobs:
       - name: Build and Push Docker Image
         run: |
           docker buildx create --use
-          docker buildx build --platform linux/amd64 -t ghcr.io/${{ github.repository }}:latest .
-          docker buildx build --platform linux/amd64 -t ghcr.io/${{ github.repository }}:main .
+          docker buildx build --platform linux/amd64 -t ghcr.io/${{ github.repository }}:latest --push.          
           docker buildx stop
           
   deploy_to_fly:
