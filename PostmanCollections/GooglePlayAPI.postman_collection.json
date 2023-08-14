@@ -1482,9 +1482,11 @@
 									"    const responseData = pm.response.json();\r",
 									"\r",
 									"    pm.expect(responseData).to.be.an('object');\r",
-									"    pm.expect(responseData.developer).to.exist.and.to.be.an('object');\r",
-									"    pm.expect(responseData.developer.devId).to.exist.and.to.be.a('string');\r",
-									"    pm.expect(responseData.developer.url).to.exist.and.to.be.a('string');\r",
+									"    responseData.apps.forEach(function (app) {\r",
+									"        pm.expect(app.developer).to.exist.and.to.be.an('object');\r",
+									"        pm.expect(app.developer.devId).to.exist.and.to.be.a('string');\r",
+									"        pm.expect(app.developer.url).to.exist.and.to.be.a('string');\r",
+									"    });\r",
 									"});\r",
 									"\r",
 									""
@@ -1832,37 +1834,37 @@
 	],
 	"variable": [
 		{
-			"id": "d7967987-a31c-41df-9599-a350c6ba3a43",
+			"id": "7be78b35-dab9-4ba0-8cc5-9362a05c5179",
 			"key": "APP_ID",
 			"value": "org.wikipedia"
 		},
 		{
-			"id": "f3b8e926-26df-48ef-aade-1d2f5d291a3a",
+			"id": "c2543629-777f-4941-bd17-12defbc4dba0",
 			"key": "DEV_ID",
 			"value": "Wikimedia Foundation"
 		},
 		{
-			"id": "20e9c937-0445-49cf-9432-4e5527b17d4d",
+			"id": "9a682cf4-b286-4576-9b08-558024742e64",
 			"key": "COUNTRY_CODE",
 			"value": "IN"
 		},
 		{
-			"id": "e41ebb87-a6c6-4026-87a5-227c5f8aaa29",
+			"id": "c369b19f-5987-4e8c-b86d-4f5b4964f75a",
 			"key": "LANGUAGE_CODE",
 			"value": "en"
 		},
 		{
-			"id": "c6f013a0-c70e-4f08-9eb0-f8afb3d072a6",
+			"id": "a7537411-8187-4542-b5c8-7627e11f7a41",
 			"key": "expectedResponseTime",
 			"value": 20
 		},
 		{
-			"id": "23be6b61-eb54-40a9-97d8-b5e102802476",
+			"id": "05c8829f-c78d-4e94-9a33-ce371b902a38",
 			"key": "expectedResponseStatusCode",
 			"value": 200
 		},
 		{
-			"id": "220fdd36-fdf9-4077-9348-86908205016c",
+			"id": "4ea1cfae-8f3c-4e41-b1e3-64f6d4490571",
 			"key": "HOST",
 			"value": "gplayapi.srik.me",
 			"type": "string"
