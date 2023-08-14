@@ -12,7 +12,7 @@ jobs:
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Cache Node.js dependencies
         uses: actions/cache@v2
@@ -23,7 +23,7 @@ jobs:
             ${{ runner.os }}-npm-
 
       - name: Setup Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: 18
 
@@ -42,7 +42,7 @@ jobs:
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
@@ -70,7 +70,7 @@ jobs:
 
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       
       - name: Get FlyCtl
         uses: superfly/flyctl-actions/setup-flyctl@master
@@ -89,33 +89,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-flyctl-
 
-      - name: Get deploy url
-        run: |
-          FLY_DEPLOY_URL=$(flyctl status --app googleplayapi -j | jq -r '.url')
-          echo "FLY_DEPLOY_URL=$FLY_DEPLOY_URL" >> $GITHUB_ENV
-
-      - name: Create Deployment Check
-        uses: actions/github-script@v6
+      - name: Create GitHub deployment
+        uses: github-actions/create-deployment@v1
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const deploymentUrl = process.env.FLY_DEPLOY_URL;
-            
-            const repo = context.repo;
-            const sha = context.sha;
-
-            async function createCheck() {
-              await github.checks.create({
-                ...repo,
-                name: 'Deployment to Fly.io',
-                head_sha: sha,
-                status: 'completed',
-                conclusion: 'success',
-                output: {
-                  title: 'Deployment Successful',
-                  summary: `Deployment to Fly.io: [${deploymentUrl}](${deploymentUrl})`,
-                },
-              });
-            }
-
-            createCheck();
+          fly_deployment_id: ${{ steps.deploy.outputs.fly_deployment_id }}
