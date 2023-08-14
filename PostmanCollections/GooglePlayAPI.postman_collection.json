@@ -67,7 +67,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{HOST}}/api/apps?q=map&fullDetail=true",
+							"raw": "{{HOST}}/api/apps",
 							"host": [
 								"{{HOST}}"
 							],
@@ -80,12 +80,13 @@
 									"key": "q",
 									"value": "map",
 									"description": "Optional - defaults to none; Search term",
-									"type": "text"
+									"disabled": true
 								},
 								{
 									"key": "fullDetail",
 									"value": "true",
-									"description": "Optional - default is false."
+									"description": "Optional - default is false.",
+									"disabled": true
 								},
 								{
 									"key": "country",
@@ -1600,37 +1601,37 @@
 	],
 	"variable": [
 		{
-			"id": "3dc4e632-b91a-4b6b-8fc7-50b190538c2b",
+			"id": "b875ca3d-0d73-4bf1-ae20-d38564ba5185",
 			"key": "APP_ID",
 			"value": "org.wikipedia"
 		},
 		{
-			"id": "e8cf9f9b-dd43-40a5-8780-89a326d1f10e",
+			"id": "89b2b909-d392-4155-93a6-6d7264e89d32",
 			"key": "DEV_ID",
 			"value": "Wikimedia Foundation"
 		},
 		{
-			"id": "1216b16b-ed9e-47ee-a10c-3b77580a4e9f",
+			"id": "2d6f8d32-bfca-4223-b5c5-c42d49011baa",
 			"key": "COUNTRY_CODE",
 			"value": "IN"
 		},
 		{
-			"id": "7d70b021-b88f-44ed-9253-89af8fa623ca",
+			"id": "21e786b8-5465-4708-9784-baa0729e3607",
 			"key": "LANGUAGE_CODE",
 			"value": "en"
 		},
 		{
-			"id": "d6edd91d-6ce0-4fbc-abf0-ea5ac64bf947",
+			"id": "e63123cd-79ce-4056-9b9b-9fe7c3d77606",
 			"key": "expectedResponseTime",
 			"value": 20
 		},
 		{
-			"id": "9fc5bc47-075d-47a6-8553-7bb13b4cf44f",
+			"id": "225fa348-ed57-496e-aa40-3c18d961ffae",
 			"key": "expectedResponseStatusCode",
 			"value": 200
 		},
 		{
-			"id": "35c923e7-9c5d-44ee-b01f-e2a5c06f31d4",
+			"id": "f112b990-cff0-4e37-ba96-de73c1831e39",
 			"key": "HOST",
 			"value": "gplayapi.srik.me",
 			"type": "string"
