@@ -750,7 +750,7 @@
 									"var jsonData = pm.response.json();",
 									"",
 									"pm.test(\"Check for read USB storage permission\", function () {",
-									"    pm.expect(pm.response.text()).to.include(\"read the contents of your USB storage\");",
+									"    pm.expect(jsonData.results[0].permission).to.include(\"read the contents of your USB storage\");",
 									"});",
 									"",
 									"",
@@ -803,7 +803,54 @@
 									"    //pm.expect(tv4.validate(data2, schema)).to.be.true;",
 									"});",
 									"",
-									"console.log(jsonData)"
+									"",
+									"pm.test(\"Response has required fields - permission and type\", function () {",
+									"    const responseData = pm.response.json();",
+									"",
+									"    pm.expect(responseData.results).to.exist.and.to.be.an('array');",
+									"    pm.expect(responseData.results.length).to.be.above(0, \"Results array should not be empty\");",
+									"",
+									"    responseData.results.forEach(function (result) {",
+									"        pm.expect(result.permission).to.exist.and.to.be.a('string');",
+									"        pm.expect(result.type).to.exist.and.to.be.a('string');",
+									"    });",
+									"});",
+									"",
+									"",
+									"pm.test(\"Validate the 'results' array is present and contains the expected number of elements\", function () {",
+									"    const responseData = pm.response.json();",
+									"",
+									"    pm.expect(responseData.results).to.exist.and.to.be.an('array');",
+									"    pm.expect(responseData.results.length).to.equal(1);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Validate permission and type properties\", function () {",
+									"    const responseData = pm.response.json();",
+									"",
+									"    pm.expect(responseData.results).to.be.an('array');",
+									"",
+									"    responseData.results.forEach(function (result) {",
+									"        pm.expect(result.permission).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Permission should not be empty\");",
+									"        pm.expect(result.type).to.be.a('string');",
+									"    });",
+									"});",
+									"",
+									"",
+									"pm.test(\"Verify response schema\", function () {",
+									"    const responseData = pm.response.json();",
+									"",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData.results).to.exist.and.to.be.an('array');",
+									"",
+									"    responseData.results.forEach(function (result) {",
+									"        pm.expect(result).to.be.an('object');",
+									"        pm.expect(result.permission).to.exist.and.to.be.a('string');",
+									"        pm.expect(result.type).to.exist.and.to.be.a('string');",
+									"    });",
+									"});",
+									"",
+									""
 								],
 								"type": "text/javascript"
 							}
@@ -1630,37 +1677,37 @@
 	],
 	"variable": [
 		{
-			"id": "edbc6e76-968f-48c2-8881-d24bbafef385",
+			"id": "179040ea-4d14-4825-a6d1-8337d44d180f",
 			"key": "APP_ID",
 			"value": "org.wikipedia"
 		},
 		{
-			"id": "e2db556c-0389-4fec-b712-030762e84754",
+			"id": "963c859a-796d-45a3-8596-f03a60010402",
 			"key": "DEV_ID",
 			"value": "Wikimedia Foundation"
 		},
 		{
-			"id": "4a55394c-b346-4337-a1a7-4c46bbb3b512",
+			"id": "835b1b36-b3e1-4d63-9c1d-9994a230c989",
 			"key": "COUNTRY_CODE",
 			"value": "IN"
 		},
 		{
-			"id": "655512db-e795-4cab-8109-875527370034",
+			"id": "611ac343-2ed3-45e1-8343-aa188be5b282",
 			"key": "LANGUAGE_CODE",
 			"value": "en"
 		},
 		{
-			"id": "5a87ead2-0c47-4326-b07f-08791d6094be",
+			"id": "833de986-f671-48d5-80dc-8ae72aca9571",
 			"key": "expectedResponseTime",
 			"value": 20
 		},
 		{
-			"id": "699e3f90-3bfe-4efb-9767-256cc17cc3ba",
+			"id": "56d9dd19-c5b1-4a52-9832-e7c40aa3afff",
 			"key": "expectedResponseStatusCode",
 			"value": 200
 		},
 		{
-			"id": "18ad981a-f7f9-4801-a72e-b5d88c4bafdd",
+			"id": "41c31934-c832-467d-8a6e-224020159d35",
 			"key": "HOST",
 			"value": "gplayapi.srik.me",
 			"type": "string"
