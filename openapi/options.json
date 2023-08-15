@@ -14,7 +14,7 @@
             "name": "MIT",
             "url": "https://en.wikipedia.org/wiki/MIT_License"
         },
-        "title": "Google Play API",
+        "title": "Google Play Metadata API",
         "version": "0.2.1",
         "xLogo": {
             "altText": "CashlessConsumer logo",
@@ -26,8 +26,8 @@
     "outputFormat": "json",
     "servers": [
         {
-            "description": "Play API on Fly",
-            "url": "https://googleplayapi.fly.dev/"
+            "description": "Google Play Metadata API ",
+            "url": "https://gplayapi.cashlessconsumer.in/"
         }
     ]
 }

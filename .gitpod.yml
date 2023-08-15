@@ -7,7 +7,7 @@
 tasks:
   - name: Setup and Install
     before: npm install
-    init: npm generateoas
+    init: npm run generateoas
     command: npm run start
 
 # Ports to expose on workspace startup
