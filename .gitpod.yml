@@ -5,7 +5,16 @@
 # Learn more from ready-to-use templates: https://www.gitpod.io/docs/introduction/getting-started/quickstart
 
 tasks:
-  - init: npm install
+  - name: Setup and Install
+    before: npm install
+    init: npm generateoas
     command: npm run start
 
-
+# Ports to expose on workspace startup
+ports:
+    - port: 3000
+      onOpen: open-preview
+      name: Google Play API
+      description: Website Preview
+      visibility: private
+      protocol: https

@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "test": "node --es-module-specifier-resolution=node test.js",
-    "generateoas": "p2o ./PostmanCollections/GooglePlayAPI.postman_collection.json -o openapi/options.json -f openapi/swagger.json",
+    "generateoas": "p2o ./PostmanCollections/GooglePlayAPI.postman_collection.json -o ./openapi/options.json -f ./openapi/swagger.json",
     "start": "node server.js"
   },
   "author": "Facundo Olano",
