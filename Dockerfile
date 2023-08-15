@@ -12,8 +12,10 @@ WORKDIR /home/node/app
 # Copy only the package.json and package-lock.json first to leverage Docker caching
 COPY package*.json ./
 
+RUN npm install -g npm@9.8.1
+
 # Install dependencies
-RUN npm ci --quiet --only=production
+RUN npm ci --quiet --omit=dev
 
 # Copy the rest of the application code
 COPY . .

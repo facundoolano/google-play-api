@@ -6,7 +6,6 @@ Dockerfile
 fly.toml
 .gitpod.yml
 .gitignore
-PostmanCollections
 .eslintrc
 newman
 openapi/options.json
