@@ -1,9 +1,9 @@
 'use strict';
 
-const Express = require('express');
-const router = require('./lib');
+import express from 'express';
+import router from './lib/index.js';
 
-const app = Express();
+const app = express();
 const port = process.env.PORT || 3000;
 
 app.use('/api/', router);
