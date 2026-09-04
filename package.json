@@ -1,11 +1,15 @@
 {
   "name": "google-play-api",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "turn google play scraper into a RESTful API",
   "type": "module",
-  "exports": "./server.js",
+  "exports": "./src/index.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "wrangler dev",
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "test": "vitest run",
+    "lint": "eslint src tests"
   },
   "author": "Facundo Olano",
   "license": "ISC",
@@ -14,17 +18,21 @@
     "url": "https://github.com/facundoolano/google-play-api.git"
   },
   "dependencies": {
-    "dotenv": "^16.5.0",
-    "express": "^4.17.1",
-    "google-play-scraper": "^10.1.1"
+    "cheerio": "^1.0.0-rc.12",
+    "hono": "^4.13.5",
+    "json5": "^2.2.3",
+    "ramda": "^0.29.0"
   },
   "devDependencies": {
+    "@cloudflare/workers-types": "^5.20260904.1",
     "eslint": "^7.32.0",
     "eslint-config-semistandard": "^16.0.0",
     "eslint-config-standard": "^16.0.3",
     "eslint-plugin-import": "^2.24.2",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^5.1.0",
-    "eslint-plugin-standard": "^4.1.0"
+    "eslint-plugin-standard": "^4.1.0",
+    "vitest": "^5.0.0",
+    "wrangler": "^4.129.0"
   }
 }

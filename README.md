@@ -1,26 +1,33 @@
 # google-play-api
 
-Turns [google-play-scraper](https://github.com/facundoolano/google-play-scraper/) into a RESTful API.
+Cloudflare Workers REST API for Google Play app data. Existing API paths,
+authentication, query parameters, and response fields are kept compatible with
+the original Node.js service.
 
 ## Setup
 
-To run locally:
+To run locally with Cloudflare Workers:
 
 ```bash
 # Install dependencies
 npm install
 
-# Create .env file and set your API key
-echo "API_KEY=your_api_key_here" > .env
-echo "PORT=8080" >> .env
+# Create local Worker secrets
+cp .dev.vars.example .dev.vars
+# Edit .dev.vars and set API_KEY
 
-# Start the server
-npm start
+# Start the Worker
+npm run dev
 ```
 
 ## google-play-scraper Version
 
-This project uses `google-play-scraper` version **10.1.1** or later, which includes a fix for the bug that caused the following error for certain apps:
+This project vendors the parsing modules from `google-play-scraper` **10.1.3** and
+uses a Workers-native `fetch` request adapter. The Node.js-only `got`,
+`tough-cookie`, `dotenv`, and Express server entrypoint are not used at runtime.
+
+The parser includes the upstream fix for the bug that caused the following
+error for certain apps:
 
 ```
 TypeError: Cannot read properties of undefined (reading 'length')
@@ -113,3 +120,24 @@ GET /api/categories/
 ```
 
 Note: Remember to include the `x-api-key` header in all requests.
+
+## Deploy
+
+Set the API key as a Worker secret and deploy with Wrangler:
+
+```bash
+npx wrangler login
+npx wrangler secret put API_KEY
+npm run deploy
+```
+
+`PUBLIC_BASE_URL` is optional. When it is not set, generated API links use the
+request origin. Set it as a Wrangler variable when the public API is served
+behind a custom hostname:
+
+```bash
+npx wrangler deploy --var PUBLIC_BASE_URL:https://api.example.com
+```
+
+The deployed Worker continues to use the existing `/api/...` routes and
+`x-api-key` header, so existing clients do not need to change.
